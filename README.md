@@ -55,7 +55,7 @@ To use this module in a more advanced way, please check out the
 [reference](#reference) section of this document. It is worth to highlight that
 all the input variables have already a default input value, in a yaml document.
 (We use R.I.Piennar [module data](https://www.devco.net/archives/2013/12/08/better-puppet-modules-using-hiera-data.php))
-To leverage this feature, please add the following in your `/etc/hiera.yaml`
+To leverage this feature, please add the following in your `/etc/puppet/hiera.yaml`
 (or the Hiera configuration file that you are using):
 
     ---
