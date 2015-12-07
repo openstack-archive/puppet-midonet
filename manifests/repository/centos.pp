@@ -73,8 +73,8 @@ class midonet::repository::centos (
               command => '/usr/bin/yum clean all && /usr/bin/yum makecache'
             }
 
-            Yumrepo<| |> -> Exec<| command == 'update-midonet-repos' |>
-            Package<| |> -> Exec<| command == 'update-midonet-repos' |>
+            Yumrepo<| |> -> Exec<| title == 'update-midonet-repos' |>
+            Package<| |> -> Exec<| title == 'update-midonet-repos' |>
         }
         else
         {

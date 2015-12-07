@@ -71,7 +71,7 @@ class midonet::repository::ubuntu (
 
             }
 
-            Apt::Source<| |> -> Exec<| command == 'update-midonet-repos' |>
+            Apt::Source<| |> -> Exec<| title == 'update-midonet-repos' |>
 
         }
         else
