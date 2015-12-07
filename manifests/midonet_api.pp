@@ -106,7 +106,7 @@ class midonet::midonet_api(
   $bind_address='0.0.0.0',
   $catalina_base) {
 
-    class {'midonet::midonet_api::install': }
+    contain midonet::midonet_api::install
 
     class {'midonet::midonet_api::run':
         zk_servers           => $zk_servers,
@@ -122,4 +122,5 @@ class midonet::midonet_api(
         catalina_base        => $catalina_base,
         bind_address         => $bind_address
     }
+    contain midonet::midonet_api::run
 }

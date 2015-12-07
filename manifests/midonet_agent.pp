@@ -65,11 +65,11 @@
 
 class midonet::midonet_agent($zk_servers, $cassandra_seeds) {
 
-  class {'midonet::midonet_agent::install':
-  }
+  contain midonet::midonet_agent::install
 
   class {'midonet::midonet_agent::run':
       zk_servers => $zk_servers,
       cs_seeds   => $cassandra_seeds
   }
+  contain midonet::midonet_agent::run
 }
