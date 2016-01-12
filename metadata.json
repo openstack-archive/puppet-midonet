@@ -1,12 +1,12 @@
 {
-  "name": "midonet-midonet",
-  "version": "2015.6.0",
+  "name": "openstack-midonet",
+  "version": "1.0.0",
   "author": "MidoNet",
   "summary": "Configure and install MidoNet components",
   "license": "Apache-2.0",
-  "source": "https://github.com/midonet/puppet-midonet",
-  "project_page": "https://github.com/midonet/puppet-midonet",
-  "issues_url": "https://midonet.atlassian.net/projects/PUP",
+  "source": "git://github.com/openstack/puppet-midonet",
+  "project_page": "https://launchpad.net/puppet-midonet",
+  "issues_url": "https://bugs.launchpad.net/puppet-midonet",
   "dependencies": [
     { "name":"puppetlabs-inifile", "version_requirement": ">=1.0.0 <2.0.0" },
     { "name":"puppetlabs-apt","version_requirement":">=1.7.0 <2.0.0" },
