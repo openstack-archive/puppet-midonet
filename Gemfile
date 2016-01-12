@@ -11,7 +11,7 @@ def location_for(place, fake_version = nil)
 end
 
 group :development, :unit_tests do
-  gem 'rspec-puppet', '~> 2.1',             :require => false
+  gem 'rspec-puppet', '~> 2.2',             :require => false
   gem 'rspec-core', '3.1.7',                :require => false
   gem 'puppetlabs_spec_helper', '>= 0.1.0', :require => false
   gem 'puppet-lint', '>= 0.3.2',            :require => false
@@ -32,6 +32,7 @@ group :system_tests do
 
   gem 'serverspec',    :require => false
   gem 'beaker-puppet_install_helper', :require => false
+  gem 'r10k',                               :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']

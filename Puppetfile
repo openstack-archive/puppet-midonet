@@ -3,13 +3,8 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
-metadata
-
-mod 'midonet-zookeeper',
-  :git => 'http://github.com/midonet/puppet-zookeeper',
-  :ref => 'master'
-
-mod 'midonet-cassandra',
-  :git => 'http://github.com/midonet/puppet-cassandra',
-  :ref => 'master'
-
+mod 'puppetlabs/inifile'
+mod 'puppetlabs/apt'
+mod 'puppetlabs/java'
+mod 'puppetlabs/tomcat'
+mod 'puppetlabs/stdlib'

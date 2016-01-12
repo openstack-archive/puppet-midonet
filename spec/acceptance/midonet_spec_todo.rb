@@ -1,3 +1,4 @@
+#TODO(karume) Enable this test ASAP! Only disabled because of 
 require 'spec_helper_acceptance'
 
 describe 'midonet all-in-one' do
