@@ -103,8 +103,7 @@ class midonet::midonet_api(
   $keystone_tenant_name='admin',
   $api_ip=$::ipaddress,
   $api_port='8080',
-  $bind_address='0.0.0.0',
-  $catalina_base) {
+  $bind_address='0.0.0.0') {
 
     contain midonet::midonet_api::install
 
@@ -119,7 +118,6 @@ class midonet::midonet_api(
         keystone_port        => $keystone_port,
         keystone_admin_token => $keystone_admin_token,
         keystone_tenant_name => $keystone_tenant_name,
-        catalina_base        => $catalina_base,
         bind_address         => $bind_address
     }
     contain midonet::midonet_api::run
