@@ -6,9 +6,11 @@
 #
 # [*zk_servers*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
-# [*cassandra_seeds]
+# [*cassandra_seeds*]
 #   List of [ip] cassandra instances that run in cluster.
-#
+# [*control_interface*]
+#   Control interface to use
+#   Defaults to eth0
 # === Examples
 #
 # The easiest way to run the class is:
@@ -26,7 +28,8 @@
 #        zk_servers              =>  [{'ip'   => 'host1',
 #                                      'port' => '2183'},
 #                                     {'ip'   => 'host2'}],
-#        cassandra_seeds         =>  ['host1', 'host2', 'host3']
+#        cassandra_seeds         =>  ['host1', 'host2', 'host3'],
+#        control_interface       =>  'eth0'
 #    }
 #
 # Please note that Zookeeper port is not mandatory and defaulted to 2181
@@ -41,6 +44,8 @@
 #     - 'host1'
 #     - 'host2'
 #     - 'host3'
+#
+# midonet::midonet_agent::control_interface: 'eth0'
 #
 # === Authors
 #
@@ -63,13 +68,18 @@
 # limitations under the License.
 #
 
-class midonet::midonet_agent($zk_servers, $cassandra_seeds) {
+class midonet::midonet_agent(
+  $zk_servers,
+  $cassandra_seeds,
+  $control_interface='eth0')
+{
 
   contain midonet::midonet_agent::install
 
   class {'midonet::midonet_agent::run':
-      zk_servers => $zk_servers,
-      cs_seeds   => $cassandra_seeds
+    zk_servers        => $zk_servers,
+    cs_seeds          => $cassandra_seeds,
+    control_interface => $control_interface,
   }
   contain midonet::midonet_agent::run
 }

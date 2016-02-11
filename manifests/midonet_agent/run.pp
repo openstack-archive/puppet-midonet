@@ -24,7 +24,9 @@
 #
 class midonet::midonet_agent::run (
   $zk_servers,
-  $cs_seeds) {
+  $cs_seeds,
+  $control_interface)
+{
 
     file {'/etc/midolman/midolman.conf':
         ensure  => present,

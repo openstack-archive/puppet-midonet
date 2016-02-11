@@ -46,7 +46,7 @@ arp_expiration_seconds = 3600
 
 [midolman]
 disconnected_ttl_seconds = 30
-control_interface = eth0
+control_interface = <%= @control_interface %>
 cache_type = cassandra
 check_flow_expiration_interval = 10000 #millis
 # top_level_actor_supervisor = resume
