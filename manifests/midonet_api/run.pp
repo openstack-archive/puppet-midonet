@@ -33,7 +33,6 @@ class midonet::midonet_api::run (
   $keystone_port,
   $keystone_admin_token,
   $keystone_tenant_name,
-  $catalina_base,
   $bind_address
 ) {
 
@@ -43,7 +42,6 @@ class midonet::midonet_api::run (
 
     tomcat::config::server::connector {'HTTP/1.1':
       port                  => $api_port,
-      catalina_base         => $catalina_base,
       connector_ensure      => 'present',
       additional_attributes => {
         'address'           => $bind_address,
