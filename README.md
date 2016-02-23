@@ -43,10 +43,9 @@ MidoNet class in your Puppet manifest:
 
     include midonet
 
-That will deploy a full MidoNet installation (repos, cassandra, zookeeper,
-agent, MidoNet API and MidoNet CLI) in the target host, which is quite
-useless deployment, since MidoNet is a network controller ready to be scalable
-and distributed. However, for testing its features and demo purposes, it can
+That will deploy a full MidoNet installation (repos, agent, MidoNet API and MidoNet CLI) 
+in the target host, which is quite useless deployment, since MidoNet is a network controller 
+ready to be scalable and distributed. However, for testing its features and demo purposes, it can
 be useful.
 
 ## Usage

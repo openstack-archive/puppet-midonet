@@ -31,10 +31,6 @@ midonet::neutron_plugin::username: 'fake_user'
 midonet::neutron_plugin::password: 'fake_password'
 midonet::neutron_plugin::project_id: 'service'
 
-midonet::cassandra::pid_dir: '/var/run/cassandra'
-midonet::cassandra::conf_dir: '/etc/cassandra/default.conf'
-midonet::cassandra::service_path: '/sbin'
-
 # Temporary source for faraday package and dependencies until it gets included
 # in EPEL repositories
 midonet::faraday_package: 'ruby193-rubygem-faraday'
