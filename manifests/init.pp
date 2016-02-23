@@ -13,8 +13,6 @@
 # documentation for the midonet's modules:
 #
 # - midonet::repository
-# - midonet::cassandra
-# - midonet::zookeeper
 # - midonet::midonet_agent
 # - midonet::midonet_api
 # - midonet::midonet_cli
@@ -42,18 +40,11 @@
 #
 class midonet {
 
-    # Add zookeeper
-    class {'::midonet::zookeeper': }
-
-    # Add cassandra
-    class {'::midonet::cassandra': }
-
     # Add midonet-agent
     class { 'midonet::midonet_agent':
       zk_servers => [{
           'ip' => $::ipaddress}
           ],
-      require    => [Class['::midonet::cassandra'], Class['::midonet::zookeeper']]
     }
 
     # Add midonet-api
