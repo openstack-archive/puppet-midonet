@@ -31,10 +31,7 @@ docs](http://docs.midonet.org/docs/latest/reference-architecture/content/index.h
 
 ## Setup
 
-### What MidoNet affects
 
-* This module affects the repository sources of the target system as well as
-  new packages and their configuration files.
 
 ### Beginning with MidoNet
 
@@ -73,35 +70,6 @@ the variables that you want to override.
 ## Reference
 
 ### Classes
-
-#### MidoNet Repository
-
-MidoNet Repository adds MidoNet's repos into target system. By default it installs
-last released version of MidoNet:
-
-To install other releases than the last default's MidoNet OSS, you can override the
-default's midonet\_repository atributes by a resource-like declaration:
-
-    class { 'midonet_repository':
-        midonet_repo            => 'http://repo.midonet.org/midonet/v2014.11',
-        midonet_openstack_repo  => 'http://repo.midonet.org/openstack',
-        midonet_thirdparty_repo => 'http://repo.midonet.org/misc',
-        midonet_key             => '50F18FCF',
-        midonet_stage           => 'stable',
-        midonet_key_url         => 'http://repo.midonet.org/packages.midokura.key',
-        openstack_release       => 'juno'
-    }
-
-or use a YAML file using the same attributes, accessible from Hiera:
-
-    midonet_repository::midonet_repo: 'http://repo.midonet.org/midonet/v2014.11'
-    midonet_repository::midonet_openstack_repo: 'http://repo.midonet.org/openstack'
-    midonet_repository::midonet_thirdparty_repo: 'http://repo.midonet.org/misc'
-    midonet_repository::midonet_key: '50F18FCF'
-    midonet_repository::midonet_stage: 'stable'
-    midonet_repository::midonet_key_url: 'http://repo.midonet.org/packages.midokura.key'
-    midonet_repository::openstack_release: 'juno'
-
 
 #### MidoNet Agent
 
