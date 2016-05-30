@@ -78,7 +78,7 @@ Puppet::Type.newtype(:midonet_gateway) do
     desc "Physical interface where the MidoNet Provider Router's port is binded to"
     defaultto 'eth0'
     validate do |value|
-      unless value =~ /\w+$/
+      unless value =~ /^\w+(.\d+)?$/
         raise ArgumentError, "'%s' is not a valid interface" % value
       end
     end
