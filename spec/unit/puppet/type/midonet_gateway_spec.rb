@@ -69,7 +69,7 @@ describe Puppet::Type::type(:midonet_gateway) do
         end
     end
 
-    context 'on valid interface name' do
+    context 'on valid interface name without vlan tag' do
         let(:resource) do
             Puppet::Type.type(:midonet_gateway).new(
                 :hostname        => Facter['hostname'].value,
@@ -81,6 +81,34 @@ describe Puppet::Type::type(:midonet_gateway) do
 
         it 'assign to it' do
             expect(resource[:interface]).to eq 'eth0'
+        end
+    end
+
+    context 'on valid interface name with vlan tag' do
+        let(:resource) do
+            Puppet::Type.type(:midonet_gateway).new(
+                :hostname        => Facter['hostname'].value,
+                :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
+                :username        => 'admin',
+                :password        => 'admin',
+                :interface       => 'eth0.9')
+        end
+
+        it 'assign to it' do
+            expect(resource[:interface]).to eq 'eth0.9'
+        end
+    end
+
+    context 'on invalid interface name' do
+        it  do
+          expect {
+            Puppet::Type.type(:midonet_gateway).new(
+                :hostname        => Facter['hostname'].value,
+                :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
+                :username        => 'admin',
+                :password        => 'admin',
+                :interface       => 'eth0.9a')
+          }.to raise_error(Puppet::ResourceError)
         end
     end
 
