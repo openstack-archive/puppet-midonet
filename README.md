@@ -32,7 +32,6 @@ docs](http://docs.midonet.org/docs/latest/reference-architecture/content/index.h
 ## Setup
 
 
-
 ### Beginning with MidoNet
 
 To install the last stable release of MidoNet OSS, just include the

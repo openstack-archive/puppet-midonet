@@ -31,7 +31,7 @@ class midonet::repository::ubuntu (
     $midonet_key_url,
     $openstack_release)
     {
-        # Adding repository for ubuntu
+        # Adds repository for ubuntu
         notice('Adding midonet sources for Debian-like distribution')
         if $::lsbdistrelease == '14.04' or $::lsbdistrelease == '12.04' {
             if $::lsbdistrelease == '12.04' and $openstack_release == 'juno' {
