@@ -193,7 +193,7 @@ Install the MidoNetCLI this way:
 
 Module does not configure the ~/.midonetrc file that `python-midonetclient`
 needs to run. Please, check out how to configure the MidoNet client
-[here](http://docs.midonet.org/docs/latest/quick-start-guide/rhel-7_juno-rdo/content/_midonet_cli_installation.html)
+[here](https://docs.midonet.org/docs/v2015.06/en/quick-start-guide/rhel-7_kilo-rdo/content/_midonet_cli_installation.html)
 
 #### Neutron Plugin
 
@@ -367,7 +367,8 @@ And then run the syntax, unit, and smoke tests.
 **Puppet-midonet** uses Docker as the backend provisioner for beaker, so to
 have Docker installed is mandatory.
 
-Ping us on **#installers** channel on http://midonet.atlassian.org
+You can contact us on several channels:
+https://github.com/midonet/midonet/wiki/Communication
 
 ## Release Notes
 
