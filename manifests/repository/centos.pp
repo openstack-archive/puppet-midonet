@@ -7,7 +7,7 @@
 #
 # === Copyright
 #
-# Copyright (c) 2015 Midokura SARL, All Rights Reserved.
+# Copyright (c) 2016 Midokura SARL, All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,8 +34,7 @@ class midonet::repository::centos (
     {
         # Adding repository for CentOS
         notice('Adding midonet sources for RedHat-like distribution')
-        if ($::operatingsystemmajrelease == 6 or
-            $::operatingsystemmajrelease == 7) {
+        if "${::operatingsystemmajrelease}" == '7' {
 
             yumrepo { 'midonet':
                 baseurl  => "${midonet_repo}/${::operatingsystemmajrelease}/${midonet_stage}",
