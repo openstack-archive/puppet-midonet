@@ -1,0 +1,2 @@
+class midonet::params {
+}
