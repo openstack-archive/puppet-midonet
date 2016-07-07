@@ -17,12 +17,12 @@
   "tags": ["openstack", "sdn", "midonet"],
   "operatingsystem_support": [
     {
-    "operatingsystem": "RedHat",
-    "operatingsystemrelease": [ "6.5", "6.6", "7.0" ]
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [ "7.0", "7.1" ]
     },
     {
-    "operatingsystem": "Ubuntu",
-    "operatingsystemrelease": ["14.04"]
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": ["14.04"]
     }
   ]
 }
