@@ -1,6 +1,14 @@
+# == Class = midonet::params
 #
-# These parameters need to be accessed from several locations and should be
-# considered to be constant
+# Configure the parameters for midonet module
 #
+# === Parameters
+#
+# [*midonet_repo_baseurl*]
+#   Address of the midonet repository
+
 class midonet::params {
+
+  $midonet_repo_baseurl = 'builds.midonet.org'
+  $midonet_key_url      = "https://${midonet_repo_baseurl}/midorepo.key"
 }
