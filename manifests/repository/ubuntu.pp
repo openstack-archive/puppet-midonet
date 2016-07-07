@@ -23,41 +23,53 @@
 #
 
 class midonet::repository::ubuntu (
-    $midonet_repo,
-    $midonet_stage,
-    $midonet_openstack_repo,
-    $midonet_thirdparty_repo,
-    $midonet_key,
-    $midonet_key_url,
-    $openstack_release)
+      $is_mem                 = false,
+      $midonet_version        = '5.2',
+      $midonet_stage          = 'stable',
+      $openstack_release      = 'mitaka',
+      $mem_version            = '5',
+      $mem_username           = undef,
+      $mem_password           = undef)
     {
-        # Adding repository for ubuntu
+
+
         notice('Adding midonet sources for Debian-like distribution')
-        if $::lsbdistrelease == '14.04' or $::lsbdistrelease == '12.04' {
-            if $::lsbdistrelease == '12.04' and $openstack_release == 'juno' {
-                fail ('Ubuntu 12.04 only supports icehouse')
-            }
+        if $::lsbdistrelease == '14.04' or $::lsbdistrelease == '16.04' {
             notice('Adding midonet sources for Debian-like distribution')
 
+            include midonet::params
             include apt
             include apt::update
 
+            if $is_mem {
+              $midonet_repo_url = "http://${mem_username}:${mem_password}@${midonet::params::midonet_repo_baseurl}/mem-${mem_version}"
+            }
+            else {
+              $midonet_repo_url = "http://${midonet::params::midonet_repo_baseurl}/midonet-${midonet_version}"
+            }
             # Update the package list each time a package is defined. That takes
             # time, but it ensures it will not fail for out of date repository info
             # Exec['apt_update'] -> Package<| |>
 
+            apt::key { 'midorepo':
+              id      => 'E9996503AEB005066261D3F38DDA494E99143E75',
+              source  => $midonet::params::midonet_key_url
+            }
+
             apt::source {'midonet':
                 comment     => 'Midonet apt repository',
-                location    => $midonet_repo,
+                location    => $midonet_repo_url,
                 release     => $midonet_stage,
-                key         => $midonet_key,
-                key_source  => $midonet_key_url,
+                key         => {
+                      'id'     => 'E9996503AEB005066261D3F38DDA494E99143E75',
+                      'server' => 'subkeys.pgp.net',
+                },
                 include_src => false,
             }
 
             apt::source {'midonet-openstack-integration':
                 comment     => 'Midonet apt plugin repository',
-                location    => $midonet_openstack_repo,
+                location    => "http://${midonet::params::midonet_repo_baseurl}/openstack-${openstack_release}",
                 release     => $midonet_stage,
                 include_src => false,
             }
