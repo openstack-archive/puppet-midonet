@@ -23,61 +23,50 @@
 #
 
 class midonet::repository::centos (
-    $midonet_repo,
-    $midonet_openstack_repo,
-    $midonet_thirdparty_repo,
-    $midonet_stage,
-    $midonet_key_url,
-    $manage_distro_repo,
-    $manage_epel_repo,
-    $openstack_release)
-    {
-        # Adding repository for CentOS
-        notice('Adding midonet sources for RedHat-like distribution')
-        if "${::operatingsystemmajrelease}" == '7' {
+  $is_mem,
+  $midonet_version,
+  $midonet_stage,
+  $openstack_release,
+  $mem_version,
+  $mem_username,
+  $mem_password,
+) {
+  include midonet::params
 
-            yumrepo { 'midonet':
-                baseurl  => "${midonet_repo}/${::operatingsystemmajrelease}/${midonet_stage}",
-                descr    => 'Midonet base repo',
-                enabled  => 1,
-                gpgcheck => 1,
-                gpgkey   => $midonet_key_url,
-                timeout  => 60
-            }
+  # Notify the user about we are doing
+  notice('Adding midonet repositories for RedHat-based distribution')
 
-            yumrepo { 'midonet-openstack-integration':
-                baseurl  => "${midonet_openstack_repo}/${::operatingsystemmajrelease}/${midonet_stage}",
-                descr    => 'Midonet OS plugin repo',
-                enabled  => 1,
-                gpgcheck => 1,
-                gpgkey   => $midonet_key_url,
-                timeout  => 60
-            }
+  # Prefix the repository name differently if we're installing MEM
+  if $is_mem {
+    $midonet_repo_prefix        = 'mem'
+    $midonet_core_repo_url      = "http://${mem_username}:${mem_password}@${midonet::params::midonet_repo_baseurl}/mem-${mem_version}/${midonet_stage}/el${::operatingsystemmajrelease}"
+  } else {
+    $midonet_repo_prefix        = 'midonet'
+    $midonet_core_repo_url      = "http://${midonet::params::midonet_repo_baseurl}/midonet-${midonet_version}/${midonet_stage}/el${::operatingsystemmajrelease}"
+  }
 
-            if $manage_epel_repo == true {
-              package { 'epel-release':
-                  ensure   => installed
-              }
-            }
-
-            if $manage_distro_repo == true {
-              package { 'rdo-release':
-                  ensure   => installed,
-                  source   => "https://repos.fedorapeople.org/repos/openstack/openstack-${openstack_release}/rdo-release-${openstack_release}.rpm",
-                  provider => 'rpm'
-              }
-            }
-
-            exec {'update-midonet-repos':
-              command => '/usr/bin/yum clean all && /usr/bin/yum makecache'
-            }
-
-            Yumrepo<| |> -> Exec<| title == 'update-midonet-repos' |>
-            Package<| |> -> Exec<| title == 'update-midonet-repos' |>
-        }
-        else
-        {
-            fail("RedHat/CentOS version ${::operatingsystemmajrelease}
-                  not supported")
-        }
+  if "${::operatingsystemmajrelease}" == '7' {
+    yumrepo { 'midonet':
+      name     => $midonet_repo_prefix,
+      baseurl  => $midonet_core_repo_url,
+      descr    => 'Base repository',
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => $midonet::params::midonet_key_url,
+      timeout  => 60
     }
+    yumrepo { 'midonet-openstack-integration':
+      name     => "${midonet_repo_prefix}-openstack-integration",
+      baseurl  => "http://${midonet::params::midonet_repo_baseurl}/openstack-${openstack_release}/${midonet_stage}/el${::operatingsystemmajrelease}",
+      descr    => 'OpenStack integration',
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => $midonet::params::midonet_key_url,
+      timeout  => 60
+    }
+  }
+  else
+  {
+    fail("RedHat/CentOS version ${::operatingsystemmajrelease} not supported")
+  }
+}
