@@ -3,6 +3,12 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
+
+## OpenStack modules
+
+
+## External modules
+
 mod 'puppetlabs/inifile'
 mod 'puppetlabs/apt'
 mod 'puppetlabs/java'
