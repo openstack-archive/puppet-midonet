@@ -90,44 +90,42 @@
 # limitations under the License.
 #
 class midonet::repository (
-    $midonet_repo,
-    $midonet_openstack_repo,
-    $midonet_thirdparty_repo,
-    $midonet_stage,
-    $midonet_key_url,
-    $midonet_key=unset,
-    $manage_distro_repo=true,
-    $manage_epel_repo=true,
-    $openstack_release,) {
+  $is_mem                 = false,
+  $midonet_version        = '5.2',
+  $midonet_stage          = 'stable',
+  $openstack_release      = 'mitaka',
+  $mem_version            = '5',
+  $mem_username           = undef,
+  $mem_password           = undef
+  ) {
 
     case $::osfamily {
-        'Debian': {
-            class {'midonet::repository::ubuntu':
-                midonet_repo            => $midonet_repo,
-                midonet_openstack_repo  => $midonet_openstack_repo,
-                midonet_thirdparty_repo => $midonet_thirdparty_repo,
-                midonet_stage           => $midonet_stage,
-                midonet_key_url         => $midonet_key_url,
-                midonet_key             => $midonet_key,
-                openstack_release       => $openstack_release
-            }
+      'Debian': {
+        class { 'midonet::repository::ubuntu':
+          is_mem            => $is_mem,
+          midonet_version   => $midonet_version,
+          midonet_stage     => $midonet_stage,
+          openstack_release => $openstack_release,
+          mem_version       => $mem_version,
+          mem_username      => $mem_username,
+          mem_password      => $mem_password
         }
+      }
 
-        'RedHat': {
-            class {'midonet::repository::centos':
-                midonet_repo            => $midonet_repo,
-                midonet_openstack_repo  => $midonet_openstack_repo,
-                midonet_thirdparty_repo => $midonet_thirdparty_repo,
-                midonet_stage           => $midonet_stage,
-                midonet_key_url         => $midonet_key_url,
-                manage_distro_repo      => $manage_distro_repo,
-                manage_epel_repo        => $manage_epel_repo,
-                openstack_release       => $openstack_release
-            }
+      'RedHat': {
+        class { 'midonet::repository::centos':
+          is_mem            => $is_mem,
+          midonet_version   => $midonet_version,
+          midonet_stage     => $midonet_stage,
+          openstack_release => $openstack_release,
+          mem_version       => $mem_version,
+          mem_username      => $mem_username,
+          mem_password      => $mem_password
         }
+      }
 
-        default: {
-            fail('Operating System not supported by this module')
-        }
-    }
+      default: {
+        fail('Operating system not supported by this module')
+      }
+  }
 }
