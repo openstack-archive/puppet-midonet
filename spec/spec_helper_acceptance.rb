@@ -23,7 +23,7 @@ RSpec.configure do |c|
       zuul_branch = ENV['ZUUL_BRANCH']
       zuul_url = ENV['ZUUL_URL']
 
-      repo = 'openstack/puppet-openstack-integration'
+      repo = 'openstack/puppet-midonet'
 
       # Start out with clean moduledir, don't trust r10k to purge it
       on host, "rm -rf /etc/puppet/modules/*"
@@ -41,7 +41,7 @@ RSpec.configure do |c|
         on host, "git clone https://git.openstack.org/#{repo} #{repo}"
       end
 
-      on host, "ZUUL_REF=#{zuul_ref} ZUUL_BRANCH=#{zuul_branch} ZUUL_URL=#{zuul_url} bash #{repo}/install_modules.sh"
+      on host, "ZUUL_REF=#{zuul_ref} ZUUL_BRANCH=#{zuul_branch} ZUUL_URL=#{zuul_url} bash #{repo}/spec/files/install_modules.sh"
 
       # Install the module being tested
       on host, "rm -fr /etc/puppet/modules/#{modname}"
