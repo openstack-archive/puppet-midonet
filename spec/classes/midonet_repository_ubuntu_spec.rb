@@ -39,6 +39,12 @@ describe 'midonet::repository::ubuntu' do
         'include_src' => 'false'
       )
     }
+    it { is_expected.to contain_apt__source('midonet-openstack-misc').with(
+        'location' => 'http://builds.midonet.org/misc',
+        'release' => 'stable',
+        'include_src' => 'false'
+      )
+    }
     it { is_expected.to contain_exec('update-midonet-repos').with(
         'command' => '/bin/true',
         'require' => '[Exec[apt_update]{:command=>"apt_update"}, Apt::Source[midonet]{:name=>"midonet"}, Apt::Source[midonet-openstack-integration]{:name=>"midonet-openstack-integration"}]'
@@ -80,6 +86,12 @@ describe 'midonet::repository::ubuntu' do
     }
     it { is_expected.to contain_apt__source('midonet-openstack-integration').with(
         'location' => 'http://builds.midonet.org/openstack-mitaka',
+        'release' => 'stable',
+        'include_src' => 'false'
+      )
+    }
+    it { is_expected.to contain_apt__source('midonet-openstack-misc').with(
+        'location' => 'http://builds.midonet.org/misc',
         'release' => 'stable',
         'include_src' => 'false'
       )
