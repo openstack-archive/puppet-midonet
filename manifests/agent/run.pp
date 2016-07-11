@@ -1,6 +1,12 @@
-# == Class: midonet::midonet_agent::run
-# Check out the midonet::midonet_agent class for a full understanding of
-# how to use the midonet_agent resource
+# == Class: midonet::agent::run
+# Check out the midonet::agent class for a full understanding of
+# how to use the agent resource
+#
+# === Parameters
+#
+# [*zookeeper_hosts*]
+#   List of hash [{ip, port}] Zookeeper instances that run in cluster.
+#     Default: [ { 'ip' => '127.0.0.1', 'port' => '2181' } ]
 #
 # === Authors
 #
@@ -8,7 +14,7 @@
 #
 # === Copyright
 #
-# Copyright (c) 2015 Midokura SARL, All Rights Reserved.
+# Copyright (c) 2016 Midokura SARL, All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,19 +28,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class midonet::midonet_agent::run (
-  $zk_servers,
-  $cs_seeds,
-  $control_interface)
-{
+class midonet::agent::run (
+  $zookeeper_hosts = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+) {
 
     file {'/etc/midolman/midolman.conf':
         ensure  => present,
-        content => template('midonet/midonet-agent/midolman.conf.erb'),
-        require => Package['midolman']
+        content => template('midonet/agent/midolman.conf.erb'),
+        require => Package['midolman'],
     } ~>
 
-    service {'midolman':
-        ensure => running
-    }
+    service {'midolman': ensure => running }
 }
