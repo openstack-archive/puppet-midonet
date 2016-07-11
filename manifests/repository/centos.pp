@@ -64,6 +64,15 @@ class midonet::repository::centos (
       gpgkey   => $midonet::params::midonet_key_url,
       timeout  => 60
     }
+    yumrepo { 'midonet-misc':
+      name     => "${midonet_repo_prefix}-misc",
+      baseurl  => "http://${midonet::params::midonet_repo_baseurl}/misc/${midonet_stage}/el${::operatingsystemmajrelease}",
+      descr    => '3rd party tools and libraries',
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => $midonet::params::midonet_key_url,
+      timeout  => 60
+    }
   }
   else
   {
