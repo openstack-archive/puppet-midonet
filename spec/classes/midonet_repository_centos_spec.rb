@@ -40,6 +40,15 @@ describe 'midonet::repository::centos' do
         'timeout' => '60'
       )
     }
+    it { is_expected.to contain_yumrepo('midonet-misc').with(
+        'name' => 'midonet-misc',
+        'baseurl' => 'http://builds.midonet.org/misc/stable/el7',
+        'enabled' => '1',
+        'gpgcheck' => '1',
+        'gpgkey' => 'https://builds.midonet.org/midorepo.key',
+        'timeout' => '60'
+      )
+    }
   end
 
   context 'with custom parameters (centos)' do
@@ -75,6 +84,15 @@ describe 'midonet::repository::centos' do
     it { is_expected.to contain_yumrepo('midonet-openstack-integration').with(
         'name' => 'mem-openstack-integration',
         'baseurl' => 'http://builds.midonet.org/openstack-mitaka/stable/el7',
+        'enabled' => '1',
+        'gpgcheck' => '1',
+        'gpgkey' => 'https://builds.midonet.org/midorepo.key',
+        'timeout' => '60'
+      )
+    }
+    it { is_expected.to contain_yumrepo('midonet-misc').with(
+        'name' => 'mem-misc',
+        'baseurl' => 'http://builds.midonet.org/misc/stable/el7',
         'enabled' => '1',
         'gpgcheck' => '1',
         'gpgkey' => 'https://builds.midonet.org/midorepo.key',
