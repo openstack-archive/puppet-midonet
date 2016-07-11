@@ -76,6 +76,13 @@ class midonet::repository::ubuntu (
                 include_src => false,
             }
 
+            apt::source {'midonet-openstack-misc':
+                comment     => 'Midonet 3rd party tools and libraries',
+                location    => "http://${midonet::params::midonet_repo_baseurl}/misc",
+                release     => $midonet_stage,
+                include_src => false,
+            }
+
             # Dummy exec to wrap apt_update
             exec {'update-midonet-repos':
                 command => '/bin/true',
