@@ -7,6 +7,12 @@
 # [*package_name*]
 #   Name of the package in the repository. Default: undef
 #
+# [*service_name*]
+#   Name of the MN agent service. Default: undef
+#
+# [*agent_config_path*]
+#   Full path to the MN agent config. Default: undef
+#
 # [*package_ensure*]
 #   Whether the package should be installed or not. Default: undef
 #
@@ -68,6 +74,8 @@
 
 class midonet::agent (
   $package_name = undef,
+  $service_name = undef,
+  $agent_config_path = undef,
   $package_ensure = undef,
   $manage_java = undef,
   $zookeeper_hosts = undef,
@@ -83,7 +91,10 @@ class midonet::agent (
   }
 
   class { 'midonet::agent::run':
-    zookeeper_hosts => $zookeeper_hosts,
-    require         => Class['midonet::agent::install'],
+    package_name      => $package_name,
+    service_name      => $service_name,
+    agent_config_path => $agent_config_path,
+    zookeeper_hosts   => $zookeeper_hosts,
+    require           => Class['midonet::agent::install'],
   }
 }

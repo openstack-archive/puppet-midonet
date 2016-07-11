@@ -4,6 +4,13 @@
 #
 # === Parameters
 #
+#
+# [*service_name*]
+#   Name of the MN agent service. Default: midolman
+#
+# [*agent_config_path*]
+#   Full path to the MN agent config. Default: /etc/midolman/midolman.conf
+#
 # [*zookeeper_hosts*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
 #     Default: [ { 'ip' => '127.0.0.1', 'port' => '2181' } ]
@@ -29,14 +36,17 @@
 # limitations under the License.
 #
 class midonet::agent::run (
-  $zookeeper_hosts = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+  $service_name      = 'midolman',
+  $package_name      = 'midolman',
+  $agent_config_path = '/etc/midolman/midolman.conf',
+  $zookeeper_hosts   = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
 ) {
 
-    file {'/etc/midolman/midolman.conf':
+    file { $agent_config_path:
         ensure  => present,
         content => template('midonet/agent/midolman.conf.erb'),
-        require => Package['midolman'],
+        require => Package[$package_name],
     } ~>
 
-    service {'midolman': ensure => running }
+    service { $service_name: ensure => running }
 }
