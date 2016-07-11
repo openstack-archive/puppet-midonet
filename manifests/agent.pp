@@ -1,21 +1,27 @@
-# == Class: midonet::midonet_agent
+# == Class: midonet::agent
 #
 # Install and run midonet_agent
 #
 # === Parameters
 #
-# [*zk_servers*]
+# [*package_name*]
+#   Name of the package in the repository. Default: undef
+#
+# [*package_ensure*]
+#   Whether the package should be installed or not. Default: undef
+#
+# [*manage_java*]
+#   Set to true to install java. Defaults: undef
+#
+# [*zookeeper_hosts*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
-# [*cassandra_seeds*]
-#   List of [ip] cassandra instances that run in cluster.
-# [*control_interface*]
-#   Control interface to use
-#   Defaults to eth0
+#     Default: undef
+#
 # === Examples
 #
 # The easiest way to run the class is:
 #
-#     include midonet::midonet_agent
+#     include midonet::agent
 #
 # This call assumes that there is a zookeeper instance and a cassandra instance
 # running in the target machine, and will configure the midonet-agent to
@@ -24,28 +30,20 @@
 # This is a quite naive deployment, just for demo purposes. A more realistic one
 # would be:
 #
-#    class {'midonet::midonet_agent':
-#        zk_servers              =>  [{'ip'   => 'host1',
-#                                      'port' => '2183'},
-#                                     {'ip'   => 'host2'}],
-#        cassandra_seeds         =>  ['host1', 'host2', 'host3'],
-#        control_interface       =>  'eth0'
-#    }
+#    class {'midonet::agent':
+#            zookeeper_hosts =>  [{'ip'   => 'host1',
+#                                  'port' => '2183'},
+#                                 {'ip'   => 'host2'}],
+#          }
 #
 # Please note that Zookeeper port is not mandatory and defaulted to 2181
 #
 # You can alternatively use the Hiera.yaml style:
 #
-# midonet::midonet_agent::zk_servers:
+# midonet::agent::zookeeper_hosts:
 #     - ip: 'host1'
 #       port: 2183
 #     - ip: 'host2'
-# midonet::midonet_agent::cassandra_seeds:
-#     - 'host1'
-#     - 'host2'
-#     - 'host3'
-#
-# midonet::midonet_agent::control_interface: 'eth0'
 #
 # === Authors
 #
@@ -53,7 +51,7 @@
 #
 # === Copyright
 #
-# Copyright (c) 2015 Midokura SARL, All Rights Reserved.
+# Copyright (c) 2016 Midokura SARL, All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,18 +66,24 @@
 # limitations under the License.
 #
 
-class midonet::midonet_agent(
-  $zk_servers,
-  $cassandra_seeds,
-  $control_interface='eth0')
-{
+class midonet::agent (
+  $package_name = undef,
+  $package_ensure = undef,
+  $manage_java = undef,
+  $zookeeper_hosts = undef,
+) {
 
-  contain midonet::midonet_agent::install
+  include midonet::repository
 
-  class {'midonet::midonet_agent::run':
-    zk_servers        => $zk_servers,
-    cs_seeds          => $cassandra_seeds,
-    control_interface => $control_interface,
+  class { 'midonet::agent::install':
+    package_name   => $package_name,
+    package_ensure => $package_ensure,
+    manage_java    => $manage_java,
+    require        => Class['midonet::repository'],
   }
-  contain midonet::midonet_agent::run
+
+  class { 'midonet::agent::run':
+    zookeeper_hosts => $zookeeper_hosts,
+    require         => Class['midonet::agent::install'],
+  }
 }
