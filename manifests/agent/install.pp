@@ -39,12 +39,47 @@ class midonet::agent::install (
   $manage_java = false,
 ) {
 
+
   if $manage_java {
-    class { 'java': distribution => 'jre' }
+    case $::osfamily {
+      'Debian': {
+        include apt
+        if $::lsbdistrelease == '16.04' {
+          # Placeholder so the default case does not fail
+        }
+        elsif $::lsbdistrelease == '14.04' {
+          package { 'software-properties-common': ensure => installed }
+          apt::ppa { 'ppa:openjdk-r/ppa':
+            ensure  => present,
+            require => Package['software-properties-common'],
+            before  => Package[$package_name],
+          }
+        }
+        else {
+          fail("Can't manage Java on ${::lsbdistid} ${::lsbdistrelease}")
+        }
+      }
+      'RedHat': {
+        # Placeholder so the default case does not fail
+      }
+      default: {
+        fail("Java cannot be managed on ${::osfamily}-based systems")
+      }
+    }
   }
 
-  package { $package_name:
-    ensure  => $package_ensure,
-    require => Class['java']
+  case $::osfamily {
+    'Debian': {
+      package { $package_name:
+        ensure  => $package_ensure,
+        require => Exec['apt_update']
+      }
+    }
+    'RedHat': {
+      package { $package_name: ensure  => $package_ensure }
+    }
+    default: {
+      fail("Midonet agent cannot be installed on ${::osfamily}-based systems")
+    }
   }
 }
