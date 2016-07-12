@@ -28,7 +28,6 @@ describe 'midonet::agent::install' do
         :lsbdistcodename => 'xenial',
       }
     end
-    it { is_expected.to contain_class('java').with_distribution('jre')}
     it { is_expected.to contain_package('midolman').with_ensure('present') }
   end
 end
