@@ -70,13 +70,17 @@ class midonet::agent::install (
 
   case $::osfamily {
     'Debian': {
-      package { $package_name:
+      package { 'midolman':
         ensure  => $package_ensure,
-        require => Exec['apt_update']
+        name    => $package_name,
+        require => Exec['apt_update'],
       }
     }
     'RedHat': {
-      package { $package_name: ensure  => $package_ensure }
+      package { 'midolman':
+        ensure => $package_ensure,
+        name   => $package_name,
+      }
     }
     default: {
       fail("Midonet agent cannot be installed on ${::osfamily}-based systems")
