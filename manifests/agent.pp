@@ -73,12 +73,14 @@
 #
 
 class midonet::agent (
-  $package_name = undef,
-  $service_name = undef,
-  $agent_config_path = undef,
-  $package_ensure = undef,
-  $manage_java = undef,
-  $zookeeper_hosts = undef,
+  $package_name       = undef,
+  $service_name       = undef,
+  $service_ensure     = undef,
+  $service_enable     = undef,
+  $agent_config_path  = undef,
+  $package_ensure     = undef,
+  $manage_java        = undef,
+  $zookeeper_hosts    = undef,
 ) {
 
   include midonet::repository
@@ -91,8 +93,9 @@ class midonet::agent (
   }
 
   class { 'midonet::agent::run':
-    package_name      => $package_name,
     service_name      => $service_name,
+    service_ensure    => undef,
+    service_enable    => undef,
     agent_config_path => $agent_config_path,
     zookeeper_hosts   => $zookeeper_hosts,
     require           => Class['midonet::agent::install'],

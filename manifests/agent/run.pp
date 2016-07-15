@@ -36,17 +36,23 @@
 # limitations under the License.
 #
 class midonet::agent::run (
-  $service_name      = 'midolman',
-  $package_name      = 'midolman',
-  $agent_config_path = '/etc/midolman/midolman.conf',
-  $zookeeper_hosts   = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+  $service_name       = 'midolman',
+  $service_ensure     = 'running',
+  $service_enable     = true,
+  $agent_config_path  = '/etc/midolman/midolman.conf',
+  $zookeeper_hosts    = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
 ) {
 
-    file { $agent_config_path:
-        ensure  => present,
-        content => template('midonet/agent/midolman.conf.erb'),
-        require => Package[$package_name],
+    file { 'agent_config':
+      ensure  => present,
+      path    => $agent_config_path,
+      content => template('midonet/agent/midolman.conf.erb'),
+      require => Package['midolman'],
     } ~>
 
-    service { $service_name: ensure => running }
+    service { 'midolman':
+      ensure => $service_ensure,
+      name   => $service_name,
+      enable => $service_enable,
+    }
 }
