@@ -28,7 +28,7 @@ class midonet::cluster::install (
 
   include midonet::repository
 
-  package {'midonet-cluster':
+  package { 'midonet-cluster':
     ensure => present,
     name   => $package_name,
   }
