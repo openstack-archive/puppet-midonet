@@ -40,19 +40,31 @@ class midonet::agent::run (
   $service_ensure     = 'running',
   $service_enable     = true,
   $agent_config_path  = '/etc/midolman/midolman.conf',
-  $zookeeper_hosts    = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+  $zookeeper_hosts,
+  $controller_host,
+  $metadata_port,
+  $shared_secret,
 ) {
 
-    file { 'agent_config':
-      ensure  => present,
-      path    => $agent_config_path,
-      content => template('midonet/agent/midolman.conf.erb'),
-      require => Package['midolman'],
-    } ~>
+  file { '/tmp/mn-agent_config.sh':
+    ensure  => present,
+    content => template('midonet/agent/mn-agent_config.sh.erb'),
+  } ->
 
-    service { 'midolman':
-      ensure => $service_ensure,
-      name   => $service_name,
-      enable => $service_enable,
-    }
+  exec { '/bin/bash /tmp/mn-agent_config.sh': }
+
+  file { 'agent_config':
+    ensure  => present,
+    path    => $agent_config_path,
+    content => template('midonet/agent/midolman.conf.erb'),
+    require => Package['midolman'],
+    notify  => Service['midolman'],
+    before  => File['/tmp/mn-agent_config.sh'],
+  }
+
+  service { 'midolman':
+    ensure => $service_ensure,
+    name   => $service_name,
+    enable => $service_enable,
+  }
 }

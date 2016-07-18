@@ -80,7 +80,10 @@ class midonet::agent (
   $agent_config_path  = undef,
   $package_ensure     = undef,
   $manage_java        = undef,
-  $zookeeper_hosts    = undef,
+  $zookeeper_hosts,
+  $controller_host,
+  $metadata_port,
+  $shared_secret,
 ) {
 
   include midonet::repository
@@ -98,6 +101,9 @@ class midonet::agent (
     service_enable    => undef,
     agent_config_path => $agent_config_path,
     zookeeper_hosts   => $zookeeper_hosts,
+    controller_host   => $controller_host,
+    metadata_port     => $metadata_port,
+    shared_secret     => $shared_secret,
     require           => Class['midonet::agent::install'],
   }
 }
