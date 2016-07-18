@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+which mn-conf > /dev/null || {
+  echo "'mn-conf' cannot be found in \$PATH" >&2
+  exit 1
+}
+
+## Access to the NSDB
+cat << EOF | mn-conf set -t default
+zookeeper {
+  <%- zkarr = Array.new -%>
+  <%- @zookeeper_hosts.each do |s| -%>
+  <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
+  <%- end -%>
+  zookeeper_hosts = <%= zkarr.join(",") %>
+}
+
+cassandra {
+  servers = <%= @cassandra_servers.join(",") %>
+}
+EOF
+echo "cassandra.replication_factor : <%= @cassandra_rep_factor %>" | mn-conf set -t default
+
+
+## Configure Keystone access
+cat << EOF | mn-conf set -t default
+cluster.auth {
+  provider_class = "org.midonet.cluster.auth.keystone.KeystoneService"
+  admin_role = "admin"
+  keystone.tenant_name = "admin"
+  keystone.admin_token = "<%= @keystone_admin_token %>"
+  keystone.host = <%= @keystone_host %>
+  keystone.port = 35357
+}
+EOF
+
+exit 0
