@@ -93,33 +93,31 @@
 # limitations under the License.
 #
 class midonet::cluster (
-  $zk_servers,
-  $keystone_auth,
-  $vtep,
-  $tomcat_package,
-  $keystone_host=$::ipaddress,
-  $keystone_port=35357,
-  $keystone_admin_token=undef,
-  $keystone_tenant_name='admin',
-  $api_ip=$::ipaddress,
-  $api_port='8080',
-  $bind_address='0.0.0.0'
+  $package_name           = undef,
+  $service_name           = undef,
+  $service_ensure         = undef,
+  $service_enable         = undef,
+  $cluster_config_path    = undef,
+  $zookeeper_hosts,
+  $cassandra_servers,
+  $cassandra_rep_factor,
+  $keystone_admin_token,
+  $keystone_host,
 ) {
 
-    contain midonet::midonet_api::install
+    class { 'midonet::cluster::install':
+      package_name => $package_name,
+    } ->
 
-    class {'midonet::midonet_api::run':
-        zk_servers           => $zk_servers,
-        keystone_auth        => $keystone_auth,
-        tomcat_package       => $tomcat_package,
-        vtep                 => $vtep,
-        api_ip               => $api_ip,
-        api_port             => $api_port,
-        keystone_host        => $keystone_host,
-        keystone_port        => $keystone_port,
-        keystone_admin_token => $keystone_admin_token,
-        keystone_tenant_name => $keystone_tenant_name,
-        bind_address         => $bind_address
+    class { 'midonet::cluster::run':
+      service_name         => $service_name,
+      service_ensure       => $service_ensure,
+      service_enable       => $service_enable,
+      cluster_config_path  => $cluster_config_path,
+      zookeeper_hosts      => $zookeeper_hosts,
+      cassandra_servers    => $cassandra_servers,
+      cassandra_rep_factor => $cassandra_rep_factor,
+      keystone_admin_token => $keystone_admin_token,
+      keystone_host        => $keystone_host,
     }
-    contain midonet::midonet_api::run
 }
