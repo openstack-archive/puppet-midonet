@@ -8,7 +8,14 @@
 #
 # === Examples
 #
-# Just declare the class and the package will be installed
+# [*api_endpoint*]
+#   Url to bind to. Normally the CLI is in the same machine..
+# [*username*]
+#   Keystone username
+# [*password*]
+#   KKeystone Password
+# [*tenant_name*]
+#   Tenant Name
 #
 # === Authors
 #
@@ -31,7 +38,7 @@
 # limitations under the License.
 #
 class midonet::midonet_cli(
-  $api_endpoint='http://127.0.0.1:8080/midonet-api',
+  $api_endpoint='http://127.0.0.1:8181/midonet-api',
   $username='admin',
   $password='admin',
   $tenant_name='admin',
