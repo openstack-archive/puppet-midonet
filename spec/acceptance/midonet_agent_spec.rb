@@ -1,11 +1,17 @@
 require 'spec_helper_acceptance'
 
 describe 'midonet::agent class' do
-  context 'default parameters' do
+  context 'with mandatory parameters (default params not overwritten)' do
     # Using puppet_apply as a helper
     it 'should install the midonet agent without any errors' do
       pp = <<-EOS
-      class { 'midonet::agent': manage_java => true }
+      class { 'midonet::agent':
+        zookeeper_hosts => [ {'ip' => '127.0.0.1', 'port' => '2181'} ],
+        controller_host => '127.0.0.1',
+        metadata_port => '8181',
+        shared_secret => 'SHARED_SECRET',
+        manage_java => true,
+      }
       EOS
 
       # Run it twice and test for idempotency
