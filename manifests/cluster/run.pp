@@ -24,18 +24,31 @@
 #
 class midonet::cluster::run (
   $service_name         = 'midonet-cluster',
-  $service_ensure     = 'running',
-  $service_enable     = true,
+  $service_ensure       = 'running',
+  $service_enable       = true,
   $cluster_config_path  = '/etc/midonet/midonet.conf',
-  $zookeeper_hosts   = [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+  $zookeeper_hosts,
+  $cassandra_servers,
+  $cassandra_rep_factor,
+  $keystone_admin_token,
+  $keystone_host,
 ) {
+
+  file { '/tmp/mn-cluster_config.sh':
+    ensure  => present,
+    content => template('midonet/cluster/mn-cluster_config.sh.erb'),
+  } ->
+
+  exec { '/bin/bash /tmp/mn-cluster_config.sh': }
 
   file { 'cluster_config':
     ensure  => present,
     path    => $cluster_config_path,
     content => template('midonet/cluster/midonet.conf.erb'),
     require => Package['midonet-cluster'],
-  } ~>
+    notify  => Service['midonet-cluster'],
+    before  => File['/tmp/mn-cluster_config.sh'],
+  }
 
   service { 'midonet-cluster':
     ensure => $service_ensure,
