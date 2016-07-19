@@ -53,7 +53,7 @@ Puppet::Type.type(:midonet_network).provide(:midonet_api_caller) do
 
     tenants = call_get_tenant(resource[:tenant_name])
     if tenants.empty?
-      return
+      raise "Tenant with specified name #{resource[:tenant_name]} does not exist"
     end
     tenant_id = tenant[0]['id']
     network = call_get_network(resource[:netname],tenant_id)
