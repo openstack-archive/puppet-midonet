@@ -71,5 +71,90 @@ describe Puppet::Type.type(:midonet_network).provider(:midonet_api_caller) do
   end
 
 
+##
+
+describe 'try to create a network for an unexisting tenant' do
+  # - Tenant Existing
+  # - Network not previously existing
+
+  let(:tenants) {
+    [
+      {
+        "name" => "admin",
+        "id"   => "bd69f96a-005b-4d58-9f6c-b8dd9fbb6339",
+      }
+    ]
+  }
+
+  let(:networks) {
+    [
+      {
+        "name"      => "testnet",
+        "id"        => "by82a88d-005b-4d58-9f6c-aaaaaaaa1111",
+        "tenant_id" => "admin",
+        "shared"    => "true",
+        "external"  => "true"
+      }
+    ]
+  }
+
+
+
+
+  it 'should raise an exception' do
+    # Expectations over 'create' call
+    allow(provider).to receive(:call_get_tenant).and_return([])
+    allow(provider).to receive(:call_get_token).and_return('thisisafaketoken')
+    expect {
+      provider.create
+    }.to raise_error(RuntimeError)
+
+  end
+
+end
+
+##
+
+describe 'try to delete a network that does not exist' do
+  # - Tenant Existing
+  # - Network not previously existing
+
+  let(:tenants) {
+    [
+      {
+        "name" => "admin",
+        "id"   => "bd69f96a-005b-4d58-9f6c-b8dd9fbb6339",
+      }
+    ]
+  }
+
+  let(:networks) {
+    [
+      {
+        "name"      => "testnet",
+        "id"        => "by82a88d-005b-4d58-9f6c-aaaaaaaa1111",
+        "tenant_id" => "admin",
+        "shared"    => "true",
+        "external"  => "true"
+      }
+    ]
+  }
+
+
+
+
+  it 'should not fail' do
+    # Expectations over 'create' call
+    allow(provider).to receive(:call_get_tenant).and_return(tenants)
+    allow(provider).to receive(:call_get_network).and_return([])
+    allow(provider).to receive(:call_get_token).and_return('thisisafaketoken')
+
+    expect(provider).not_to receive(:call_delete_network)
+    provider.destroy
+
+  end
+
+end
+
 
 end
