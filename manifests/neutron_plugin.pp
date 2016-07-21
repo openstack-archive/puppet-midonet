@@ -76,7 +76,17 @@ class midonet::neutron_plugin (
     $sync_db           = false
     ) {
 
-    package {'python-neutron-plugin-midonet':
+    if $::osfamily == 'Debian' {
+      $package_networking = 'python-networking-midonet'
+    }
+    elsif $::osfamily == 'RedHat' {
+      $package_networking = 'python-neutron-plugin-midonet'
+    }
+    else {
+      $package_networking = undef
+    }
+
+    package {$package_networking:
         ensure  => present,
     } ->
 
