@@ -32,7 +32,7 @@ cluster.auth {
   keystone.tenant_name = "admin"
   keystone.admin_token = "<%= @keystone_admin_token %>"
   keystone.host = <%= @keystone_host %>
-  keystone.port = 35357
+  keystone.port = <%= @keystone_port %>
 }
 EOF
 
