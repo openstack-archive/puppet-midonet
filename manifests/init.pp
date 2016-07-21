@@ -40,6 +40,7 @@
 #
 class midonet {
 
+    include ::midonet::params
     # Add midonet-agent
     class { 'midonet::midonet_agent':
       zk_servers => [{
@@ -60,15 +61,15 @@ class midonet {
 # package for RHEL-based. We are working on getting it included in EPEL repos.
 # Detailed info: https://midonet.atlassian.net/browse/PUP-30
 
-    if ! defined(Package["hiera('midonet::faraday', 'ruby-faraday')"]) {
+    if ! defined(Package[$::midonet::params::midonet_faraday_package]) {
       if $::osfamily == 'RedHat' {
-        package { "hiera('midonet::multipart', 'rubygem-multipart-post')":
+        package { "${::midonet::params::midonet_faraday_package}":
           ensure => present,
-          source => "hiera('midonet::multipart_post_url'"
+          source => $::midonet::params::midonet_faraday_url
         } ->
-        package { "hiera('midonet::faraday', 'ruby-faraday')":
+        package { "${::midonet::paramsmidonet_multipart_post_package}":
           ensure => present,
-          source => "hiera('midonet::faraday_url')"
+          source => $::midonet::paramsmidonet_multipart_post_url
         }
       }
       else {

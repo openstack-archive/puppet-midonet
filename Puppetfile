@@ -7,8 +7,8 @@ forge "https://forgeapi.puppetlabs.com"
 ## OpenStack modules
 
 mod 'puppet-neutron',
-  :git => 'https://github.com/openstack/puppet-neutron',
-  :ref => 'stable/mitaka'
+  :git => 'https://github.com/ahharu/puppet-neutron',
+  :ref => 'master'
 
 ## External modules
 
