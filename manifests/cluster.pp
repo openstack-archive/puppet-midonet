@@ -1,74 +1,52 @@
-# == Class: midonet::midonet_api
+# == Class: midonet::midonet_cluster
 #
-# Install and run midonet_api
+# Install and run midonet_cluster
 #
 # === Parameters
 #
-# [*zk_servers*]
+# [*package_name*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
-# [*keystone_auth*]
-#   Whether to authenticate the API request through a Keystone service. Default:
+# [*service_name*]
+#   Whether to authenticate the cluster request through a Keystone service. Default:
 #   false.
-# [*vtep*]
+# [*service_ensure*]
 #   Whether to enable the vtep service endpoint. Default: false
-# [*tomcat_package*]
+# [*service_enable*]
 #   The name of the tomcat package to install. The module already inserts a
 #   value depending on the distribution used. Don't override it unless you know
 #   what you are doing.
-# [*bind_address*]
+# [*cluster_config_path*]
 #   Let choose the address to bind instead of all of them
-# [*api_ip*]
+# [*zookeeper_hosts*]
 #   Exposed IP address. By default, it exposes the first internet address that
 #   founds in the host.
-# [*api_port*]
+# [*cassandra_servers*]
 #   TCP listening port. By default, 8080
-# [*keystone_host*]
+# [*cassandra_rep_factor*]
 #   Keystone service endpoint IP. Not used if keystone_auth is false.
-# [*keystone_port*]
-#   Keystone service endpoint port. Not used if keystone_auth is false.
 # [*keystone_admin_token*]
-#   Keystone admin token. Not used if keystone_auth is false.
-# [*keystone_tenant_name*]
-#   Keystone tenant name. 'admin' by default. Not used if keystone_auth is false.
+#   Keystone service endpoint port. Not used if keystone_auth is false.
+# [*keystone_host*]
+#   Keystone host
+# [*keystone_port*]
+#   Keystone port
 #
 # === Examples
 #
-# The easiest way to run this class is:
-#
-#     include midonet::midonet_api
-#
-# This call assumes that there is a zookeeper running in the target host and the
-# module will spawn a midonet_api without keystone authentication.
-#
-# This is a quite naive deployment, just for demo purposes. A more realistic one
+# This would be a deployment for demo purposes
 # would be:
 #
-#    class {'midonet::midonet_api':
-#        zk_servers           =>  [{'ip'   => 'host1',
-#                             'port' => '2183'},
-#                            {'ip'   => 'host2'}],
-#        keystone_auth        => true,
-#        vtep                 => true,
-#        api_ip               => '92.234.12.4',
-#        keystone_host        => '92.234.12.9',
-#        keystone_port        => 35357  (35357 is already the default)
-#        keystone_admin_token => 'arrakis',
-#        keystone_tenant_name => 'other-than-admin' ('admin' by default)
+#    class {'midonet::midonet_cluster':
+#        zookeeper_hosts        => [{
+#          'ip' => $::ipaddress}
+#          ]
+#        cassandra_servers      => ['127.0.0.1'],
+#        cassandra_rep_factor   => 1.
+#        keystone_admin_token   => 'fake_token',
+#        keystone_host          => '127.0.0.1'
 #    }
 #
-# You can alternatively use the Hiera.yaml style:
-#
-# midonet::midonet_api::zk_servers:
-#     - ip: 'host1'
-#       port: 2183
-#     - ip: 'host2'
-# midonet::midonet_api::vtep: true
-# midonet::midonet_api::keystone_auth: true
-# midonet::midonet_api::api_ip: '92.234.12.4'
-# midonet::midonet_api::keystone_host: '92.234.12.9'
-# midonet::midonet_api::keystone_port: 35357
-# midonet::midonet_api::keystone_admin_token: 'arrakis'
-# midonet::midonet_api::keystone_tenant_name: 'admin'
+
 #
 # Please note that Zookeeper port is not mandatory and defaulted to 2181.
 #
@@ -98,6 +76,7 @@ class midonet::cluster (
   $service_ensure         = undef,
   $service_enable         = undef,
   $cluster_config_path    = undef,
+  $keystone_port          = undef,
   $zookeeper_hosts,
   $cassandra_servers,
   $cassandra_rep_factor,
@@ -119,5 +98,6 @@ class midonet::cluster (
       cassandra_rep_factor => $cassandra_rep_factor,
       keystone_admin_token => $keystone_admin_token,
       keystone_host        => $keystone_host,
+      keystone_port        => $keystone_port
     }
 }
