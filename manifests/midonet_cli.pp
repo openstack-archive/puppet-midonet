@@ -4,10 +4,6 @@
 #
 # === Parameters
 #
-# No parameters
-#
-# === Examples
-#
 # [*api_endpoint*]
 #   Url to bind to. Normally the CLI is in the same machine..
 # [*username*]
@@ -16,6 +12,15 @@
 #   KKeystone Password
 # [*tenant_name*]
 #   Tenant Name
+#
+# === Examples
+#
+#   class midonet::midonet_cli(
+#     $api_endpoint='http://127.0.0.1:8181/midonet-api',
+#     $username='admin',
+#     $password='admin',
+#     $tenant_name='admin',
+#   )
 #
 # === Authors
 #
