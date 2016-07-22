@@ -27,6 +27,8 @@ class midonet::cluster::run (
   $service_ensure       = 'running',
   $service_enable       = true,
   $cluster_config_path  = '/etc/midonet/midonet.conf',
+  $cluster_host         = '0.0.0.0',
+  $cluster_port         = '8181',
   $zookeeper_hosts,
   $cassandra_servers,
   $cassandra_rep_factor,
