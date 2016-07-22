@@ -77,13 +77,17 @@ class midonet::neutron_plugin (
     ) {
 
     if $::osfamily == 'Debian' {
-      $package_networking = 'python-networking-midonet'
+      $ml2_package = 'neutron-plugin-ml2'
     }
     if $::osfamily == 'RedHat' {
-      $package_networking = 'python-neutron-plugin-midonet'
+      $package_networking = 'openstack-neutron-ml2'
     }
 
-    package { $package_networking:
+    package { 'python-networking-midonet':
+        ensure  => present,
+    } ->
+
+    package { "$ml2_package":
         ensure  => present,
     } ->
 
