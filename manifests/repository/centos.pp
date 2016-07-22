@@ -45,7 +45,7 @@ class midonet::repository::centos (
     $midonet_core_repo_url      = "http://${midonet::params::midonet_repo_baseurl}/midonet-${midonet_version}/${midonet_stage}/el${::operatingsystemmajrelease}"
   }
 
-  if "${::operatingsystemmajrelease}" == '7' {
+  if $::operatingsystemmajrelease == '7' {
     yumrepo { 'midonet':
       name     => $midonet_repo_prefix,
       baseurl  => $midonet_core_repo_url,
