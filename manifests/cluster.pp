@@ -17,6 +17,10 @@
 #   what you are doing.
 # [*cluster_config_path*]
 #   Let choose the address to bind instead of all of them
+# [*cluster_host*]
+#   Keystone port
+# [*cluster_port*]
+#   Keystone port
 # [*zookeeper_hosts*]
 #   Exposed IP address. By default, it exposes the first internet address that
 #   founds in the host.
@@ -76,6 +80,8 @@ class midonet::cluster (
   $service_ensure         = undef,
   $service_enable         = undef,
   $cluster_config_path    = undef,
+  $cluster_host           = undef,
+  $cluster_port           = undef,
   $keystone_port          = undef,
   $zookeeper_hosts,
   $cassandra_servers,
@@ -93,6 +99,8 @@ class midonet::cluster (
       service_ensure       => $service_ensure,
       service_enable       => $service_enable,
       cluster_config_path  => $cluster_config_path,
+      cluster_host         => $cluster_host,
+      cluster_port         => $cluster_port,
       zookeeper_hosts      => $zookeeper_hosts,
       cassandra_servers    => $cassandra_servers,
       cassandra_rep_factor => $cassandra_rep_factor,
