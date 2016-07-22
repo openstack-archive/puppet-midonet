@@ -34,6 +34,10 @@ cluster.auth {
   keystone.host = <%= @keystone_host %>
   keystone.port = <%= @keystone_port %>
 }
+cluster.rest_api {
+  http_host = <%= @cluster_host %>
+  http_port = <%= @cluster_port %>
+}
 EOF
 
 exit 0
