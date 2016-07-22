@@ -88,7 +88,7 @@ class midonet::neutron_plugin (
     } ->
 
     package { $ml2_package:
-        ensure  => present,
+        ensure  => absent,
     } ->
 
     class { 'neutron::plugins::midonet':
