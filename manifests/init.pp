@@ -43,7 +43,7 @@ class midonet {
     include ::midonet::params
 
     # Add midonet-agent
-    class { 'midonet::midonet_agent':
+    class { 'midonet::agent':
       zk_servers => [{
           'ip' => $::ipaddress}
           ],
