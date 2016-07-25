@@ -80,7 +80,7 @@ class midonet::neutron_plugin (
       $ml2_package = 'neutron-plugin-ml2'
     }
     if $::osfamily == 'RedHat' {
-      $package_networking = 'openstack-neutron-ml2'
+      $ml2_package = 'openstack-neutron-ml2'
     }
 
     package { 'python-networking-midonet':
