@@ -1,0 +1,41 @@
+{
+  <% if @api_host -%>
+     "api_host": "<%= @api_host %>",
+  <% end -%>
+  <% if @login_host -%>
+    "login_host": "<%= @login_host %>",
+  <% end -%>
+  <% if @trace_api_host -%>
+    "trace_api_host": "<%= @trace_api_host %>",
+  <% end -%>
+  <% if @traces_ws_url -%>
+    "traces_ws_url": "<%= @traces_ws_url %>",
+  <% end -%>
+  <% if @api_namespace -%>
+    "api_namespace": "<%= @api_namespace %>",
+  <% elsif @api_namespace == nil -%>
+    "api_namespace": "midonet-api",
+  <% end -%>
+  <% if @api_version -%>
+    "api_version": "<%= @api_version %>",
+  <% end -%>
+  <% if @api_token -%>
+    "api_token": "<%= @api_token %>",
+  <% elsif @api_token == false -%>
+    "api_token": false,
+  <% end -%>
+  <% if @agent_config_api_namespace -%>
+    "agent_config_api_namespace": "<%= @agent_config_api_namespace %>",
+  <% elsif @agent_config_api_namespace == nil -%>
+    "agent_config_api_namespace": "conf",
+  <% end -%>
+  <% if @analytics_ws_api_url -%>
+    "analytics_ws_api_url": "<%= @analytics_ws_api_url %>",
+  <% end -%>
+  <% if @poll_enabled -%>
+    "poll_enabled": "<%= @poll_enabled %>",
+  <% end -%>
+  <% if @login_animation_enabled -%>
+    "login_animation_enabled": "<%= @login_animation_enabled %>"
+  <% end -%>
+}
