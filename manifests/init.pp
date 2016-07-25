@@ -43,7 +43,7 @@ class midonet {
     include ::midonet::params
 
     # Add midonet-agent
-    class { 'midonet::midonet_agent':
+    class { 'midonet::agent':
       zk_servers => [{
           'ip' => $::ipaddress}
           ],
@@ -55,7 +55,7 @@ class midonet {
           'ip' => $::ipaddress}
           ],
         cassandra_servers    => ['127.0.0.1'],
-        cassandra_rep_factor => '1',
+        cassandra_rep_factor => '1'.
         keystone_admin_token => 'testmido',
         keystone_host        => '127.0.0.1'
     }
