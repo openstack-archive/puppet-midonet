@@ -79,21 +79,21 @@
 
 class midonet::mem(
 # Midonet Manager installation options
-  $mem_package                = $::midonet::mem::params::mem_package,
-  $mem_install_path           = $::midonet::mem::params::mem_install_path,
-  $api_host                   = $::midonet::mem::params::api_host,
-  $login_host                 = $::midonet::mem::params::login_host,
-  $trace_api_host             = $::midonet::mem::params::trace_api_host,
-  $traces_ws_url              = $::midonet::mem::params::traces_ws_url,
-  $api_namespace              = $::midonet::mem::params::api_namespace,
-  $api_version                = $::midonet::mem::params::api_version,
-  $api_token                  = $::midonet::mem::params::api_token,
-  $agent_config_api_namespace = $::midonet::mem::params::agent_config_api_namespace,
-  $analytics_ws_api_url       = $::midonet::mem::params::analytics_ws_api_url,
-  $poll_enabled               = $::midonet::mem::params::poll_enabled,
-  $login_animation_enabled    = $::midonet::mem::params::login_animation_enabled,
+  $mem_package                = $::midonet::params::mem_package,
+  $mem_install_path           = $::midonet::params::mem_install_path,
+  $api_host                   = $::midonet::params::api_host,
+  $login_host                 = $::midonet::params::login_host,
+  $trace_api_host             = $::midonet::params::trace_api_host,
+  $traces_ws_url              = $::midonet::params::traces_ws_url,
+  $api_namespace              = $::midonet::params::api_namespace,
+  $api_version                = $::midonet::params::api_version,
+  $api_token                  = $::midonet::params::api_token,
+  $agent_config_api_namespace = $::midonet::params::agent_config_api_namespace,
+  $analytics_ws_api_url       = $::midonet::params::analytics_ws_api_url,
+  $poll_enabled               = $::midonet::params::poll_enabled,
+  $login_animation_enabled    = $::midonet::params::login_animation_enabled,
 
-) inherits midonet::mem::params {
+) inherits midonet::params {
 
   include midonet::repository
 
