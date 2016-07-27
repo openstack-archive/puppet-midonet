@@ -91,7 +91,7 @@ class midonet {
     # Register the host
     midonet_host_registry { $::hostname:
       ensure          => present,
-      midonet_api_url => 'http://127.0.0.1:8080',
+      midonet_api_url => 'http://127.0.0.1:8181/midonet-api',
       username        => 'midogod',
       password        => 'midogod',
       require         => Class['midonet::midonet_agent']
