@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'midonet::midonet_cli' do
+describe 'midonet::cli' do
 
   let :pre_condition do
     "include ::midonet::repository"
@@ -116,5 +116,6 @@ describe 'midonet::midonet_cli' do
     end
 
     it_configures 'set up midonet cli'
+    it { is_expected.to contain_package('epel-release').with_ensure('installed') }
   end
 end

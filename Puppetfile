@@ -15,7 +15,13 @@ mod 'puppet-neutron',
 mod 'puppetlabs/inifile'
 mod 'puppetlabs/apt'
 mod 'puppetlabs/java'
-mod 'puppetlabs/tomcat'
 mod 'puppetlabs/stdlib'
 mod 'puppetlabs/apache'
+mod 'puppetlabs/firewall'
+mod 'deric/zookeeper'
+mod 'locp/cassandra'
 mod 'puppetlabs/concat'
+
+mod 'midonet_openstack',
+  :git => 'https://github.com/midonet/puppet-midonet_openstack',
+  :ref => 'master'

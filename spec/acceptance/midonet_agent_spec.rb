@@ -5,12 +5,16 @@ describe 'midonet::agent class' do
     # Using puppet_apply as a helper
     it 'should install the midonet agent without any errors' do
       pp = <<-EOS
+      class { 'midonet_openstack::role::nsdb':
+      }
       class { 'midonet::agent':
         zookeeper_hosts => [ { 'ip' => '127.0.0.1', 'port' => '2181' } ],
         controller_host => '127.0.0.1',
-        metadata_port => '8181',
-        shared_secret => 'SHARED_SECRET',
-        manage_java => true,
+        metadata_port   => '8181',
+        shared_secret   => 'SHARED_SECRET',
+        manage_java     => false,
+        require         => Class['midonet_openstack::role::nsdb'],
+        max_heap_size   => "256M"
       }
       EOS
 
@@ -26,11 +30,6 @@ describe 'midonet::agent class' do
     describe service('midolman') do
       it { should be_enabled }
       it { should be_running }
-    end
-
-    # JMX
-    describe port(7200) do
-      it { should be_listening }
     end
   end
 

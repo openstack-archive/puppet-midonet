@@ -75,14 +75,17 @@
 # limitations under the License.
 #
 class midonet::cluster (
-  $package_name           = undef,
-  $service_name           = undef,
-  $service_ensure         = undef,
-  $service_enable         = undef,
-  $cluster_config_path    = undef,
-  $cluster_host           = undef,
-  $cluster_port           = undef,
-  $keystone_port          = undef,
+  $package_name            = undef,
+  $service_name            = undef,
+  $service_ensure          = undef,
+  $service_enable          = undef,
+  $cluster_config_path     = undef,
+  $cluster_jvm_config_path = undef,
+  $cluster_host            = undef,
+  $cluster_port            = undef,
+  $keystone_port           = undef,
+  $max_heap_size           = undef,
+  $heap_newsize            = undef,
   $zookeeper_hosts,
   $cassandra_servers,
   $cassandra_rep_factor,
@@ -95,17 +98,20 @@ class midonet::cluster (
     } ->
 
     class { 'midonet::cluster::run':
-      service_name         => $service_name,
-      service_ensure       => $service_ensure,
-      service_enable       => $service_enable,
-      cluster_config_path  => $cluster_config_path,
-      cluster_host         => $cluster_host,
-      cluster_port         => $cluster_port,
-      zookeeper_hosts      => $zookeeper_hosts,
-      cassandra_servers    => $cassandra_servers,
-      cassandra_rep_factor => $cassandra_rep_factor,
-      keystone_admin_token => $keystone_admin_token,
-      keystone_host        => $keystone_host,
-      keystone_port        => $keystone_port
+      service_name            => $service_name,
+      service_ensure          => $service_ensure,
+      service_enable          => $service_enable,
+      cluster_config_path     => $cluster_config_path,
+      cluster_jvm_config_path => $cluster_config_path,
+      cluster_host            => $cluster_host,
+      cluster_port            => $cluster_port,
+      max_heap_size           => $max_heap_size,
+      heap_newsize            => $heap_newsize,
+      zookeeper_hosts         => $zookeeper_hosts,
+      cassandra_servers       => $cassandra_servers,
+      cassandra_rep_factor    => $cassandra_rep_factor,
+      keystone_admin_token    => $keystone_admin_token,
+      keystone_host           => $keystone_host,
+      keystone_port           => $keystone_port
     }
 }

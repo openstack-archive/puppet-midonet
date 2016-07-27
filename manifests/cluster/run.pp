@@ -23,18 +23,21 @@
 # limitations under the License.
 #
 class midonet::cluster::run (
-  $service_name         = 'midonet-cluster',
-  $service_ensure       = 'running',
-  $service_enable       = true,
-  $cluster_config_path  = '/etc/midonet/midonet.conf',
-  $cluster_host         = '0.0.0.0',
-  $cluster_port         = '8181',
+  $service_name             = 'midonet-cluster',
+  $service_ensure           = 'running',
+  $service_enable           = true,
+  $cluster_config_path      = '/etc/midonet/midonet.conf',
+  $cluster_jvm_config_path  = '/etc/midonet-cluster/midonet-cluster-env.sh',
+  $cluster_host             = '0.0.0.0',
+  $cluster_port             = '8181',
+  $max_heap_size            = '2048M',
+  $heap_newsize             = '1024M',
   $zookeeper_hosts,
   $cassandra_servers,
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
-  $keystone_port        = '35357'
+  $keystone_port            = '35537'
 ) {
 
   file { '/tmp/mn-cluster_config.sh':
@@ -51,6 +54,14 @@ class midonet::cluster::run (
     require => Package['midonet-cluster'],
     notify  => Service['midonet-cluster'],
     before  => File['/tmp/mn-cluster_config.sh'],
+  }
+
+  file { 'cluster_jvm_config':
+    ensure  => present,
+    path    => $cluster_jvm_config_path,
+    content => template('midonet/cluster/midonet-cluster-env.sh.erb'),
+    require => Package['midonet-cluster'],
+    notify  => Service['midonet-cluster'],
   }
 
   service { 'midonet-cluster':

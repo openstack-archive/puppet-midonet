@@ -18,6 +18,7 @@ describe 'midonet::agent::run' do
       }
     end
     it { is_expected.to contain_file('agent_config').with_ensure('present') }
+    it { is_expected.to contain_file('jvm_config').with_ensure('present') }
     it { is_expected.to contain_service('midolman').with_ensure('running') }
   end
 end

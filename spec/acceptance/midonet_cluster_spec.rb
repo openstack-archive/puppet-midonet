@@ -10,7 +10,8 @@ describe 'midonet::cluster class' do
         cassandra_servers     => ['127.0.0.1'],
         cassandra_rep_factor  => 1,
         keystone_admin_token  => 'testmido',
-        keystone_host         => '127.0.0.1'
+        keystone_host         => '127.0.0.1',
+        max_heap_size         => '256M',
        }
       EOS
 

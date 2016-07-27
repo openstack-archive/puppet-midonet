@@ -42,16 +42,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class midonet::midonet_cli(
+class midonet::cli(
   $api_endpoint='http://127.0.0.1:8181/midonet-api',
   $username='admin',
   $password='admin',
   $tenant_name='admin',
 ) {
 
-  package {'python-midonetclient':
-    ensure  => present,
+  if $::osfamily == 'RedHat' {
+    package { 'epel-release':
+      ensure => installed,
+      before => Package['python-midonetclient']
+    }
   }
+
+  package { 'python-midonetclient': ensure  => present, }
 
   midonet_client_conf {
     'cli/api_url':    value => $api_endpoint;

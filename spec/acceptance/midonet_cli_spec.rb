@@ -1,11 +1,11 @@
 require 'spec_helper_acceptance'
 
-describe 'midonet class' do
+describe 'midonet::cli class' do
   context 'without mem' do
     # Using puppet_apply as a helper
     it 'should work without any errors' do
       pp = <<-EOS
-        class {'::midonet::midonet_cli':
+        class {'midonet::cli':
           api_endpoint => 'http://127.0.0.1:8181/midonet-api',
           username     => 'admin',
           password     => 'admin',
@@ -27,7 +27,6 @@ describe 'midonet class' do
         its (:content) { should match /username=admin/ }
         its (:content) { should match /password=admin/ }
         its (:content) { should match /project_id=admin/ }
-
       end
 
 

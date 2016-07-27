@@ -35,11 +35,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 class midonet::agent::run (
   $service_name       = 'midolman',
   $service_ensure     = 'running',
   $service_enable     = true,
   $agent_config_path  = '/etc/midolman/midolman.conf',
+  $jvm_config_path    = '/etc/midolman/midolman-env.sh',
+  $max_heap_size      = '2048M',
   $zookeeper_hosts,
   $controller_host,
   $metadata_port,
@@ -60,6 +63,14 @@ class midonet::agent::run (
     require => Package['midolman'],
     notify  => Service['midolman'],
     before  => File['/tmp/mn-agent_config.sh'],
+  }
+
+  file { 'jvm_config':
+    ensure  => present,
+    path    => $jvm_config_path,
+    content => template('midonet/agent/midolman-env.sh.erb'),
+    require => Package['midolman'],
+    notify  => Service['midolman'],
   }
 
   service { 'midolman':
