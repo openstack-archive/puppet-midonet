@@ -1,0 +1,59 @@
+MIDO_HOME=/usr/share/midolman                                                                                                                                  [18/1974]
+MIDO_CFG=/etc/midolman
+MIDO_LOG_DIR=/var/log/midolman/
+MIDO_DEBUG_PORT=8001
+JMX_PORT="7200"
+MIDO_CFG_FILE=midolman.conf
+QUAGGA_DIR=/var/run/quagga
+WATCHDOG_TIMEOUT=10
+
+MAX_HEAP_SIZE="<%= @max_heap_size %>"
+
+JVM_OPTS="$JVM_OPTS -XX:+AggressiveOpts"
+
+JVM_OPTS="$JVM_OPTS -XX:+UseThreadPriorities"
+JVM_OPTS="$JVM_OPTS -XX:ThreadPriorityPolicy=42"
+
+JVM_OPTS="$JVM_OPTS -Xms${MAX_HEAP_SIZE}"
+JVM_OPTS="$JVM_OPTS -Xmx${MAX_HEAP_SIZE}"
+JVM_OPTS="$JVM_OPTS -XX:HeapDumpPath=/var/log/midolman/"
+JVM_OPTS="$JVM_OPTS -XX:+HeapDumpOnOutOfMemoryError"
+JVM_OPTS="$JVM_OPTS -XX:OnOutOfMemoryError=\"kill;-3;%p\""
+
+JVM_OPTS="$JVM_OPTS -XX:-UseBiasedLocking"
+
+JVM_OPTS="$JVM_OPTS -XX:+UseG1GC"
+JVM_OPTS="$JVM_OPTS -XX:MaxGCPauseMillis=500"
+JVM_OPTS="$JVM_OPTS -XX:InitiatingHeapOccupancyPercent=70"
+JVM_OPTS="$JVM_OPTS -XX:SurvivorRatio=8"
+JVM_OPTS="$JVM_OPTS -XX:MaxTenuringThreshold=8"
+JVM_OPTS="$JVM_OPTS -XX:+UseTLAB"
+JVM_OPTS="$JVM_OPTS -XX:+ResizeTLAB"
+JVM_OPTS="$JVM_OPTS -XX:TLABSize=2m"
+JVM_OPTS="$JVM_OPTS -XX:PretenureSizeThreshold=2m"
+
+JVM_OPTS="$JVM_OPTS -XX:+PrintGCDetails"
+JVM_OPTS="$JVM_OPTS -XX:+PrintGCTimeStamps"
+JVM_OPTS="$JVM_OPTS -XX:+PrintClassHistogram"
+JVM_OPTS="$JVM_OPTS -XX:+PrintTenuringDistribution"
+JVM_OPTS="$JVM_OPTS -XX:+PrintGCApplicationStoppedTime"
+JVM_OPTS="$JVM_OPTS -XX:+UseGCLogFileRotation"
+JVM_OPTS="$JVM_OPTS -XX:NumberOfGCLogFiles=10"
+JVM_OPTS="$JVM_OPTS -XX:GCLogFileSize=10M"
+JVM_OPTS="$JVM_OPTS -Xloggc:/var/log/midolman/gc-`date +%Y%m%d_%H%M%S`.log"
+
+if [ "x$JMXDISABLE" = "x" ] ; then
+    JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote"
+    JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.local.only=$JMXLOCALONLY"
+    JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.port=$JMX_PORT"
+    JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.ssl=false"
+    JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
+    HOSTNAME=`hostname`
+    JVM_OPTS="$JVM_OPTS -Djava.rmi.server.hostname=$HOSTNAME"
+fi
+
+if [ "$MIDOLMAN_HPROF" = "1" ] ; then
+    DATE=$(date +'%H%M%S')
+    HPROF_FILENAME=${HPROF_FILENAME:-/tmp/midolman-$DATE.hprof}
+    JVM_OPTS="$JVM_OPTS -agentlib:hprof=cpu=samples,depth=100,interval=1,lineno=y,thread=y,file=$HPROF_FILENAME"
+fi
