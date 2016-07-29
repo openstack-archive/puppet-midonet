@@ -111,4 +111,8 @@ class midonet::agent (
     max_heap_size     => $max_heap_size,
     require           => Class['midonet::agent::install'],
   }
+
+  class { 'midonet::agent::scrapper':
+
+  }
 }
