@@ -16,6 +16,7 @@ describe 'midonet::agent class' do
         require         => Class['midonet_openstack::role::nsdb'],
         max_heap_size   => "256M"
       }
+      include ::midonet::agent::scrapper
       EOS
 
       # Run it twice and test for idempotency
