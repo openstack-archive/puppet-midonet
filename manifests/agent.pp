@@ -26,6 +26,22 @@
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
 #     Default: undef
 #
+# [*is_mem*]
+#   Boolean variable - If true puppet will install MEM specific services
+#     Default: false
+#
+# [*manage_repo*]
+#   Boolean variable - If true puppet will install repositories on given node
+#     Default: false
+#
+# [*mem_username*]
+#   Username which will have access to Midokura repositories 
+#     Default: undef
+#
+# [*mem_password*]
+#   Password for User which will be used to access the Midokura repositories 
+#     Default: undef
+#
 # === Examples
 #
 # The easiest way to run the class is:
@@ -88,6 +104,10 @@ class midonet::agent (
   $controller_host,
   $metadata_port,
   $shared_secret,
+  $is_mem             = false,
+  $manage_repo        = false,
+  $mem_username       = undef,
+  $mem_password       = undef
 ) {
 
   include midonet::repository
@@ -111,4 +131,27 @@ class midonet::agent (
     max_heap_size     => $max_heap_size,
     require           => Class['midonet::agent::install'],
   }
+
+  if $is_mem {
+    if $manage_repo == true {
+      if !defined(Class['midonet::repository']) {
+        class {'midonet::repository':
+          is_mem            => $is_mem,
+          midonet_version   => undef,
+          midonet_stage     => undef,
+          openstack_release => undef,
+          mem_version       => undef,
+          mem_username      => $mem_username,
+          mem_password      => $mem_password,
+        }
+      }
+    }
+    class { 'midonet::agent::scrapper':
+      require   => Class['midonet::repository'],
+    }
+  }
+  else  {
+    notice('Skipping installation of jmx-scrapper')
+  }
+
 }
