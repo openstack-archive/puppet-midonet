@@ -12,6 +12,7 @@ end
 
 group :development, :unit_tests do
   gem 'rspec-puppet', '~> 2.4',             :require => false
+  gem 'fast_gettext', '1.1.0',             :require => false
   gem 'rspec-core', '3.5',                :require => false
   gem 'puppetlabs_spec_helper', '>= 0.1.0', :require => false
   gem 'puppet-lint', '>= 0.3.2',            :require => false
