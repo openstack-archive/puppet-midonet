@@ -86,11 +86,16 @@ class midonet::cluster (
   $keystone_port           = undef,
   $max_heap_size           = undef,
   $heap_newsize            = undef,
+  $is_mem                  = false,
+  $manage_repo             = false,
+  $mem_username            = undef,
+  $mem_password            = undef,
   $zookeeper_hosts,
   $cassandra_servers,
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
+
 ) {
 
     class { 'midonet::cluster::install':
@@ -113,5 +118,29 @@ class midonet::cluster (
       keystone_admin_token    => $keystone_admin_token,
       keystone_host           => $keystone_host,
       keystone_port           => $keystone_port
+    }
+
+    if $is_mem {
+      if $manage_repo == true {
+        if !defined(Class['midonet::repository']) {
+          class {'midonet::repository':
+            is_mem            => $is_mem,
+            midonet_version   => undef,
+            midonet_stage     => undef,
+            openstack_release => undef,
+            mem_version       => undef,
+            mem_username      => $mem_username,
+            mem_password      => $mem_password
+          }
+        }
+      }
+      package { 'midonet-cluster-mem':
+        ensure  => present
+        require => [Class['midonet::repository'],
+                    Class['midonet::cluster::run'],
+                    Class['midonet::cluster::install']]}
+    }
+    else  {
+      notice('Skipping installation of midonet-cluster-mem')
     }
 }
