@@ -77,9 +77,9 @@ class midonet {
           ensure => present,
           source => $::midonet::params::midonet_faraday_url
         } ->
-        package { $::midonet::paramsmidonet_multipart_post_package:
+        package { $::midonet::params::midonet_multipart_post_package:
           ensure => present,
-          source => $::midonet::paramsmidonet_multipart_post_url
+          source => $::midonet::params::midonet_multipart_post_url
         }
       }
       else {
