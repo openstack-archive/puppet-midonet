@@ -44,13 +44,16 @@ class midonet {
 
     # Add midonet-agent
     class { 'midonet::agent':
-      zk_servers => [{
+      controller_host => '127.0.0.1',
+      metadata_port   => '8775',
+      shared_secret   => 'testmido',
+      zookeeper_hosts => [{
           'ip' => $::ipaddress}
           ],
     }
 
     # Add midonet-cluster
-    class {'midonet::midonet_cluster':
+    class {'midonet::cluster':
         zookeeper_hosts      => [{
           'ip' => $::ipaddress}
           ],
@@ -61,7 +64,7 @@ class midonet {
     }
 
     # Add midonet-cli
-    class {'midonet::midonet_cli':}
+    class {'midonet::cli':}
 
 # TODO(carmela): This workaround has been added in order to be able to handle
 # dependencies on the custom providers. Currently there's no official faraday
@@ -94,7 +97,7 @@ class midonet {
       midonet_api_url => 'http://127.0.0.1:8181/midonet-api',
       username        => 'midogod',
       password        => 'midogod',
-      require         => Class['midonet::midonet_agent']
+      require         => Class['midonet::agent']
     }
 
 }
