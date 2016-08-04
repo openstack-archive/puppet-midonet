@@ -66,29 +66,29 @@ class midonet {
     # Add midonet-cli
     class {'midonet::cli':}
 
-# TODO(carmela): This workaround has been added in order to be able to handle
-# dependencies on the custom providers. Currently there's no official faraday
-# package for RHEL-based. We are working on getting it included in EPEL repos.
-# Detailed info: https://midonet.atlassian.net/browse/PUP-30
-
-    if ! defined(Package[$::midonet::params::midonet_faraday_package]) {
+    # Install these rubygems so our custom types work properly
       if $::osfamily == 'RedHat' {
+        yumrepo { 'foreman-releases-repo':
+          ensure   => present,
+          baseurl  => $::midonet::params::foreman_releases_repo_url,
+          enabled  => 1,
+          gpgcheck => 1,
+          timeout  => 60,
+          gpgkey   => $::midonet::params::foreman_releases_repo_gpgkey,
+        } ->
         package { $::midonet::params::midonet_faraday_package:
           ensure => present,
-          source => $::midonet::params::midonet_faraday_url
         } ->
         package { $::midonet::params::midonet_multipart_post_package:
           ensure => present,
-          source => $::midonet::params::midonet_multipart_post_url
         }
       }
-      else {
+      elsif $::osfamily == 'Debian' {
         package { 'ruby-faraday':
           ensure => present,
-          before => Midonet_host_registry[$::hostname]
+          before => midonet_host_registry[$::hostname]
         }
       }
-    }
 
 
     # Register the host
