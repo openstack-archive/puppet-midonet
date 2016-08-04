@@ -9,7 +9,6 @@ describe 'midonet::cluster::install' do
         :lsbdistrelease => '16.04',
       }
     end
-    it { is_expected.to contain_class('midonet::repository') }
     it { is_expected.to contain_package('midonet-cluster').with(
       'ensure' => 'present',
       'name'   => 'midonet-cluster',

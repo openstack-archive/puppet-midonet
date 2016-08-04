@@ -24,12 +24,21 @@
 #
 class midonet::cluster::install (
   $package_name      = 'midonet-cluster',
+  $is_mem            = false
 ) {
-
-  include midonet::repository
 
   package { 'midonet-cluster':
     ensure => present,
     name   => $package_name,
   }
+
+  if $is_mem {
+    package { 'midonet-cluster-mem':
+      ensure  => present,
+      require => Class['midonet::repository']}
+  }
+  else  {
+    notice('Skipping installation of midonet-cluster-mem')
+  }
+
 }
