@@ -14,11 +14,11 @@ zookeeper {
   <%- @zookeeper_hosts.each do |s| -%>
   <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
   <%- end -%>
-  zookeeper_hosts = <%= zkarr.join(",") %>
+  zookeeper_hosts = "<%= zkarr.join(",") %>"
 }
 
 cassandra {
-  servers = <%= @cassandra_servers.join(",") %>
+  servers = "<%= @cassandra_servers.join(",") %>"
 }
 EOF
 echo "cassandra.replication_factor : <%= @cassandra_rep_factor %>" | mn-conf set -t default
