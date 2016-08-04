@@ -13,9 +13,9 @@ class midonet::params {
   $midonet_key_url                      = "https://${midonet_repo_baseurl}/midorepo.key"
 
   $midonet_faraday_package              = 'tfm-rubygem-faraday'
-  $midonet_faraday_url                  = 'http://yum.theforeman.org/nightly/el7/x86_64/tfm-rubygem-faraday-0.9.1-3.el7.noarch.rpm'
-  $midonet_multipart_post_package       =  'tfm-rubygem-multipart-post'
-  $midonet_multipart_post_url           =  'http://yum.theforeman.org/nightly/el7/x86_64/tfm-rubygem-multipart-post-1.2.0-4.el7.noarch.rpm'
+  $midonet_multipart_post_package       = 'tfm-rubygem-multipart-post'
+  $foreman_releases_repo_url            = 'http://yum.theforeman.org/releases/latest/el7/$basearch'
+  $foreman_releases_repo_gpgkey         = 'https://yum.theforeman.org/releases/latest/RPM-GPG-KEY-foreman'
 
   # midonet MEM Manager
   $mem_package                          = 'midonet-manager'
