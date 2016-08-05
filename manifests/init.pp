@@ -76,6 +76,9 @@ class midonet {
           timeout  => 60,
           gpgkey   => $::midonet::params::foreman_releases_repo_gpgkey,
         } ->
+        package { ['centos-release-scl yum', 'install centos-release-scl-rh']:
+          ensure => present,
+        } ->
         package { $::midonet::params::midonet_faraday_package:
           ensure => present,
         } ->
