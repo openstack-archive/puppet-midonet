@@ -21,6 +21,11 @@ mod 'puppetlabs/firewall'
 mod 'deric/zookeeper'
 mod 'locp/cassandra'
 mod 'puppetlabs/concat'
+mod 'TubeMogul/curator'
+mod 'elasticsearch/elasticsearch'
+mod 'elasticsearch/logstash'
+mod 'electrical/file_concat'
+
 
 mod 'midonet_openstack',
   :git => 'https://github.com/midonet/puppet-midonet_openstack',
