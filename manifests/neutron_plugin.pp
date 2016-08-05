@@ -83,10 +83,6 @@ class midonet::neutron_plugin (
       $ml2_package = 'openstack-neutron-ml2'
     }
 
-    package { 'python-networking-midonet':
-        ensure  => present,
-    } ->
-
     package { $ml2_package:
         ensure  => absent,
     } ->
