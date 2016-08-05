@@ -58,7 +58,7 @@
 #
 
 #
-# Please note that Keystone port is not mandatory and defaulted to 35537.
+# Please note that Keystone port is not mandatory and defaulted to 35357.
 #
 # === Authors
 #
@@ -123,4 +123,5 @@ class midonet::cluster (
       keystone_host           => $keystone_host,
       keystone_port           => $keystone_port
     }
+
 }

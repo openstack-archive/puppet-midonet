@@ -37,7 +37,7 @@ class midonet::cluster::run (
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
-  $keystone_port            = '35537'
+  $keystone_port            = '35357'
 ) {
 
   file { '/tmp/mn-cluster_config.sh':
