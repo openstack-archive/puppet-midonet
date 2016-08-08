@@ -76,10 +76,8 @@ class midonet {
     else {
       fail("OS ${::operatingsystem} not supported")
     }
-    package { $::rubygems_pkg_name: ensure => installed, } ->
-    exec { "${midonet::params::gem_bin_path} install faraday multipart-post":
-      ensure => present
-    } ->
+    package { $rubygems_pkg_name: ensure => installed, } ->
+    exec { "${midonet::params::gem_bin_path} install faraday multipart-post": } ->
     midonet_host_registry { $::hostname:
       ensure          => present,
       midonet_api_url => 'http://127.0.0.1:8181/midonet-api',
