@@ -66,35 +66,20 @@ class midonet {
     # Add midonet-cli
     class {'midonet::cli':}
 
-    # Install these rubygems so our custom types work properly
-      if $::osfamily == 'RedHat' {
-        yumrepo { 'foreman-releases-repo':
-          ensure   => present,
-          baseurl  => $::midonet::params::foreman_releases_repo_url,
-          enabled  => 1,
-          gpgcheck => 1,
-          timeout  => 60,
-          gpgkey   => $::midonet::params::foreman_releases_repo_gpgkey,
-        } ->
-        package { ['centos-release-scl', 'install centos-release-scl-rh']:
-          ensure => present,
-        } ->
-        package { $::midonet::params::midonet_faraday_package:
-          ensure => present,
-        } ->
-        package { $::midonet::params::midonet_multipart_post_package:
-          ensure => present,
-        }
-      }
-      elsif $::osfamily == 'Debian' {
-        package { 'ruby-faraday':
-          ensure => present,
-          before => midonet_host_registry[$::hostname]
-        }
-      }
-
-
-    # Register the host
+    # Register the host (and make sure dependencies are installed)
+    if $::osfamily == 'RedHat' {
+      $rubygems_pkg_name = 'rubygems'
+    }
+    elsif $::osfamily == 'Debian' {
+      $rubygems_pkg_name = 'ruby'
+    }
+    else {
+      fail("OS ${::operatingsystem} not supported")
+    }
+    package { $::rubygems_pkg_name: ensure => installed, } ->
+    exec { "${midonet::params::gem_bin_path} install faraday multipart-post":
+      ensure => present
+    } ->
     midonet_host_registry { $::hostname:
       ensure          => present,
       midonet_api_url => 'http://127.0.0.1:8181/midonet-api',
