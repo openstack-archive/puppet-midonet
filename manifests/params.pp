@@ -40,5 +40,7 @@ class midonet::params {
   $mem_apache_servername                = "http://${::ipaddress}"
   $mem_apache_docroot                   = '/var/www/html'
 
+  # OS configuration
+  $gem_bin_path                         = '/usr/bin/gem'
 
 }
