@@ -120,6 +120,7 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
     end
 
     @connection.headers['X-Auth-Token'] = call_get_token()
+    @connection.headers['X-Auth-Project'] = resource[:tenant_name]
   end
 
   def call_get_token()

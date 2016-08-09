@@ -66,23 +66,12 @@ class midonet {
     # Add midonet-cli
     class {'midonet::cli':}
 
-    # Register the host (and make sure dependencies are installed)
-    if $::osfamily == 'RedHat' {
-      $rubygems_pkg_name = 'rubygems'
-    }
-    elsif $::osfamily == 'Debian' {
-      $rubygems_pkg_name = 'ruby'
-    }
-    else {
-      fail("OS ${::operatingsystem} not supported")
-    }
-    package { $rubygems_pkg_name: ensure => installed, } ->
-    exec { "${midonet::params::gem_bin_path} install faraday multipart-post": } ->
     midonet_host_registry { $::hostname:
       ensure          => present,
       midonet_api_url => 'http://127.0.0.1:8181/midonet-api',
       username        => 'midogod',
       password        => 'midogod',
+      tenant_name     => 'midokura',
       require         => Class['midonet::agent']
     }
 

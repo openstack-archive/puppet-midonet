@@ -29,7 +29,7 @@ Puppet::Type.newtype(:midonet_host_registry) do
 
   newparam(:tunnelzone_name) do
     desc 'Name of the tunnelzone. If it does not exist, it creates one'
-    defaultto :'tzone0'
+    defaultto 'tzone0'
     validate do |value|
       unless value =~ /\w+/
         raise ArgumentError, "'%s' is not a valid tunnelzone name" % value
@@ -72,7 +72,7 @@ Puppet::Type.newtype(:midonet_host_registry) do
 
   newparam(:tenant_name) do
     desc 'Tenant name of the admin user'
-    defaultto :'admin'
+    defaultto 'admin'
     validate do |value|
       unless value =~ /\w+/
         raise ArgumentError, "'%s' is not a tenant name" % value
