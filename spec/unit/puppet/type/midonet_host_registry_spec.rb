@@ -15,9 +15,9 @@ describe Puppet::Type::type(:midonet_host_registry) do
     end
 
     it 'assign the default values' do
-      expect(resource[:tenant_name]).to eq :'admin'
+      expect(resource[:tenant_name]).to eq 'admin'
       expect(resource[:underlay_ip_address]).to eq Facter['ipaddress'].value
-      expect(resource[:tunnelzone_name]).to eq :'tzone0'
+      expect(resource[:tunnelzone_name]).to eq 'tzone0'
       expect(resource[:tunnelzone_type]).to eq :'gre'
     end
   end

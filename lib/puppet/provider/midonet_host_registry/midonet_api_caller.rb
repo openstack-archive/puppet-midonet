@@ -124,6 +124,7 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
 
   def call_get_token()
     res = @connection.get do |req|
+      req.headers['X-Auth-Project'] = resource[:tenant_name]
       req.url "/midonet-api/login"
     end
     return JSON.parse(res.body)['key']
