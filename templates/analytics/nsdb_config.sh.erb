@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+which mn-conf > /dev/null || {
+  echo "'mn-conf' cannot be found in \$PATH" >&2
+  exit 1
+}
+
+## Access to the NSDB
+cat << EOF | mn-conf set -t default
+zookeeper {
+  <%- zkarr = Array.new -%>
+  <%- @zookeeper_hosts.each do |s| -%>
+  <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
+  <%- end -%>
+  zookeeper_hosts = "<%= zkarr.join(",") %>"
+}
+
+cassandra {
+  servers = "<%= @cassandra_servers.join(",") %>"
+}
+EOF
+
+mn-conf set -t default < /tmp/analytics_settings.conf
+
+exit 0
