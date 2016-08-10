@@ -20,6 +20,8 @@
 #   Password for User which will be used to access the Midokura repositories
 #     Default: undef
 #
+# [*zookeeper_hosts*]
+#   List of IPs and ports of hosts where Zookeeper is installed
 #
 # Please note that Keystone port is not mandatory and defaulted to 35537.
 #
@@ -49,6 +51,7 @@ class midonet::analytics (
   $manage_repo        = false,
   $mem_username       = undef,
   $mem_password       = undef,
+  $zookeeper_hosts,
 ) {
 
 
@@ -61,7 +64,8 @@ class midonet::analytics (
     class { 'elasticsearch':
       manage_repo  => true,
       repo_version => '1.7',
-    }
+    } ->
+    elasticsearch::instance { 'es-01': }
 
     class { 'curator':
       version => '3.5',
@@ -83,9 +87,47 @@ class midonet::analytics (
       }
       class { 'midonet::analytics::services':
         require => Class['midonet::repository'],
+      } ->
+      class { 'midonet::analytics::quickstart':
+        zookeeper_hosts   => $zookeeper_hosts,
       }
     }
     else  {
       notice('Skipping installation of midonet analytics services')
+    }
+
+    if $::osfamily == 'Debian' {
+      file_line { 'Set LS_HEAP_SIZE':
+        path    => '/etc/default/logstash',
+        line    => 'LS_HEAP_SIZE="4g"',
+        match   => '^LS_HEAP_SIZE.*$',
+        require => Package['logstash'],
+        notify  => Service['logstash'],
+      }
+
+      file_line { 'Set ES_HEAP_SIZE':
+        path    => '/etc/default/elasticsearch',
+        line    => 'ES_HEAP_SIZE="4g"',
+        match   => '^ES_HEAP_SIZE.*$',
+        require => Package['elasticsearch'],
+        notify  => Service['elasticsearch-instance-es-01'],
+      }
+    }
+    if $::osfamily == 'RedHat' {
+      file_line { 'Set LS_HEAP_SIZE':
+        path    => '/etc/sysconfig/logstash',
+        line    => 'LS_HEAP_SIZE="4g"',
+        match   => '^LS_HEAP_SIZE.*$',
+        require => Package['logstash'],
+        notify  => Service['logstash'],
+      }
+
+      file_line { 'Set ES_HEAP_SIZE':
+        path    => '/etc/sysconfig/elasticsearch',
+        line    => 'ES_HEAP_SIZE="4g"',
+        match   => '^ES_HEAP_SIZE.*$',
+        require => Package['elasticsearch'],
+        notify  => Service['elasticsearch-instance-es-01'],
+      }
     }
 }

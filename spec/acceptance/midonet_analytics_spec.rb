@@ -6,10 +6,12 @@ describe 'midonet::analytics class' do
     it 'should install the midonet analytics without any errors' do
       pp = <<-EOS
       class { 'midonet::analytics':
-        is_mem       => false,
-        manage_repo  => false,
-        mem_username => undef,
-        mem_password => undef,
+        is_mem            => false,
+        manage_repo       => false,
+        mem_username      => undef,
+        mem_password      => undef, 
+        zookeeper_hosts   => [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
+        cassandra_servers => ['127.0.0.1'],
       }
       EOS
 
