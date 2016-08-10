@@ -94,8 +94,8 @@ define midonet::resources::network_creation(
   $controller_ip           = '127.0.0.1',
   $controller_neutron_port = '9696',
   $network_external        = 'ext-net',
-  $allocation_pools        = ['start=172.17.0.10,end=172.17.0.200'],
-  $gateway_ip              = '172.17.0.3',
+  $allocation_pools        = ['start=172.17.0.100,end=172.17.0.200'],
+  $gateway_ip              = '172.17.0.1',
   $subnet_cidr             = '172.17.0.0/24',
   $subnet_name             = 'ext-subnet',
   $edge_router_name        = 'edge-router',
@@ -103,46 +103,42 @@ define midonet::resources::network_creation(
   $edge_subnet_name        = 'subnet-edge1-gw1',
   $edge_cidr               = '172.17.0.0/24',
   $port_name               = 'testport',
-  $port_fixed_ip           = '172.17.0.3',
+  $port_fixed_ip           = '172.17.0.102',
   $port_interface_name     = 'eth1'
 
 ) {
 
 
-  $neutron_auth_creds = {
-    'neutron_auth_uri' => "http://${controller_ip}:${controller_neutron_port}",
-    'admin_username'        => $keystone_username,
-    'admin_password'        => $keystone_password,
-    'admin_tenant_name'     => $tenant_name,
-}
+  if($::osfamily == 'Debian' and $::operatingsystemmajrelease == '16.04')
+  {
+    package {'biosdevname':
+      ensure => 'latest',
+      before => Neutron_router[$edge_router_name]
+          }
+  }
 
   neutron_network { $network_external:
-    external            => true,
-    shared              => true,
-    neutron_credentials => $neutron_auth_creds
-    } ->
-
-  neutron_subnet { $subnet_name:
-    allocation_pools    => $allocation_pools,
-    enable_dhcp         => false,
-    gateway_ip          => $gateway_ip,
-    cidr                => $subnet_cidr,
-    network_name        => $network_external,
-    neutron_credentials => $neutron_auth_creds
+  router_external     => true,
+  shared              => true,
   } ->
 
+neutron_subnet { $subnet_name:
+  allocation_pools    => $allocation_pools,
+  enable_dhcp         => false,
+  gateway_ip          => $gateway_ip,
+  cidr                => $subnet_cidr,
+  network_name        => $network_external,
+} ->
+
   neutron_router { $edge_router_name:
-    neutron_credentials => $neutron_auth_creds
   } ->
 
   neutron_router_interface { "${edge_router_name}:${subnet_name}":
-    neutron_credentials => $neutron_auth_creds
   } ->
 
   neutron_network { $edge_network_name:
     tenant_id             => $tenant_name,
     provider_network_type => 'uplink',
-    neutron_credentials   => $neutron_auth_creds
   } ->
 
   neutron_subnet { $edge_subnet_name:
@@ -150,7 +146,6 @@ define midonet::resources::network_creation(
     cidr                => $edge_cidr,
     tenant_id           => $tenant_name,
     network_name        => $edge_network_name,
-    neutron_credentials => $neutron_auth_creds
   } ->
 
   neutron_port { $port_name:
@@ -159,13 +154,11 @@ define midonet::resources::network_creation(
     binding_profile     => {
       'interface_name' => c7_int_name($port_interface_name)
     },
-    fixed_ip            => $port_fixed_ip,
-    neutron_credentials => $neutron_auth_creds
+    ip_address          => [$port_fixed_ip],
   } ->
 
   neutron_router_interface { "${edge_router_name}:null":
     port                => $port_name,
-    neutron_credentials => $neutron_auth_creds
   }
 
 }
