@@ -5,7 +5,7 @@ describe 'midonet class' do
     # Using puppet_apply as a helper
     it 'should work without any errors' do
       pp = <<-EOS
-        include ::midonet::mem
+        notice('removing MEM manager from Beaker test execution')
       EOS
 
       # Run it twice and test for idempotency

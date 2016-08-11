@@ -1,0 +1,17 @@
+clio.enabled : true
+clio.service.udp_port : 5001
+clio.service.encoding : "binary"
+clio.target.udp_endpoint : "<%= @ipaddress %>:5000"
+clio.data.fields : [ "cookie", "devices", "host_uuid", "in_port", "in_tenant", "out_ports", "out_tenant", "match_eth_src", "match_eth_dst", "match_ethertype", "match_network_dst", "match_network_src", "match_network_proto", "match_src_port", "match_dst_port", "action_drop", "action_arp_sip", "action_arp_tip", "action_arp_op", "rules", "sim_result", "final_eth_src", "final_eth_dst", "final_net_src", "final_net_dst", "final_transport_src", "final_transport_dst", "timestamp", "type" ]
+calliope.enabled : true
+calliope.service.ws_port : 8080
+calliope.auth.ssl.enabled : true
+jmxscraper.enabled : true
+jmxscraper.target.udp_endpoint : "<%= @ipaddress %>:5000"
+mem_cluster.flow_tracing.enabled : true
+mem_cluster.flow_tracing.service.ws_port : 8460
+mem_cluster.flow_tracing.auth.ssl.enabled : true
+agent.flow_history.enabled : true
+agent.flow_history.encoding : "binary"
+agent.flow_history.udp_endpoint : "<%= @ipaddress %>:5001"
+

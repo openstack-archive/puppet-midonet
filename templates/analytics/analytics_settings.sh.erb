@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+which mn-conf > /dev/null || {
+  echo "'mn-conf' cannot be found in \$PATH" >&2
+  exit 1
+}
+
+mn-conf set -t default < /tmp/analytics_settings.conf
+
+exit 0
