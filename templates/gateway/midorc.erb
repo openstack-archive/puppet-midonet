@@ -44,8 +44,9 @@ ZOOKEEPER_HOSTS=<%= zkarr.join(",") %>
 API_PORT=<%= @api_port %>
 API_URI=http://$SERVICE_HOST:$API_PORT/midonet-api
 
-MIDO_DB_USER=<%= @mido_db_user %>
-MIDO_DB_PASSWORD=<%= @mido_db_password %>
+MIDO_KEYSTONE_USER=<%= @mido_keystone_user %>
+MIDO_KEYSTONE_PASSWORD=<%= @mido_keystone_password %>
+MIDO_PROJECT_ID=<%= @mido_project_id %>
 
 # MidoNet Client
 # --------------
@@ -53,6 +54,6 @@ MIDO_DB_PASSWORD=<%= @mido_db_password %>
 # Auth variables. They are exported so that you could source this file and
 # run midonet-cli using these credentials
 export MIDO_API_URL=$API_URI
-export MIDO_USER=${MIDO_USER:-admin}
+export MIDO_USER=${MIDO_KEYSTONE_USER:-admin}
 export MIDO_PROJECT_ID=${MIDO_PROJECT_ID:-admin}
-export MIDO_PASSWORD=${MIDO_PASSWORD:-midonet}
+export MIDO_PASSWORD=${MIDO_KEYSTONE_PASSWORD:-midonet}
