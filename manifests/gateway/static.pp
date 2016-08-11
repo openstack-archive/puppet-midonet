@@ -33,11 +33,14 @@
 # [*ensure_scripts*]
 #   (Optional) Status of the scripts
 #
-# [*mido_db_user*]
-#   (Optional) Username to authenticate against the DB
+# [*mido_keystone_user*]
+#   (Optional) Username to authenticate against Keystone
 #
-# [*mido_db_password*]
-#   (Optional) Password to authenticate against the DB
+# [*mido_keystone_password*]
+#   (Optional) Password to authenticate against Keystone
+#
+# [*mido_project_id*]
+#   (Optional) Project id to authenticate in keystone
 #
 # === Examples
 #
@@ -87,13 +90,14 @@ class midonet::gateway::static (
   $service_dir,
   $zookeeper_hosts,
   $api_port,
-  $scripts_dir       = '/tmp',
-  $uplink_script     = 'create_fake_uplink_l2.sh',
-  $midorc_script     = 'midorc',
-  $functions_script  = 'functions',
-  $ensure_scripts    = 'present',
-  $mido_db_user      = 'admin',
-  $mido_db_password  = 'admin',
+  $scripts_dir             = '/tmp',
+  $uplink_script           = 'create_fake_uplink_l2.sh',
+  $midorc_script           = 'midorc',
+  $functions_script        = 'functions',
+  $ensure_scripts          = 'present',
+  $mido_keystone_user      = 'admin',
+  $mido_keystone_password  = 'admin',
+  $mido_project_id         = 'admin'
 ) {
 
   # Install screen, as it's needed by the script
