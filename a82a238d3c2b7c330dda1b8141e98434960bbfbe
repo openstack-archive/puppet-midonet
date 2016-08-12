@@ -1,0 +1,9 @@
+Code-Review+2: Alejandro Andreu <alejandro@midokura.com>
+Code-Review+2: Alex Ruiz Estradera <ahharu@ahharu.com>
+Workflow+1: Alex Ruiz Estradera <ahharu@ahharu.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 12 Aug 2016 23:35:41 +0000
+Reviewed-on: https://review.openstack.org/354151
+Project: openstack/puppet-midonet
+Branch: refs/heads/master
