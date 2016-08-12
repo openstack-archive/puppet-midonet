@@ -5,6 +5,7 @@ describe 'midonet::cli class' do
     # Using puppet_apply as a helper
     it 'should work without any errors' do
       pp = <<-EOS
+        include ::midonet::repository
         class {'midonet::cli':
           api_endpoint => 'http://127.0.0.1:8181/midonet-api',
           username     => 'admin',

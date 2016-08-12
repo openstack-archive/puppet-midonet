@@ -5,6 +5,7 @@ describe 'midonet::agent class' do
     # Using puppet_apply as a helper
     it 'should install the midonet agent without any errors' do
       pp = <<-EOS
+      include ::midonet::repository
       class { 'midonet_openstack::role::nsdb':
       }
       class { 'midonet::agent':

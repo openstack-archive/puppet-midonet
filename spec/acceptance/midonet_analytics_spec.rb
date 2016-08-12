@@ -5,11 +5,12 @@ describe 'midonet::analytics class' do
     # Using puppet_apply as a helper
     it 'should install the midonet analytics without any errors' do
       pp = <<-EOS
+      include ::midonet::repository
       class { 'midonet::analytics':
         is_mem            => false,
         manage_repo       => false,
         mem_username      => undef,
-        mem_password      => undef, 
+        mem_password      => undef,
         zookeeper_hosts   => [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
       }
       EOS
