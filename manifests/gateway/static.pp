@@ -83,25 +83,16 @@
 #
 
 class midonet::gateway::static (
-  $network_id,
-  $cidr,
-  $gateway_ip,
-  $service_host,
-  $service_dir,
-  $zookeeper_hosts,
-  $api_port,
+  $fip,
+  $nic,
+  $edge_router,
+  $veth0_ip,
+  $veth1_ip,
+  $veth_network,
   $scripts_dir             = '/tmp',
   $uplink_script           = 'create_fake_uplink_l2.sh',
-  $midorc_script           = 'midorc',
-  $functions_script        = 'functions',
   $ensure_scripts          = 'present',
-  $mido_keystone_user      = 'admin',
-  $mido_keystone_password  = 'admin',
-  $mido_project_id         = 'admin'
 ) {
-
-  # Install screen, as it's needed by the script
-  package { 'screen': ensure => installed }
 
   # Place script and helper files before executing it
   file { 'fake_uplink_script':
@@ -109,22 +100,12 @@ class midonet::gateway::static (
     path    => "${scripts_dir}/create_fake_uplink_l2.sh",
     content => template('midonet/gateway/create_fake_uplink_l2.sh.erb'),
   }
-  file { 'midorc':
-    ensure  => $ensure_scripts,
-    path    => "${scripts_dir}/midorc",
-    content => template('midonet/gateway/midorc.erb'),
-  }
-  file { 'functions':
-    ensure  => $ensure_scripts,
-    path    => "${scripts_dir}/functions",
-    source  => 'puppet:///modules/midonet/gateway/functions',
-    require => Package['screen'],
-  }
 
   # Finally, execute the script
   exec { "/bin/bash ${scripts_dir}/create_fake_uplink_l2.sh":
+    returns => ['0', '7'],
     require => [
-      File['fake_uplink_script', 'midorc', 'functions'],
+      File['fake_uplink_script'],
       Package['python-midonetclient'],
     ]
   }
