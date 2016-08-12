@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e -x
+#!/bin/bash
 
 # Copyright 2016 Midokura SARL
 #
@@ -14,92 +14,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script creates the fake uplink assuming that midonet is running
-# correctly.  It takes the IP address CIDR as its argument which gets
-# routed into the MidoNet provider router.  CIDR is defaulted to
-# 172.24.4.0/24 with the gateway 172.24.4.1, but you can override by:
-#
-#      ./create_fake_uplink_l2.sh <network_id> 172.24.4.0/24 172.24.4.1
-# or
-#      CIDR=172.24.4.0/24 GATEWAY_IP=172.24.4.1 NETWORK_ID=<network_id> \
-#           ./create_fake_uplink.sh
-#
-
-function usage() {
-    echo "Usage: $0 <NETWORK_ID> <CIDR> <GATEWAY_IP>]" 1>&2;
-    exit 1;
-}
-
-NETWORK_ID=<%= @network_id %>
-CIDR=<%= @cidr %>
-GATEWAY_IP=<%= @gateway_ip %>
-
-if [ -z "${NETWORK_ID}" ] || [ -z "${CIDR}" ] || [ -z "${GATEWAY_IP}" ]; then
-    usage
-fi
-
-echo "NETWORK_ID = $NETWORK_ID"
-echo "CIDR = $CIDR"
-echo "GATEWAY_IP = $GATEWAY_IP"
-
-OLD_IFS=$IFS
-IFS='/'; read -ra CIDR_SPLIT <<< "$CIDR"
-NET_LEN=${CIDR_SPLIT[1]}
-IFS=$OLD_IFS
-
-# Save the top directory and source the functions and midorc
-TOP_DIR=$(cd $(dirname "$0") && pwd)
-source $TOP_DIR/midorc
-source $TOP_DIR/functions
-
 set -e
 set -x
 
-# Get the host id of the devstack machine
-HOST_ID=$(midonet-cli -e host list | awk '{ print $2 }')
-die_if_not_set $LINENO HOST_ID "FAILED to obtain host id"
-echo "Host: ${HOST_ID}"
+FIP=<%= @fip %>
+NIC=<%= @nic %>
+EDGE_ROUTER=<%= @edge_router %>
+VETH0_IP=<%= @veth0_ip %>
+VETH1_IP=<%= @veth1_ip %>
+VETH_NETWORK=<%= @veth_network %>
 
-# Check if the default tunnel zone exists
-TZ_NAME='DEFAULT'
-TZ_ID=$(midonet-cli -e list tunnel-zone name $TZ_NAME | awk '{ print $2 }')
-if [[ -z "$TZ_ID" ]]; then
-    TZ_ID=$(midonet-cli -e create tunnel-zone name $TZ_NAME type gre)
+HOSTNAME=$(hostname)
+HOST_ID=$(midonet-cli -A -e host list | grep ${HOSTNAME} | awk '{ print $2 }')
+BINDING=$(midonet-cli -A -e host ${HOST_ID} list binding interface veth1)
+
+# If interface veth1 is bound already stop the script
+if [ -n "${BINDING}" ]; then
+    echo "Interface veth1 is already bound to host id ${HOST_ID}" >&2
+    exit 7
 fi
-echo "Tunnel Zone: ${TZ_ID}"
 
-# Check if the host is a member of the tunnel zone
-TZ_MEMBER=$(midonet-cli -e tunnel-zone $TZ_ID list member host $HOST_ID \
-    address $GATEWAY_IP)
-if [[ -z "$TZ_MEMBER" ]]; then
-    TZ_MEMBER=$(midonet-cli -e tunnel-zone $TZ_ID add member host $HOST_ID \
-        address $GATEWAY_IP)
-fi
-echo "Tunnel Zone Member: ${TZ_MEMBER}"
+# Create veth pair
+ip link add type veth
+ip link set dev veth0 up
+ip link set dev veth1 up
 
-# Check if we need to bind - we assume that if 'veth1' is bound, then it must
-# exist, and so does veth0
-BINDING=$(midonet-cli -e host $HOST_ID list binding interface veth1)
-if [[ -z "$BINDING" ]]; then
+# Create a bridge, set an IP address and attach veth0
+brctl addbr uplinkbridge
+brctl addif uplinkbridge veth0
+ip addr add ${VETH0_IP}/30 dev uplinkbridge
+ip link set dev uplinkbridge up
 
-    # Create the veth interfaces
-    sudo ip link add type veth
-    sudo ip addr flush veth0
-    sudo ip addr flush veth1
-    sudo ip link set dev veth0 up
-    sudo ip link set dev veth1 up
+# Enable IPv4 forwarding
+sysctl -w net.ipv4.ip_forward=1
 
-    PORT_ID=$(midonet-cli -e bridge $NETWORK_ID add port)
-    echo "Port: ${PORT_ID}"
+# Route packets towards floating IP network through the bridge
+ip route add ${FIP} via ${VETH1_IP}
 
-    BINDING=$(midonet-cli -e host $HOST_ID add binding \
-        port bridge $NETWORK_ID port $PORT_ID interface veth1)
-fi
-echo "Binding: ${BINDING}"
+# Create a port on the edge router and bind it to the veth pair
+ROUTER_ID=$(midonet-cli -A -e router list | grep ${EDGE_ROUTER} | awk '{ print $2 }')
+PORT_ID=$(midonet-cli -A -e router ${ROUTER_ID} add port address ${VETH1_IP} \
+    net ${VETH_NETWORK} | cut -d ":" -f 2)
+midonet-cli -e router ${ROUTER_ID} add route src 0.0.0.0/0 dst 0.0.0.0/0 \
+    type normal port router ${ROUTER_ID} port ${PORT_ID} gw ${VETH0_IP}
+midonet-cli -e host ${HOST_ID} add binding port router ${ROUTER_ID} \
+    port ${PORT_ID} interface veth1
 
-# Add the gateway address to the other veth
-if ! ip addr | grep veth0 | grep $GATEWAY_IP; then
-    sudo ip addr add $GATEWAY_IP/$NET_LEN dev veth0
-fi
+# Add masquerading to enable NATing
+iptables -t nat -I POSTROUTING -o ${NIC} -s ${FIP} -j MASQUERADE
+iptables -I FORWARD -s ${FIP} -j ACCEPT
 
 echo "Successfully created fake uplink"
+exit 0
