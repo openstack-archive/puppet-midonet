@@ -118,6 +118,7 @@ class midonet::agent (
     manage_java    => $manage_java,
     require        => Class['midonet::repository'],
   }
+  contain 'midonet::agent::install'
 
   class { 'midonet::agent::run':
     service_name      => $service_name,
@@ -131,6 +132,7 @@ class midonet::agent (
     max_heap_size     => $max_heap_size,
     require           => Class['midonet::agent::install'],
   }
+  contain 'midonet::agent::run'
 
   if $is_mem {
     if $manage_repo == true {
@@ -144,11 +146,13 @@ class midonet::agent (
           mem_username      => $mem_username,
           mem_password      => $mem_password,
         }
+        contain 'midonet::repository'
       }
     }
     class { 'midonet::agent::scrapper':
       require   => Class['midonet::repository'],
     }
+    contain 'midonet::agent::scrapper'
   }
   else  {
     notice('Skipping installation of jmx-scrapper')
