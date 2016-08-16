@@ -104,7 +104,8 @@ class midonet::cluster (
     class { 'midonet::cluster::install':
       package_name => $package_name,
       is_mem       => $is_mem
-    } ->
+    }
+    contain 'midonet::cluster::install'
 
     class { 'midonet::cluster::run':
       service_name            => $service_name,
@@ -121,7 +122,9 @@ class midonet::cluster (
       cassandra_rep_factor    => $cassandra_rep_factor,
       keystone_admin_token    => $keystone_admin_token,
       keystone_host           => $keystone_host,
-      keystone_port           => $keystone_port
+      keystone_port           => $keystone_port,
+      require                 => Class['midonet::cluster::install']
     }
+    contain 'midonet::cluster::install'
 
 }
