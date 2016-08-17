@@ -6,6 +6,8 @@ describe 'midonet::cluster class' do
     it 'should install the midonet cluster without any errors' do
       pp = <<-EOS
       include ::midonet::repository
+      class { 'midonet_openstack::role::nsdb':
+      }
       class { 'midonet::cluster':
         zookeeper_hosts       => [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
         cassandra_servers     => ['127.0.0.1'],
