@@ -13,7 +13,7 @@ module Puppet::Parser::Functions
 
     if Facter.value('osfamily') == 'Debian'
       os_majrelease = Facter.value('operatingsystemmajrelease')
-      if(os_majrelease != '16.04')
+      if(os_majrelease == '16.04')
         interfaces = {}
         kernel_devs=`/sbin/biosdevname -d`
         if ($?.to_i == 4)
