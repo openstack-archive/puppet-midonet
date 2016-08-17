@@ -116,6 +116,13 @@ define midonet::resources::network_creation(
       before => Neutron_router[$edge_router_name]
     }
   }
+  if($::osfamily == 'RedHat'
+  {
+    package {'biosdevname':
+      ensure => 'latest',
+      before => Neutron_router[$edge_router_name]
+    }
+  }
 
   neutron_network { $network_external:
     router_external => true,
