@@ -38,15 +38,8 @@
 
 
 class midonet::analytics::quickstart (
-  $config_path      = '/etc/midonet/midonet.conf',
   $zookeeper_hosts,
 ) {
-
-  file { 'set_config':
-    ensure  => present,
-    path    => $config_path,
-    content => template('midonet/analytics/midonet.conf.erb'),
-  }
 
   file { 'analytics_settings':
     ensure  => present,
