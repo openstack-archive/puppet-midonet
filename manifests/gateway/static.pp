@@ -102,7 +102,7 @@ class midonet::gateway::static (
   }
 
   # Finally, execute the script
-  exec { "/bin/bash ${scripts_dir}/create_fake_uplink_l2.sh":
+  exec { "/bin/bash -x ${scripts_dir}/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out":
     returns => ['0', '7'],
     require => [
       File['fake_uplink_script'],
