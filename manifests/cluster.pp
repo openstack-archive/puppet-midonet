@@ -81,6 +81,11 @@
 # limitations under the License.
 #
 class midonet::cluster (
+  $zookeeper_hosts,
+  $cassandra_servers,
+  $cassandra_rep_factor,
+  $keystone_admin_token,
+  $keystone_host,
   $package_name            = undef,
   $service_name            = undef,
   $service_ensure          = undef,
@@ -93,11 +98,6 @@ class midonet::cluster (
   $max_heap_size           = undef,
   $heap_newsize            = undef,
   $is_mem                  = undef,
-  $zookeeper_hosts,
-  $cassandra_servers,
-  $cassandra_rep_factor,
-  $keystone_admin_token,
-  $keystone_host,
 
 ) {
 
