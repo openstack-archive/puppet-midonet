@@ -92,6 +92,10 @@
 #
 
 class midonet::agent (
+  $zookeeper_hosts,
+  $controller_host,
+  $metadata_port,
+  $shared_secret,
   $package_name       = undef,
   $service_name       = undef,
   $service_ensure     = undef,
@@ -100,10 +104,6 @@ class midonet::agent (
   $package_ensure     = undef,
   $manage_java        = undef,
   $max_heap_size      = undef,
-  $zookeeper_hosts,
-  $controller_host,
-  $metadata_port,
-  $shared_secret,
   $is_mem             = false,
   $manage_repo        = false,
   $mem_username       = undef,

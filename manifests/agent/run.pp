@@ -37,16 +37,16 @@
 #
 
 class midonet::agent::run (
+  $zookeeper_hosts,
+  $controller_host,
+  $metadata_port,
+  $shared_secret,
   $service_name       = 'midolman',
   $service_ensure     = 'running',
   $service_enable     = true,
   $agent_config_path  = '/etc/midolman/midolman.conf',
   $jvm_config_path    = '/etc/midolman/midolman-env.sh',
   $max_heap_size      = '2048M',
-  $zookeeper_hosts,
-  $controller_host,
-  $metadata_port,
-  $shared_secret,
 ) {
 
   file { '/tmp/mn-agent_config.sh':

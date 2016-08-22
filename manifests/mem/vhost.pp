@@ -26,20 +26,24 @@
 # Copyright (c) 2016 Midokura SARL, All Rights Reserved.
 
 class midonet::mem::vhost (
-  $mem_apache_port        = $midonet::params::mem_apache_port,
-  $mem_apache_docroot     = $midonet::params::mem_apache_docroot,
-  $mem_apache_servername  = $midonet::params::mem_apache_servername,
-  $proxy_pass = [
-    { 'path' => "/${midonet::params::mem_api_namespace}",
-      'url'  => $midonet::params::mem_api_host,
-    },
-  ],
+  $docroot,
+) inherits midonet::params {
+
   $directories = [
-    { 'path'  => $docroot,
+    {
+      'path'  => $docroot,
       'allow' => 'from all',
     },
-  ],
-) inherits midonet::params {
+  ]
+  $mem_apache_port        = $midonet::params::mem_apache_port
+  $mem_apache_docroot     = $midonet::params::mem_apache_docroot
+  $mem_apache_servername  = $midonet::params::mem_apache_servername
+  $proxy_pass = [
+    {
+      'path' => "/${midonet::params::mem_api_namespace}",
+      'url'  => $midonet::params::mem_api_host,
+    },
+  ]
 
   validate_string($mem_apache_port)
   validate_string($mem_apache_docroot)

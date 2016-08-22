@@ -23,6 +23,12 @@
 # limitations under the License.
 #
 class midonet::cluster::run (
+  $zookeeper_hosts,
+  $cassandra_servers,
+  $cassandra_rep_factor,
+  $keystone_admin_token,
+  $keystone_host,
+  $keystone_port            = '35357',
   $service_name             = 'midonet-cluster',
   $service_ensure           = 'running',
   $service_enable           = true,
@@ -32,12 +38,6 @@ class midonet::cluster::run (
   $cluster_port             = '8181',
   $max_heap_size            = '2048M',
   $heap_newsize             = '1024M',
-  $zookeeper_hosts,
-  $cassandra_servers,
-  $cassandra_rep_factor,
-  $keystone_admin_token,
-  $keystone_host,
-  $keystone_port            = '35357'
 ) {
 
   file { '/tmp/mn-cluster_config.sh':

@@ -1,6 +1,6 @@
 # == Class: midonet::analytics
 #
-# Installs midonet analytics packages 
+# Installs midonet analytics packages
 #
 # === Parameters
 #
@@ -47,11 +47,11 @@
 #
 
 class midonet::analytics (
+  $zookeeper_hosts,
   $is_mem             = false,
   $manage_repo        = false,
   $mem_username       = undef,
   $mem_password       = undef,
-  $zookeeper_hosts,
 ) {
 
 
