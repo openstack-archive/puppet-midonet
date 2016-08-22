@@ -35,7 +35,7 @@ class midonet::mem::vhost (
     },
   ],
   $directories = [
-    { 'path'  => $docroot,
+    { 'path'  => $mem_apache_docroot,
       'allow' => 'from all',
     },
   ],
