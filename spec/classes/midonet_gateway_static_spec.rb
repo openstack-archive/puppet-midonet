@@ -15,7 +15,7 @@ describe 'midonet::gateway::static' do
       :fip            => '200.200.200.0/24',
       :edge_router    => 'edge-router',
       :veth0_ip       => '172.19.0.1',
-      :veth1_ip       => '172.19.0.2',                                                                                                                                                                                                     
+      :veth1_ip       => '172.19.0.2',
       :veth_network   => '172.19.0.0/30',
       :scripts_dir    => '/tmp',
       :uplink_script  => 'create_fake_uplink_l2.sh',
@@ -23,6 +23,6 @@ describe 'midonet::gateway::static' do
       }
     end
     it { is_expected.to contain_file('fake_uplink_script').with_ensure('present') }
-    it { is_expected.to contain_exec('/bin/bash /tmp/create_fake_uplink_l2.sh') }
+    it { is_expected.to contain_exec('/bin/bash -x /tmp/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out') }
   end
 end
