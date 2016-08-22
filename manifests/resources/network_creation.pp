@@ -125,11 +125,13 @@ define midonet::resources::network_creation(
   }
 
   neutron_network { $network_external:
+    ensure          => present,
     router_external => true,
     shared          => true,
   } ->
 
   neutron_subnet { $subnet_name:
+    ensure           => present,
     allocation_pools => $allocation_pools,
     enable_dhcp      => false,
     gateway_ip       => $gateway_ip,
@@ -142,14 +144,17 @@ define midonet::resources::network_creation(
   } ->
 
   neutron_router_interface { "${edge_router_name}:${subnet_name}":
+    ensure => present,
   } ->
 
   neutron_network { $edge_network_name:
+    ensure                => present,
     tenant_id             => $tenant_name,
     provider_network_type => 'uplink',
   } ->
 
   neutron_subnet { $edge_subnet_name:
+    ensure       => present,
     enable_dhcp  => false,
     cidr         => $edge_cidr,
     tenant_id    => $tenant_name,
@@ -157,6 +162,7 @@ define midonet::resources::network_creation(
   } ->
 
   neutron_port { $port_name:
+    ensure          => present,
     network_name    => $edge_network_name,
     binding_host_id => $::fqdn,
     binding_profile => {
@@ -166,7 +172,8 @@ define midonet::resources::network_creation(
   } ->
 
   neutron_router_interface { "${edge_router_name}:null":
-    port                => $port_name,
+    ensure => present,
+    port   => $port_name,
   }
 
 }

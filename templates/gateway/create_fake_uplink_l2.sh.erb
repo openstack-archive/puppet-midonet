@@ -29,7 +29,7 @@ HOST_ID=$(midonet-cli -A -e host list | grep ${HOSTNAME} | awk '{ print $2 }')
 BINDING=$(midonet-cli -A -e host ${HOST_ID} list binding interface veth1)
 
 # If interface veth1 is bound already stop the script
-if [ -n "${BINDING}" ]; then
+if [ -n "$(ip l | grep "veth")" ]; then
     echo "Interface veth1 is already bound to host id ${HOST_ID}" >&2
     exit 7
 fi
@@ -42,8 +42,14 @@ ip link set dev veth1 up
 # Create a bridge, set an IP address and attach veth0
 brctl addbr uplinkbridge
 brctl addif uplinkbridge veth0
+echo "ZzZ..."
+sleep 3
 ip addr add ${VETH0_IP}/30 dev uplinkbridge
+echo "ZzZ..."
+sleep 3
 ip link set dev uplinkbridge up
+echo "ZzZ..."
+sleep 3
 
 # Enable IPv4 forwarding
 sysctl -w net.ipv4.ip_forward=1
@@ -53,12 +59,11 @@ ip route add ${FIP} via ${VETH1_IP}
 
 # Create a port on the edge router and bind it to the veth pair
 ROUTER_ID=$(midonet-cli -A -e router list | grep ${EDGE_ROUTER} | awk '{ print $2 }')
-PORT_ID=$(midonet-cli -A -e router ${ROUTER_ID} add port address ${VETH1_IP} \
-    net ${VETH_NETWORK} | cut -d ":" -f 2)
+PORT_ID=$(midonet-cli -A -e router ${ROUTER_ID} port list | grep ${VETH1_IP} | cut -f 2 -d " ")
 midonet-cli -e router ${ROUTER_ID} add route src 0.0.0.0/0 dst 0.0.0.0/0 \
     type normal port router ${ROUTER_ID} port ${PORT_ID} gw ${VETH0_IP}
-midonet-cli -e host ${HOST_ID} add binding port router ${ROUTER_ID} \
-    port ${PORT_ID} interface veth1
+#midonet-cli -e host ${HOST_ID} add binding port router ${ROUTER_ID} \
+    #port ${PORT_ID} interface veth1
 
 # Add masquerading to enable NATing
 iptables -t nat -I POSTROUTING -o ${NIC} -s ${FIP} -j MASQUERADE
