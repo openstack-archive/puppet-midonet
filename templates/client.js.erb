@@ -1,41 +1,17 @@
 {
-  <% if @api_host -%>
-     "api_host": "<%= @mem_api_host %>",
-  <% end -%>
-  <% if @login_host -%>
-    "login_host": "<%= @mem_login_host %>",
-  <% end -%>
-  <% if @trace_api_host -%>
-    "trace_api_host": "<%= @mem_trace_api_host %>",
-  <% end -%>
-  <% if @traces_ws_url -%>
-    "traces_ws_url": "<%= @mem_traces_ws_url %>",
-  <% end -%>
-  <% if @api_namespace -%>
-    "api_namespace": "<%= @mem_api_namespace %>",
-  <% elsif @api_namespace == nil -%>
-    "api_namespace": "midonet-api",
-  <% end -%>
-  <% if @api_version -%>
-    "api_version": "<%= @mem_api_version %>",
-  <% end -%>
-  <% if @api_token -%>
-    "api_token": "<%= @mem_api_token %>",
-  <% elsif @api_token == false -%>
-    "api_token": false,
-  <% end -%>
-  <% if @agent_config_api_namespace -%>
-    "agent_config_api_namespace": "<%= @mem_agent_config_api_namespace %>",
-  <% elsif @agent_config_api_namespace == nil -%>
-    "agent_config_api_namespace": "conf",
-  <% end -%>
-  <% if @analytics_ws_api_url -%>
-    "analytics_ws_api_url": "<%= @mem_analytics_ws_api_url %>",
-  <% end -%>
-  <% if @poll_enabled -%>
-    "poll_enabled": "<%= @mem_poll_enabled %>",
-  <% end -%>
-  <% if @login_animation_enabled -%>
-    "login_animation_enabled": "<%= @mem_login_animation_enabled %>"
-  <% end -%>
+  "api_host": "<%= @mem_api_host %>",
+  "login_host": "<%= @mem_login_host %>",
+  "trace_api_host": "<%= @mem_trace_api_host %>",
+  "traces_ws_url": "<%= @mem_traces_ws_url %>",
+  "api_namespace": "<%= @mem_api_namespace %>",
+  "api_namespace": "midonet-api",
+  "api_version": "<%= @mem_api_version %>",
+  "api_token": "<%= @mem_api_token %>",
+  "api_token": false,
+  "agent_config_api_namespace": "<%= @mem_agent_config_api_namespace %>",
+  "agent_config_api_namespace": "conf",
+  "analytics_ws_api_url": "<%= @mem_analytics_ws_api_url %>",
+  "poll_enabled": "<%= @mem_poll_enabled %>",
+  "login_animation_enabled": "<%= @mem_login_animation_enabled %>"
 }
+
