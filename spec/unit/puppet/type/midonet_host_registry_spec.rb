@@ -8,7 +8,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on default values' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname        =>  Facter['hostname'].value,
+        :title           => 'test',
         :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
         :username        => 'admin',
         :password        => 'admin')
@@ -22,23 +22,11 @@ describe Puppet::Type::type(:midonet_host_registry) do
     end
   end
 
-  context 'on invalid hostname' do
-    it do
-      expect {
-        Puppet::Type.type(:midonet_host_registry).new(
-          :hostname        => '_invalid_hostname.local',
-          :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
-          :username        => 'admin',
-          :password        => 'admin')
-      }.to raise_error(Puppet::ResourceError)
-    end
-  end
-
   context 'on invalid api url' do
     it do
       expect {
         Puppet::Type.type(:midonet_host_registry).new(
-          :hostname        => Facter['hostname'].value,
+          :title           => 'test',
           :midonet_api_url => '87.23.43.2:8080/midonet-api',
           :username        => 'admin',
           :password        => 'admin')
@@ -49,7 +37,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on tenant_name valid value' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname        =>  Facter['hostname'].value,
+        :title           => 'test',
         :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
         :username        => 'admin',
         :password        => 'admin',
@@ -64,7 +52,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on tunnelzone valid name' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname        =>  Facter['hostname'].value,
+        :title           => 'test',
         :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
         :username        => 'admin',
         :password        => 'admin',
@@ -79,7 +67,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on tunnelzone valid type gre' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname        =>  Facter['hostname'].value,
+        :title           => 'test',
         :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
         :username        => 'admin',
         :password        => 'admin',
@@ -94,7 +82,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on tunnelzone valid type vxlan' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname        =>  Facter['hostname'].value,
+        :title           => 'test',
         :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
         :username        => 'admin',
         :password        => 'admin',
@@ -110,7 +98,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
     it do
       expect {
         Puppet::Type.type(:midonet_host_registry).new(
-          :hostname        =>  Facter['hostname'].value,
+          :title           => 'test',
           :midonet_api_url => 'http://87.23.43.2:8080/midonet-api',
           :username        => 'admin',
           :password        => 'admin',
@@ -122,7 +110,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
   context 'on underlay_ip_address valid IP' do
     let(:resource) do
       Puppet::Type.type(:midonet_host_registry).new(
-        :hostname            =>  Facter['hostname'].value,
+        :title               => 'test',
         :midonet_api_url     => 'http://87.23.43.2:8080/midonet-api',
         :username            => 'admin',
         :password            => 'admin',
@@ -139,7 +127,7 @@ describe Puppet::Type::type(:midonet_host_registry) do
     it do
       expect {
         Puppet::Type.type(:midonet_host_registry).new(
-          :hostname            =>  Facter['hostname'].value,
+          :title               => 'test',
           :midonet_api_url     => 'http://87.23.43.2:8080/midonet-api',
           :username            => 'admin',
           :password            => 'admin',

@@ -6,8 +6,8 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
 
   let(:resource) { Puppet::Type.type(:midonet_host_registry).new(
     {
+      :title                => 'test',
       :ensure              => :present,
-      :hostname            => 'compute.midonet',
       :midonet_api_url     => 'http://controller:8080',
       :username            => 'username',
       :password            => 'password',
@@ -32,20 +32,13 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
       ]
     }
 
-    let(:hosts) {
-      [
-        {
-          "id"   => "04f7361c-4cb8-4cda-a50f-1744fd8b7851",
-          "name" => "compute.midonet"
-        }
-      ]
-    }
+    let(:host) { '04f7361c-4cb8-4cda-a50f-1744fd8b7851' }
 
     before :each do
       allow(provider).to receive(:call_get_tunnelzone).and_return(tzones)
-      allow(provider).to receive(:call_get_host).and_return(hosts)
+      allow(provider).to receive(:call_get_host).and_return(host)
       allow(provider).to receive(:call_create_tunnelzone_host)
-      allow(provider).to receive(:call_get_tunnelzone_host).and_return(hosts)
+      allow(provider).to receive(:call_get_tunnelzone_host).and_return(host)
       allow(provider).to receive(:call_delete_tunnelzone_host)
       allow(provider).to receive(:call_get_tunnelzone_hosts).and_return([])
       allow(provider).to receive(:call_delete_tunnelzone)
@@ -73,14 +66,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
   end
 
   describe 'when no tunnelzones' do
-    let(:hosts) {
-      [
-        {
-          "id"   => "04f7361c-4cb8-4cda-a50f-1744fd8b7851",
-          "name" => "compute.midonet"
-        }
-      ]
-    }
+    let(:host) { '04f7361c-4cb8-4cda-a50f-1744fd8b7851' }
 
     let(:tzones) {
       [
@@ -95,7 +81,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
     it 'creates the tunnelzone and the host' do
       allow(provider).to receive(:call_get_tunnelzone).and_return([])
       allow(provider).to receive(:call_create_tunnelzone).and_return(tzones)
-      allow(provider).to receive(:call_get_host).and_return(hosts)
+      allow(provider).to receive(:call_get_host).and_return(host)
       allow(provider).to receive(:call_create_tunnelzone_host)
       allow(provider).to receive(:call_get_token).and_return('thisisafaketoken')
 
@@ -117,14 +103,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
       ]
     }
 
-    let(:host_to_unregister) {
-      [
-        {
-          "id"   => "04f7361c-4cb8-4cda-a50f-1744fd8b7851",
-          "name" => "compute.midonet"
-        }
-      ]
-    }
+    let(:host_to_unregister) { "04f7361c-4cb8-4cda-a50f-1744fd8b7851"}
 
     let(:host_left_in_tunnelzone) {
       [
@@ -145,7 +124,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
       allow(provider).to receive(:call_get_token).and_return('thisisafaketoken')
 
       # Set the behaviour expectations
-      expect(provider).to receive(:call_delete_tunnelzone_host).with(tzones[0]['id'], host_to_unregister[0]['id'])
+      expect(provider).to receive(:call_delete_tunnelzone_host).with(tzones[0]['id'], host_to_unregister)
       expect(provider).not_to receive(:call_delete_tunnelzone)
 
       provider.destroy
@@ -236,14 +215,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
       ]
     }
 
-    let(:hosts) {
-      [
-        {
-          "id"   => "04f7361c-4cb8-4cda-a50f-1744fd8b7851",
-          "name" => "compute.midonet"
-        }
-      ]
-    }
+    let(:hosts) {"04f7361c-4cb8-4cda-a50f-1744fd8b7851" }
 
     it 'should not fail' do
       allow(provider).to receive(:call_get_tunnelzone).and_return(tzones)
@@ -253,7 +225,7 @@ describe Puppet::Type.type(:midonet_host_registry).provider(:midonet_api_caller)
 
       expect(provider).to receive(:call_get_tunnelzone).once
       expect(provider).to receive(:call_get_host).once
-      expect(provider).to receive(:call_get_tunnelzone_host).once.with(tzones[0]['id'], hosts[0]['id'])
+      expect(provider).to receive(:call_get_tunnelzone_host).once.with(tzones[0]['id'], hosts)
 
       provider.destroy
     end
