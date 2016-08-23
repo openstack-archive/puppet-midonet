@@ -32,14 +32,10 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
       end
     end
 
-    host = call_get_host()
-    if host.empty?
-      raise 'Midonet agent does not run on the host you are trying to register'
-    else
-      host_id = host[0]['id']
+    host_id = call_get_host()
+    if host_id.empty?
+      raise 'Midonet agent is not running on the host you are trying to register'
     end
-
-    host_id = host[0]['id']
 
     message = Hash.new
     message['hostId'] = "#{host_id}"
@@ -57,11 +53,10 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
     end
     tz_id = tz[0]['id']
 
-    host = call_get_host()
-    if host.empty?
+    host_id = call_get_host()
+    if host_id.empty?
       return
     end
-    host_id = host[0]['id']
 
     reg_host = call_get_tunnelzone_host(tz_id, host_id)
     if reg_host.empty?
@@ -87,11 +82,10 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
     end
     tz_id = tz[0]['id']
 
-    host = call_get_host()
-    if host.empty?
+    host_id = call_get_host()
+    if host_id.empty?
       return false
     end
-    host_id = host[0]['id']
 
     reg_host = call_get_tunnelzone_host(tz_id, host_id)
     if reg_host.empty?
@@ -140,12 +134,11 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
   end
 
   def call_get_host()
-    res = @connection.get do |req|
-      req.url "/midonet-api/hosts"
+    begin
+      return File.read('/etc/midonet_host_id.properties').split('=')[1].sub("\n","")
+    rescue
+      raise 'Midonet agent is not running on the host you are trying to register'
     end
-
-    output = JSON.parse(res.body)
-    return output.select{ |host| host['name'] == resource[:hostname].to_s }
   end
 
   def call_create_tunnelzone(message)

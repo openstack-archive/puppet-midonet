@@ -42,15 +42,6 @@ class midonet {
 
     include ::midonet::params
 
-    # Add midonet-agent
-    class { 'midonet::agent':
-      controller_host => '127.0.0.1',
-      metadata_port   => '8775',
-      shared_secret   => 'testmido',
-      zookeeper_hosts => [{
-          'ip' => $::ipaddress}
-          ],
-    }
 
     # Add midonet-cluster
     class {'midonet::cluster':
@@ -63,8 +54,22 @@ class midonet {
         keystone_host        => '127.0.0.1'
     }
 
+    # Add midonet-agent
+    class { 'midonet::agent':
+      controller_host => '127.0.0.1',
+      metadata_port   => '8775',
+      shared_secret   => 'testmido',
+      zookeeper_hosts => [{
+          'ip' => $::ipaddress}
+          ],
+      require         => ['::midonet::cluster::install','::midonet::cluster::run']
+    }
+
     # Add midonet-cli
-    class {'midonet::cli':}
+    class {'midonet::cli':
+      username    => 'midogod',
+      password    => 'midogod',
+      tenant_name => 'midokura',}
 
     midonet_host_registry { $::hostname:
       ensure          => present,

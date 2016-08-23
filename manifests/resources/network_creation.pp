@@ -104,10 +104,12 @@ define midonet::resources::network_creation(
   $edge_cidr               = '172.17.0.0/24',
   $port_name               = 'testport',
   $port_fixed_ip           = '172.17.0.102',
-  $port_interface_name     = 'eth1'
+  $port_interface_name     = 'eth1',
+  $binding_host_id         = undef
 
 ) {
 
+include stdlib
 
   if($::osfamily == 'Debian' and $::operatingsystemmajrelease == '16.04')
   {
@@ -127,7 +129,7 @@ define midonet::resources::network_creation(
   neutron_network { $network_external:
     ensure          => present,
     router_external => true,
-    shared          => true,
+    shared          => false,
   } ->
 
   neutron_subnet { $subnet_name:
@@ -162,10 +164,11 @@ define midonet::resources::network_creation(
   } ->
 
   neutron_port { $port_name:
-    ensure          => present,
-    network_name    => $edge_network_name,
-    binding_host_id => $::fqdn,
-    binding_profile => {
+
+    ensure             => present,
+    network_name       => $edge_network_name,
+    binding_host_id    => pick($binding_host_id,$::hostname),
+    binding_profile    => {
       'interface_name' => c7_int_name($port_interface_name)
     },
     ip_address      => [[$port_fixed_ip]],
