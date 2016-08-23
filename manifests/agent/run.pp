@@ -46,7 +46,7 @@ class midonet::agent::run (
   $service_enable     = true,
   $agent_config_path  = '/etc/midolman/midolman.conf',
   $jvm_config_path    = '/etc/midolman/midolman-env.sh',
-  $max_heap_size      = '2048M',
+  $max_heap_size      = '1024M',
 ) {
 
   file { '/tmp/mn-agent_config.sh':

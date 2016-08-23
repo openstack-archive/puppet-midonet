@@ -36,8 +36,8 @@ class midonet::cluster::run (
   $cluster_jvm_config_path  = '/etc/midonet-cluster/midonet-cluster-env.sh',
   $cluster_host             = '0.0.0.0',
   $cluster_port             = '8181',
-  $max_heap_size            = '2048M',
-  $heap_newsize             = '1024M',
+  $max_heap_size            = '1024M',
+  $heap_newsize             = '512M',
 ) {
 
   file { '/tmp/mn-cluster_config.sh':
