@@ -7,7 +7,7 @@ Puppet::Type.newtype(:midonet_host_registry) do
 
       Example:
 
-        midonet_host_registry {'hostname':
+        midonet_host_registry {'myhost':
           $midonet_api_url     => 'http://controller:8080',
           $username            => 'admin',
           $password            => 'admin',
@@ -16,15 +16,8 @@ Puppet::Type.newtype(:midonet_host_registry) do
   }
   ensurable
 
-  newparam(:hostname, :namevar => true) do
-    desc 'Hostname of the host that wants to register in MidoNet cloud'
-    # Regex obtained from StackOverflow question:
-    # http://stackoverflow.com/questions/1418423/the-hostname-regex
-    validate do |value|
-      unless value =~ /^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/
-        raise ArgumentError, "'%s' is not a valid hostname" % value
-      end
-    end
+  newparam(:name) do
+    desc "The name of the host."
   end
 
   newparam(:tunnelzone_name) do
