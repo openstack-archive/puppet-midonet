@@ -354,7 +354,7 @@ need to do and squash your changes with the previous patch:
 
     git commit --amend
 
-We are using beaker for integration testing, puppet-lint for syntax code
+We are using Vagrant for integration testing, puppet-lint for syntax code
 convention and rspec por unit testing. To test the module before send a patch,
 we recommend to use [bundle](http://bundler.io/) to install the dependencies:
 
@@ -364,8 +364,8 @@ And then run the syntax, unit, and smoke tests.
 
     $ rake lint $ rake spec $ rake beaker
 
-**Puppet-midonet** uses Docker as the backend provisioner for beaker, so to
-have Docker installed is mandatory.
+**Puppet-midonet** uses Vagrant as the backend provisioner for beaker, so to
+have Vagrant installed is mandatory.
 
 You can contact us on several channels:
 https://github.com/midonet/midonet/wiki/Communication
