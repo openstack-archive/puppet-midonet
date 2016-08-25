@@ -78,11 +78,13 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
     [
       {
         'ip_address' => '203.0.113.1',
-        'remote_asn' => '64513'
+        'remote_asn' => '64513',
+        'remote_net' => '203.0.113.0/24'
       },
       {
         'ip_address' => '198.51.100.1',
-        'remote_asn' => '64514'
+        'remote_asn' => '64514',
+        'remote_net' => '198.51.100.0/24'
       }
     ]
     "
@@ -99,6 +101,9 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
             end
             unless e["remote_asn"] =~ /^\d+$/
               raise ArgumentError, "#{e['remote_asn']} is not a valid AS number"
+            end
+            unless e["remote_net"] =~ /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/\d+$/
+              raise ArgumentError, "#{e} is not a valid network"
             end
           end
         end
@@ -136,6 +141,17 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
       end
     end
   end
+
+  newparam(:tenant_name) do
+    desc 'Tenant name of the admin user'
+    defaultto 'admin'
+    validate do |value|
+      unless value =~ /\w+/
+        raise ArgumentError, "'%s' is not a tenant name" % value
+      end
+    end
+  end
+
 
   newparam(:router, :namevar => true) do
     desc "The MidoNet's internal Provider router that acts as the gateway router of the cloud"
