@@ -17,10 +17,12 @@ describe Puppet::Type::type(:midonet_gateway_bgp) do
         {
           'ip_address' => '200.100.98.7',
           'remote_asn' => '45237',
+          'remote_net' => '200.100.98.0/24'
         },
         {
           'ip_address' => '182.24.63.2',
           'remote_asn' => '45235',
+          'remote_net' => '182.24.63.0/24'
         },
       ],
       :bgp_advertised_networks => [ '200.0.0.0/24', '200.0.20.0/24' ] )
