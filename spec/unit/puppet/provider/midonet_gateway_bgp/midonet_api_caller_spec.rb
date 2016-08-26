@@ -103,6 +103,8 @@ describe Puppet::Type.type(:midonet_gateway_bgp).provider(:midonet_api_caller) d
       expect(provider).to receive(:call_get_bgp_routes).with(routers[0]['id'])
       expect(provider).to receive(:call_add_bgp_route).with(routers[0]['id'], '200.100.98.0/24')
       expect(provider).to receive(:call_add_bgp_route).with(routers[0]['id'], '182.24.63.0/24')
+      expect(provider).to receive(:call_add_default_routes).with(routers[0]['id'], { 'ip_address' => '200.100.98.7', 'remote_asn' => '45237', 'remote_net' => '200.100.98.0/24' } )
+      expect(provider).to receive(:call_add_default_routes).with(routers[0]['id'], { 'ip_address' => '182.24.63.2', 'remote_asn' => '45235', 'remote_net' => '182.24.63.0/24' } )
       #expect(provider).to receive(:call_delete_bgp_route).with('4a268156-341d-ad41-9cf8-6892afed1234')
       provider.create
       #provider.destroy

@@ -15,13 +15,11 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
 
     # Get the edge router uuid
     provider_router = call_get_provider_router()[0]
-    puts "MYDEBUG >> provider_router   = #{provider_router}"
     provider_router_id = provider_router['id']
 
     # Assign local ASN to the provider router
     asn = provider_router['asNumber']
     call_assign_asn(provider_router, resource[:bgp_local_as_number]) unless asn == resource[:bgp_local_as_number]
-    puts "MYDEBUG >> Assigning ASN #{resource[:bgp_local_as_number]} to router #{provider_router_id}"
 
     # Sync BGP peers
     bgp_neighbors = call_get_bgp_peers(provider_router_id)
@@ -32,9 +30,7 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
       m << n
     end
     tbd_peers = m - resource[:bgp_neighbors]
-    puts "MYDEBUG >> Deleting BGP peers #{tbd_peers}"
     tba_peers = resource[:bgp_neighbors] - m
-    puts "MYDEBUG >> Adding BGP peers #{tba_peers}"
 
     tba_peers.each { |a| call_add_bgp_peer(provider_router_id, a['ip_address'], a['remote_asn']) }
     tbd_peers.each do |d|
@@ -44,14 +40,11 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
 
     # Advertise floating IP networks
     bgp_advertised_networks = call_get_bgp_networks(provider_router_id)
-    puts "MYDEBUG >> Existing BGP networks are #{bgp_advertised_networks}"
     j = Array.new
     bgp_advertised_networks.each do |bgp_advertised_network|
       k = [ bgp_advertised_network["subnetAddress"], bgp_advertised_network["subnetLength"] ].join("/")
       j << k
     end
-    puts "MYDEBUG >> bgp_advertised_networks is worth #{bgp_advertised_networks}"
-    puts "MYDEBUG >> j is worth #{j}"
     tbd_bgp_networks = j - resource[:bgp_advertised_networks]
     tba_bgp_networks = resource[:bgp_advertised_networks] - j
     tbd_bgp_networks.each do |d|
@@ -59,14 +52,11 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
       call_delete_bgp_network(bgp_network_id)
     end
     tba_bgp_networks.each { |a| call_advertise_bgp_network(provider_router_id, a) }
-    puts "MYDEBUG >> Deleting BGP networks #{tbd_bgp_networks}"
-    puts "MYDEBUG >> Advertising BGP networks #{tba_bgp_networks}"
 
     # Get routes and see which ones do we need to actually create
     dup_routes = Array.new
     existing_bgp_routes = call_get_bgp_routes(provider_router_id)
     neighbors_remote_net = resource[:bgp_neighbors].map { |x| x['remote_net']  }.uniq
-    puts "MYDEBUG >> neighbors_remote_net is #{neighbors_remote_net}"
     existing_bgp_routes.each do |r|
       dup_routes << r if neighbors_remote_net.select { |net| net == "#{r['dstNetworkAddr']}/#{r['dstNetworkLength']}" }
     end
@@ -74,6 +64,20 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
     tba_routes = neighbors_remote_net - dup_routes.map { |dr| "#{dr['dstNetworkAddr']}/#{dr['dstNetworkLength']}" }
     tba_routes.each do |r|
       call_add_bgp_route(provider_router_id, r)
+    end
+
+    # Add default routes
+    dup_routes = Array.new
+    existing_bgp_routes = call_get_bgp_routes(provider_router_id)
+    neighbors_remote_ips = resource[:bgp_neighbors].map { |x| x['ip_address']  }.uniq
+    existing_bgp_routes.each do |r|
+      dup_routes << r if neighbors_remote_ips.select { |ip| ip == "#{r['nextHopGateway']}" }
+    end
+    # Add routes to remote BGP peers
+    tba_routes = neighbors_remote_ips - dup_routes.map { |dr| "#{dr['nextHopGateway']}" }
+    tba_routes.each do |ip|
+      b = resource[:bgp_neighbors].select { |neighbor| neighbor['ip_address'] == ip }
+      call_add_default_routes(provider_router_id, resource[:bgp_neighbors].select { |neighbor| neighbor['ip_address'] == ip }[0])
     end
   end
 
@@ -221,6 +225,34 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
         }.to_json
       end
     end
+  end
+
+  def call_add_default_routes( provider_router_id, bgp_neighbor )
+    remote_ip = bgp_neighbor['remote_net']
+    remote_network = bgp_neighbor['remote_net']
+    net_address, net_length = remote_network.split("/")
+    port = ''
+    router_ports = call_get_router_ports(provider_router_id)
+    router_ports.each do |rp|
+      port = rp if IPAddr.new("#{remote_network}").include?(rp['portAddress'])
+    end
+    unless port.empty?
+      res = @connection.post do |req|
+        req.url "/midonet-api/routers/#{provider_router_id}/routes"
+        req.headers['Content-Type'] = "application/vnd.org.midonet.Route-v1+json"
+        req.body = {
+          'dstNetworkAddr' => '0.0.0.0',
+          'dstNetworkLength' => '0',
+          'nextHopPort' => port['id'],
+          'nextHopGateway' => bgp_neighbor['ip_address'],
+          'srcNetworkAddr' => '0.0.0.0',
+          'srcNetworkLength' => '0',
+          'type' => 'Normal',
+          'weight' => '100'
+        }.to_json
+      end
+    end
+
   end
 
   def call_advertise_bgp_network( provider_router_id, bgp_advertised_network )
