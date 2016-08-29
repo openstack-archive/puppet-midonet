@@ -135,6 +135,7 @@ Puppet::Type.type(:midonet_host_registry).provide(:midonet_api_caller) do
 
   def call_get_host()
     begin
+      sleep 15
       return File.read('/etc/midonet_host_id.properties').split('=')[1].sub("\n","")
     rescue
       raise 'Midonet agent is not running on the host you are trying to register'
