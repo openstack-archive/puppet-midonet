@@ -26,40 +26,44 @@
 # Copyright (c) 2016 Midokura SARL, All Rights Reserved.
 
 class midonet::mem::vhost (
+  $analytics_ip,
+  $cluster_ip,
+
 ) inherits midonet::params {
 
-  $directories = [
-    {
-      'path'  => $midonet::params::mem_apache_docroot,
-      'allow' => 'from all',
-    },
-  ]
-  $mem_apache_port        = $midonet::params::mem_apache_port
-  $mem_apache_docroot     = $midonet::params::mem_apache_docroot
-  $mem_apache_servername  = $midonet::params::mem_apache_servername
+    $mem_apache_docroot     = $midonet::params::mem_apache_docroot
+
   $proxy_pass = [
     {
       'path' => "/${midonet::params::mem_api_namespace}",
-      'url'  => $midonet::params::mem_api_host,
+      'url'  => "http://$cluster_ip:8181/midonet-api",
+    },
+    {
+      'path' => "/${midonet::params::mem_trace_namespace}",
+      'url'  => "wss://$cluster_ip:8460/trace",
+    },
+    {
+      'path' => "/${midonet::params::mem_analytics_namespace}",
+      'url'  => "wss://$analytics_ip:8080/analytics",
     },
   ]
 
-  validate_string($mem_apache_port)
-  validate_string($mem_apache_docroot)
-  validate_string($mem_apache_servername)
   validate_array($proxy_pass)
-  validate_array($directories)
+  validate_string($mem_apache_docroot)
 
   include ::apache
   include ::apache::mod::headers
 
   apache::vhost { 'midonet-mem':
-    port        => $mem_apache_port,
-    servername  => $mem_apache_servername,
-    docroot     => $mem_apache_docroot,
-    proxy_pass  => $proxy_pass,
-    directories => $directories,
-    require     => Package[$midonet::params::mem_package],
+    docroot               => $mem_apache_docroot,
+    proxy_preserve_host   => 'on',
+    proxy_pass            => $proxy_pass,
+    headers => [
+    'set    Access-Control-Allow-Origin  *',
+    'append Access-Control-Allow-Headers Content-Type',
+    'append Access-Control-Allow-Headers X-Auth-Token',
+    ],
+    require               => Package[$midonet::params::mem_package],
   }
 }
 

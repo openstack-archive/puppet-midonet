@@ -79,6 +79,8 @@
 
 class midonet::mem(
 # Midonet Manager installation options
+  $analytics_ip,
+  $cluster_ip,
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
   $mem_api_host                   = $::midonet::params::mem_api_host,
@@ -129,6 +131,9 @@ class midonet::mem(
     require => Package['midonet-manager']
   }
 
-  include ::midonet::mem::vhost
+  class {'midonet::mem::vhost':
+    cluster_ip      => $cluster_ip,
+    analytics_ip    => $analytics_ip,
+  }
 }
 
