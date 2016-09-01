@@ -79,21 +79,29 @@
 
 class midonet::mem(
 # Midonet Manager installation options
+  $analytics_ip                   = $::ipaddress,
+  $cluster_ip                     = $::ipaddress,
+  $is_insights                    = false,
+  $mem_api_host                   = "http://${cluster_ip}:8181",
+  $mem_login_host                 = "http://${cluster_ip}:8181",
+  $mem_trace_api_host             = "http://${cluster_ip}:8181",
+  $mem_traces_ws_url              = "wss://${cluster_ip}:8460/trace",
+  $mem_api_namespace              = 'midonet-api',
+  $mem_trace_namespace            = 'trace',
+  $mem_analytics_namespace        = 'analytics',
+  $mem_analytics_ws_api_url       = "wss://${analytics_ip}:8080/analytics",
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
-  $mem_api_host                   = $::midonet::params::mem_api_host,
-  $mem_login_host                 = $::midonet::params::mem_login_host,
-  $mem_trace_api_host             = $::midonet::params::mem_trace_api_host,
-  $mem_traces_ws_url              = $::midonet::params::mem_traces_ws_url,
-  $mem_api_namespace              = $::midonet::params::mem_api_namespace,
+  $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
   $mem_api_version                = $::midonet::params::mem_api_version,
   $mem_api_token                  = $::midonet::params::mem_api_token,
-  $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
-  $mem_analytics_ws_api_url       = $::midonet::params::mem_analytics_ws_api_url,
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
   $mem_login_animation_enabled    = $::midonet::params::mem_login_animation_enabled,
   $mem_config_file                = $::midonet::params::mem_config_file,
-
+  $mem_apache_servername          = $cluster_ip,
+  $mem_apache_docroot             = '/var/www/html',
+  $mem_apache_port                = '80',
+  $mem_proxy_preserve_host        = 'on',
 ) inherits midonet::params {
 
   include midonet::repository
@@ -129,6 +137,17 @@ class midonet::mem(
     require => Package['midonet-manager']
   }
 
-  include ::midonet::mem::vhost
+  class {'midonet::mem::vhost':
+    cluster_ip              => $cluster_ip,
+    analytics_ip            => $analytics_ip,
+    is_insights             => $is_insights,
+    mem_apache_servername   => $mem_apache_servername,
+    mem_apache_docroot      => $mem_apache_docroot,
+    mem_api_namespace       => $mem_api_namespace,
+    mem_trace_namespace     => $mem_trace_namespace,
+    mem_analytics_namespace => $mem_analytics_namespace,
+    mem_proxy_preserve_host => $mem_proxy_preserve_host,
+    mem_apache_port         => $mem_apache_port,
+  }
 }
 
