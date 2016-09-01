@@ -26,6 +26,8 @@ class midonet::params {
   $mem_analytics_ws_api_url             = "wss://${::ipaddress}:8080/analytics"
   $mem_api_host                         = "http://${::ipaddress}:8181"
   $mem_api_namespace                    = 'midonet-api'
+  $mem_trace_namespace                  = 'trace'
+  $mem_analytics_namespace              = 'analytics'
   $mem_api_token                        = false
   $mem_api_version                      = '5.0'
   $mem_login_host                       = "http://${::ipaddress}:8181"
@@ -42,5 +44,4 @@ class midonet::params {
 
   # OS configuration
   $gem_bin_path                         = '/usr/bin/gem'
-
 }
