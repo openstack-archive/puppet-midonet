@@ -94,7 +94,7 @@ class midonet::repository (
   $midonet_version        = '5.2',
   $midonet_stage          = 'stable',
   $openstack_release      = 'mitaka',
-  $mem_version            = '5',
+  $mem_version            = '5.2',
   $mem_username           = undef,
   $mem_password           = undef
   ) {

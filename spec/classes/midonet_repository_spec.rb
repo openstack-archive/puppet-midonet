@@ -14,7 +14,7 @@ describe 'midonet::repository' do
         'midonet_version'       => '5.2',
         'midonet_stage'         => 'stable',
         'openstack_release'     => 'mitaka',
-        'mem_version'           => '5',
+        'mem_version'           => '5.2',
         'mem_username'          => nil,
         'mem_password'          => nil
       ) }
@@ -32,7 +32,7 @@ describe 'midonet::repository' do
         'midonet_version'       => '5.2',
         'midonet_stage'         => 'stable',
         'openstack_release'     => 'mitaka',
-        'mem_version'           => '5',
+        'mem_version'           => '5.2',
         'mem_username'          => nil,
         'mem_password'          => nil
       ) }
