@@ -100,9 +100,9 @@ class midonet::mem(
   $analytics_ip                   = $::ipaddress,
   $cluster_ip                     = $::ipaddress,
   $is_insights                    = false,
-  $mem_api_namespace              = 'midonet-api',
-  $mem_trace_namespace            = 'trace',
-  $mem_analytics_namespace        = 'analytics',
+  $mem_api_namespace              = undef,
+  $mem_trace_namespace            = undef,
+  $mem_analytics_namespace        = undef,
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
   $mem_login_host                 = "http://${cluster_ip}:8181",
@@ -116,11 +116,13 @@ class midonet::mem(
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
   $mem_login_animation_enabled    = $::midonet::params::mem_login_animation_enabled,
   $mem_config_file                = $::midonet::params::mem_config_file,
-  $mem_apache_port                = $::midonet::params::mem_apache_port,
-  $mem_apache_docroot             = $::midonet::params::mem_apache_docroot,
-  $mem_apache_servername          = $::midonet::params::mem_apache_servername,
-
-
+  $mem_apache_servername          = $cluster_ip,
+  $mem_apache_docroot             = undef,
+  $mem_apache_port                = undef,
+  $mem_proxy_preserve_host        = undef,
+  $is_ssl                         = false,
+  $ssl_cert                       = '',
+  $ssl_key                        = '',
 ) inherits midonet::params {
 
   include midonet::repository
@@ -156,12 +158,39 @@ class midonet::mem(
     require => Package['midonet-manager']
   }
 
-  class { 'midonet::mem::vhost':
-    mem_apache_port       => $mem_apache_port,
-    mem_apache_docroot    => $mem_apache_docroot,
-    mem_apache_servername => $mem_apache_servername,
-    mem_api_namespace     => $mem_api_namespace,
-    mem_api_host          => $mem_api_host
+  if $is_ssl {
+    if $ssl_cert == '' or $ssl_key == '' {
+      fail('SSL key and cert are empty. Please provide value for them Or make is_ssl - false')
+    }
+    class {'midonet::mem::vhost':
+      cluster_ip              => $cluster_ip,
+      analytics_ip            => $analytics_ip,
+      is_insights             => $is_insights,
+      mem_apache_servername   => $mem_apache_servername,
+      mem_apache_docroot      => $mem_apache_docroot,
+      mem_api_namespace       => $mem_api_namespace,
+      mem_trace_namespace     => $mem_trace_namespace,
+      mem_analytics_namespace => $mem_analytics_namespace,
+      mem_proxy_preserve_host => $mem_proxy_preserve_host,
+      mem_apache_port         => $mem_apache_port,
+      is_ssl                  => $is_ssl,
+      ssl_cert                => $ssl_cert,
+      ssl_key                 => $ssl_key,
+    }
   }
-
+  else {
+    class {'midonet::mem::vhost':
+      cluster_ip              => $cluster_ip,
+      analytics_ip            => $analytics_ip,
+      is_insights             => $is_insights,
+      mem_apache_servername   => $mem_apache_servername,
+      mem_apache_docroot      => $mem_apache_docroot,
+      mem_api_namespace       => $mem_api_namespace,
+      mem_trace_namespace     => $mem_trace_namespace,
+      mem_analytics_namespace => $mem_analytics_namespace,
+      mem_proxy_preserve_host => $mem_proxy_preserve_host,
+      mem_apache_port         => $mem_apache_port,
+      is_ssl                  => $is_ssl,
+    }
+  }
 }
