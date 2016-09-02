@@ -36,6 +36,9 @@ class midonet::mem::vhost (
   $mem_analytics_namespace  = $mem_analytics_namespace,
   $mem_proxy_preserve_host  = $mem_proxy_preserve_host,
   $mem_apache_port          = $mem_apache_port,
+  $is_ssl                   = $is_ssl,
+  $ssl_cert                 = $ssl_cert,
+  $ssl_key                  = $ssl_key,
 ) inherits midonet::params {
 
   $aliases = [
@@ -81,19 +84,42 @@ class midonet::mem::vhost (
 
   include ::apache
   include ::apache::mod::headers
-
-  apache::vhost { 'midonet-mem':
-    servername          => $mem_apache_servername,
-    docroot             => $mem_apache_docroot,
-    proxy_preserve_host => $mem_proxy_preserve_host,
-    proxy_pass          => $proxy_pass,
-    headers             => [
-    'set    Access-Control-Allow-Origin  *',
-    'append Access-Control-Allow-Headers Content-Type',
-    'append Access-Control-Allow-Headers X-Auth-Token',
-    ],
-    aliases             => $aliases,
-    require             => Package[$midonet::params::mem_package],
+  if $is_ssl {
+    apache::vhost { 'midonet-mem':
+      servername                  => $mem_apache_servername,
+      docroot                     => $mem_apache_docroot,
+      proxy_preserve_host         => $mem_proxy_preserve_host,
+      proxy_pass                  => $proxy_pass,
+      headers                     => [
+      'set    Access-Control-Allow-Origin  *',
+      'append Access-Control-Allow-Headers Content-Type',
+      'append Access-Control-Allow-Headers X-Auth-Token',
+      ],
+      aliases                     => $aliases,
+      ssl                         => true,
+      ssl_proxyengine             => true,
+      ssl_cert                    => $ssl_cert,
+      ssl_key                     => $ssl_key,
+      ssl_proxy_verify            => none,
+      ssl_proxy_check_peer_cn     => off,
+      ssl_proxy_check_peer_name   => off,
+      ssl_proxy_check_peer_expire => off,
+      require                     => Package[$midonet::params::mem_package],
+    }
+  }
+  else {
+    apache::vhost { 'midonet-mem':
+      servername          => $mem_apache_servername,
+      docroot             => $mem_apache_docroot,
+      proxy_preserve_host => $mem_proxy_preserve_host,
+      proxy_pass          => $proxy_pass,
+      headers             => [
+      'set    Access-Control-Allow-Origin  *',
+      'append Access-Control-Allow-Headers Content-Type',
+      'append Access-Control-Allow-Headers X-Auth-Token',
+      ],
+      aliases             => $aliases,
+      require             => Package[$midonet::params::mem_package],
+    }
   }
 }
-
