@@ -21,26 +21,27 @@ class midonet::params {
   $mem_package                          = 'midonet-manager'
   $mem_install_path                     = '/var/www/html/midonet-manager'
 
+
   # MEM Manager config.js parameters
   $mem_agent_config_api_namespace       = 'conf'
-  $mem_analytics_ws_api_url             = "wss://${::ipaddress}:8080/analytics"
-  $mem_api_host                         = "http://${::ipaddress}:8181"
-  $mem_api_namespace                    = 'midonet-api'
   $mem_api_token                        = false
   $mem_api_version                      = '5.0'
-  $mem_login_host                       = "http://${::ipaddress}:8181"
   $mem_poll_enabled                     = true
   $mem_login_animation_enabled          = true
-  $mem_trace_api_host                   = "http://${::ipaddress}:8181"
-  $mem_traces_ws_url                    = "wss://${::ipaddress}:8460"
   $mem_config_file                      = "${mem_install_path}/config/client.js"
+
+  $mem_api_namespace                    = 'midonet-api'
+  $mem_trace_namespace                    = 'trace'
+  $mem_analytics_namespace                    = 'analytics'
+  $mem_proxy_preserve_host              = true
+
 
   # MEM vhost parameters for apache conf
   $mem_apache_port                      = '80'
-  $mem_apache_servername                = "http://${::ipaddress}"
+  $mem_apache_servername                = $::ipaddress
   $mem_apache_docroot                   = '/var/www/html'
+
 
   # OS configuration
   $gem_bin_path                         = '/usr/bin/gem'
-
 }
