@@ -29,6 +29,17 @@ class midonet::agent::scrapper (
 
   include midonet::repository
 
+  if ($::osfamily == 'RedHat') {
+    yumrepo { 'vbernat-lldpd':
+      baseurl  => 'http://download.opensuse.org/repositories/home:/vbernat/RHEL_7/',
+      descr    => 'vbernat-lldpd',
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => 'http://download.opensuse.org/repositories/home:/vbernat/RHEL_7//repodata/repomd.xml.key',
+      before   => Package['midonet-jmxscraper']
+    }
+}
+
   package { 'midonet-jmxscraper':
     ensure => present,
     name   => $package_name,
@@ -41,4 +52,3 @@ class midonet::agent::scrapper (
   }
 
 }
-

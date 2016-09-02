@@ -4,6 +4,15 @@
 #
 # === Parameters
 #
+# [analytics_ip]
+# IP Where the analytics service is running
+#
+# [cluster_ip]
+# IP where the cluster service is running
+#
+# [is_insights]
+# Whether using insights or not
+#
 # [mem_package]
 # Name of the MEM package
 #
@@ -69,6 +78,15 @@
 #   of the current session. It can also be disabled permanently by changing the
 #   'poll_enabled' parameter to 'false'
 #
+# [mem_api_namespace]
+#   The path where you are serving the api. Default "midonet-api"
+#
+# [mem_trace_namespace]
+#   The path where you are serving the analytics service. Default "trace"
+#
+# [mem_analytics_namespace]
+#   The path where you are serving the analytics service. Default "analytics"
+#
 # === Authors
 #
 # Midonet (http://midonet.org)
@@ -79,20 +97,29 @@
 
 class midonet::mem(
 # Midonet Manager installation options
+  $analytics_ip                   = $::ipaddress,
+  $cluster_ip                     = $::ipaddress,
+  $is_insights                    = false,
+  $mem_api_namespace              = 'midonet-api',
+  $mem_trace_namespace            = 'trace',
+  $mem_analytics_namespace        = 'analytics',
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
-  $mem_api_host                   = $::midonet::params::mem_api_host,
-  $mem_login_host                 = $::midonet::params::mem_login_host,
-  $mem_trace_api_host             = $::midonet::params::mem_trace_api_host,
-  $mem_traces_ws_url              = $::midonet::params::mem_traces_ws_url,
-  $mem_api_namespace              = $::midonet::params::mem_api_namespace,
+  $mem_login_host                 = "http://${cluster_ip}:8181",
+  $mem_trace_api_host             = "http://${analytics_ip}:8181",
+  $mem_traces_ws_url              = "wss://${cluster_ip}:8460/${mem_trace_namespace}",
   $mem_api_version                = $::midonet::params::mem_api_version,
   $mem_api_token                  = $::midonet::params::mem_api_token,
+  $mem_api_host                   = "http://${cluster_ip}:8181",
   $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
-  $mem_analytics_ws_api_url       = $::midonet::params::mem_analytics_ws_api_url,
+  $mem_analytics_ws_api_url       = "wss://${cluster_ip}:8080/${mem_analytics_namespace}",
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
   $mem_login_animation_enabled    = $::midonet::params::mem_login_animation_enabled,
   $mem_config_file                = $::midonet::params::mem_config_file,
+  $mem_apache_port                = $::midonet::params::mem_apache_port,
+  $mem_apache_docroot             = $::midonet::params::mem_apache_docroot,
+  $mem_apache_servername          = $::midonet::params::mem_apache_servername,
+
 
 ) inherits midonet::params {
 
@@ -125,10 +152,16 @@ class midonet::mem(
     group   => 'root',
     mode    => '0644',
     path    => "${mem_install_path}/config/client.js",
-    content => template("${module_name}/client.js.erb"),
+    content => template("${module_name}/manager/client.js.erb"),
     require => Package['midonet-manager']
   }
 
-  include ::midonet::mem::vhost
-}
+  class { 'midonet::mem::vhost':
+    mem_apache_port       => $mem_apache_port,
+    mem_apache_docroot    => $mem_apache_docroot,
+    mem_apache_servername => $mem_apache_servername,
+    mem_api_namespace     => $mem_api_namespace,
+    mem_api_host          => $mem_api_host
+  }
 
+}
