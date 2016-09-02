@@ -101,7 +101,10 @@ class midonet::mem(
   $mem_apache_servername          = $cluster_ip,
   $mem_apache_docroot             = '/var/www/html',
   $mem_apache_port                = '80',
-  $mem_proxy_preserve_host        = 'on',
+  $mem_proxy_preserve_host        = true,
+  $is_ssl        = false,
+  $ssl_cert                       = '',
+  $ssl_key                        = '',
 ) inherits midonet::params {
 
   include midonet::repository
@@ -148,6 +151,9 @@ class midonet::mem(
     mem_analytics_namespace => $mem_analytics_namespace,
     mem_proxy_preserve_host => $mem_proxy_preserve_host,
     mem_apache_port         => $mem_apache_port,
+    is_ssl                  => $is_ssl,
+    ssl_cert                => $ssl_cert,
+    ssl_key                 => $ssl_key,
   }
 }
 
