@@ -98,7 +98,7 @@ class midonet::cluster (
   $max_heap_size           = undef,
   $heap_newsize            = undef,
   $is_mem                  = undef,
-
+  $is_insights             = undef,
 ) {
 
     class { 'midonet::cluster::install':
@@ -123,6 +123,7 @@ class midonet::cluster (
       keystone_admin_token    => $keystone_admin_token,
       keystone_host           => $keystone_host,
       keystone_port           => $keystone_port,
+      is_insights             => $is_insights,
       require                 => Class['midonet::cluster::install']
     }
     contain 'midonet::cluster::install'
