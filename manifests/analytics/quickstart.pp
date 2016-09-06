@@ -47,16 +47,4 @@ class midonet::analytics::quickstart (
     path    => $config_path,
     content => template('midonet/analytics/midonet.conf.erb'),
   }
-
-  file { 'analytics_settings':
-    ensure  => present,
-    path    => '/tmp/analytics_settings.conf',
-    content => template('midonet/analytics/analytics_settings.erb'),
-  } ->
-  file { 'analytics_settings_script':
-    ensure  => present,
-    path    => '/tmp/analytics_settings.sh',
-    content => template('midonet/analytics/analytics_settings.sh.erb'),
-  } ->
-  exec { '/bin/bash /tmp/analytics_settings.sh': }
 }

@@ -28,16 +28,22 @@ class midonet::cluster::run (
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
-  $keystone_port            = '35357',
-  $service_name             = 'midonet-cluster',
-  $service_ensure           = 'running',
-  $service_enable           = true,
-  $cluster_config_path      = '/etc/midonet/midonet.conf',
-  $cluster_jvm_config_path  = '/etc/midonet-cluster/midonet-cluster-env.sh',
-  $cluster_host             = '0.0.0.0',
-  $cluster_port             = '8181',
-  $max_heap_size            = '1024M',
-  $heap_newsize             = '512M',
+  $keystone_port               = '35357',
+  $service_name                = 'midonet-cluster',
+  $service_ensure             = 'running',
+  $service_enable              = true,
+  $cluster_config_path         = '/etc/midonet/midonet.conf',
+  $cluster_jvm_config_path     = '/etc/midonet-cluster/midonet-cluster-env.sh',
+  $cluster_host                = '0.0.0.0',
+  $cluster_port                = '8181',
+  $max_heap_size              = '1024M',
+  $heap_newsize                = '512M',
+  $is_insights                   = false,
+  $clio_service_udp_port           = undef,
+  $clio_target_udp_port            = undef,
+  $jmxscraper_target_udp_endpoint  = undef,
+  $flow_tracing_service_ws_port    = undef,
+  $agent_flow_history_udp_endpoint = undef,
 ) {
 
   file { '/tmp/mn-cluster_config.sh':
@@ -62,6 +68,20 @@ class midonet::cluster::run (
     content => template('midonet/cluster/midonet-cluster-env.sh.erb'),
     require => Package['midonet-cluster'],
     notify  => Service['midonet-cluster'],
+  }
+
+  if $is_insights {
+    file { 'analytics_settings':
+      ensure  => present,
+      path    => '/tmp/analytics_settings.conf',
+      content => template('midonet/analytics/analytics_settings.erb'),
+    } ->
+    file { 'analytics_settings_script':
+      ensure  => present,
+      path    => '/tmp/analytics_settings.sh',
+      content => template('midonet/analytics/analytics_settings.sh.erb'),
+    } ->
+    exec { '/bin/bash /tmp/analytics_settings.sh': }
   }
 
   service { 'midonet-cluster':
