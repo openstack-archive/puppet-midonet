@@ -38,6 +38,7 @@ class midonet::cluster::run (
   $cluster_port             = '8181',
   $max_heap_size            = '1024M',
   $heap_newsize             = '512M',
+  $is_insights              = false,
 ) {
 
   file { '/tmp/mn-cluster_config.sh':
@@ -62,6 +63,20 @@ class midonet::cluster::run (
     content => template('midonet/cluster/midonet-cluster-env.sh.erb'),
     require => Package['midonet-cluster'],
     notify  => Service['midonet-cluster'],
+  }
+
+  if $is_insights {
+    file { 'analytics_settings':
+      ensure  => present,
+      path    => '/tmp/analytics_settings.conf',
+      content => template('midonet/analytics/analytics_settings.erb'),
+    } ->
+    file { 'analytics_settings_script':
+      ensure  => present,
+      path    => '/tmp/analytics_settings.sh',
+      content => template('midonet/analytics/analytics_settings.sh.erb'),
+    } ->
+    exec { '/bin/bash /tmp/analytics_settings.sh': }
   }
 
   service { 'midonet-cluster':
