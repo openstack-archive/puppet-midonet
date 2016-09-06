@@ -113,6 +113,8 @@ class midonet::mem(
   $mem_api_host                   = "http://${cluster_ip}:8181",
   $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
   $mem_analytics_ws_api_url       = "wss://${cluster_ip}:8080/${mem_analytics_namespace}",
+  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}:8007/subscription",
+  $mem_fabric_ws_api_url          = "wss://${cluster_ip}:8009/fabric"
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
   $mem_login_animation_enabled    = $::midonet::params::mem_login_animation_enabled,
   $mem_config_file                = $::midonet::params::mem_config_file,
