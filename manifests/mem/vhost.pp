@@ -112,6 +112,7 @@ class midonet::mem::vhost (
   include ::apache::mod::proxy_http
 
   if $is_ssl {
+    include ::apache::mod::ssl
     apache::vhost { 'midonet-mem':
       servername                  => $mem_apache_servername,
       docroot                     => $mem_apache_docroot,
@@ -127,7 +128,7 @@ class midonet::mem::vhost (
       ssl_proxy_check_peer_cn     => off,
       ssl_proxy_check_peer_name   => off,
       ssl_proxy_check_peer_expire => off,
-      require                     => Package[$midonet::params::mem_package],
+      require                     => [Package[$midonet::params::mem_package],Class['::apache::mod::ssl']],
     }
   }
   else {
