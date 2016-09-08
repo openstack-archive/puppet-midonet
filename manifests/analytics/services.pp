@@ -54,4 +54,10 @@ class midonet::analytics::services (
     name    => $analytics_package_name,
     require => Class['midonet_openstack::profile::midojava::midojava'],
   }
+
+  service { $analytics_package_name:
+    ensure => 'running',
+    name   => $analytics_package_name,
+    enable => true,
+  }
 }
