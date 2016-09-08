@@ -3,7 +3,11 @@
   "login_host": "<%= @mem_login_host %>",
   "trace_api_host": "<%= @mem_trace_api_host %>",
   "traces_ws_url": "<%= @mem_traces_ws_url %>",
-  "api_namespace": "<%= @mem_api_namespace %>",
+  <% if !@mem_api_namespace %>
+    "api_namespace": "midonet-api",
+  <% else %>
+    "api_namespace": "<%= @mem_api_namespace %>",
+  <% end %>
   "api_version": "<%= @mem_api_version %>",
   <% if !@mem_api_token %>
     "api_token": false,
