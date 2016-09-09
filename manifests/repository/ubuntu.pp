@@ -70,17 +70,21 @@ class midonet::repository::ubuntu (
             }
 
             apt::source {'midonet-openstack-integration':
-                comment     => 'Midonet apt plugin repository',
-                location    => "http://${midonet::params::midonet_repo_baseurl}/openstack-${openstack_release}",
-                release     => $midonet_stage,
-                include_src => false,
+                comment  => 'Midonet apt plugin repository',
+                location => "http://${midonet::params::midonet_repo_baseurl}/openstack-${openstack_release}",
+                release  => $midonet_stage,
+                include  => {
+                      'src' => false,
+              }
             }
 
             apt::source {'midonet-openstack-misc':
-                comment     => 'Midonet 3rd party tools and libraries',
-                location    => "http://${midonet::params::midonet_repo_baseurl}/misc",
-                release     => $midonet_stage,
-                include_src => false,
+                comment  => 'Midonet 3rd party tools and libraries',
+                location => "http://${midonet::params::midonet_repo_baseurl}/misc",
+                release  => $midonet_stage,
+                include  => {
+                      'src' => false,
+              }
             }
 
             # Dummy exec to wrap apt_update

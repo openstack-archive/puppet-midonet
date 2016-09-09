@@ -87,13 +87,13 @@ describe 'midonet::repository::ubuntu' do
     it { is_expected.to contain_apt__source('midonet-openstack-integration').with(
         'location' => 'http://builds.midonet.org/openstack-mitaka',
         'release' => 'stable',
-        'include_src' => 'false'
+        'include' => '{"src"=>false}'
       )
     }
     it { is_expected.to contain_apt__source('midonet-openstack-misc').with(
         'location' => 'http://builds.midonet.org/misc',
         'release' => 'stable',
-        'include_src' => 'false'
+        'include' => '{"src"=>false}'
       )
     }
     it { is_expected.to contain_exec('update-midonet-repos').with(
