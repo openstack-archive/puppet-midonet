@@ -56,8 +56,9 @@ class midonet::analytics::services (
   }
 
   service { $analytics_package_name:
-    ensure => 'running',
-    name   => $analytics_package_name,
-    enable => true,
+    ensure  => 'running',
+    name    => $analytics_package_name,
+    enable  => true,
+    require => Package[$analytics_package_name],
   }
 }
