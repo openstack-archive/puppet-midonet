@@ -86,6 +86,7 @@ class midonet::cluster (
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
+  $keystone_tenant_name    = undef,
   $package_name            = undef,
   $service_name            = undef,
   $service_ensure          = undef,
@@ -123,6 +124,7 @@ class midonet::cluster (
       keystone_admin_token    => $keystone_admin_token,
       keystone_host           => $keystone_host,
       keystone_port           => $keystone_port,
+      keystone_tenant_name    => $keystone_tenant_name,
       is_insights             => $is_insights,
       require                 => Class['midonet::cluster::install']
     }

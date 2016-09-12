@@ -29,6 +29,7 @@ class midonet::cluster::run (
   $keystone_admin_token,
   $keystone_host,
   $keystone_port                   = '35357',
+  $keystone_tenant_name            = 'admin',
   $service_name                    = 'midonet-cluster',
   $service_ensure                  = 'running',
   $service_enable                  = true,
