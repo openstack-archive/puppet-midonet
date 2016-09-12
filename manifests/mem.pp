@@ -106,7 +106,7 @@ class midonet::mem(
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
   $mem_login_host                 = "http://${cluster_ip}:8181",
-  $mem_trace_api_host             = "http://${analytics_ip}:8181",
+  $mem_trace_api_host             = "http://${cluster_ip}:8181",
   $mem_traces_ws_url              = "wss://${cluster_ip}:8460/${mem_trace_namespace}",
   $mem_api_version                = $::midonet::params::mem_api_version,
   $mem_api_token                  = $::midonet::params::mem_api_token,
