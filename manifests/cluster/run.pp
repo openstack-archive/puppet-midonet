@@ -28,7 +28,9 @@ class midonet::cluster::run (
   $cassandra_rep_factor,
   $keystone_admin_token,
   $keystone_host,
+  $keystone_protocol               = 'http'
   $keystone_port                   = '35357',
+  $keystone_tenant_name            = 'admin',
   $service_name                    = 'midonet-cluster',
   $service_ensure                  = 'running',
   $service_enable                  = true,
