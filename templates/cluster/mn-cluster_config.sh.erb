@@ -29,10 +29,11 @@ cat << EOF | mn-conf set -t default
 cluster.auth {
   provider_class = "org.midonet.cluster.auth.keystone.KeystoneService"
   admin_role = "admin"
-  keystone.tenant_name = "admin"
+  keystone.tenant_name = "<%= @keystone_tenant_name %>"
   keystone.admin_token = "<%= @keystone_admin_token %>"
   keystone.host = <%= @keystone_host %>
   keystone.port = <%= @keystone_port %>
+  keystone.protocol = <%= @keystone_protocol %>
 }
 cluster.rest_api {
   http_host = <%= @cluster_host %>
