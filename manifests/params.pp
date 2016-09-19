@@ -25,7 +25,7 @@ class midonet::params {
   # MEM Manager config.js parameters
   $mem_agent_config_api_namespace       = 'conf'
   $mem_api_token                        = false
-  $mem_api_version                      = '5.0'
+  $mem_api_version                      = '5.2'
   $mem_poll_enabled                     = true
   $mem_login_animation_enabled          = true
   $mem_config_file                      = "${mem_install_path}/config/client.js"

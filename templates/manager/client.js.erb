@@ -2,7 +2,11 @@
   "api_host": "<%= @mem_api_host %>",
   "login_host": "<%= @mem_login_host %>",
   "trace_api_host": "<%= @mem_trace_api_host %>",
-  "traces_ws_url": "<%= @mem_traces_ws_url %>",
+  <% if !@mem_trace_namespace %>
+    "traces_ws_url": "<%= @mem_ws %><%= @cluster_ip %>:8460/trace",
+  <% else %>
+    "traces_ws_url": "<%= @mem_ws %><%= @cluster_ip %>:8460/<%=@mem_trace_namespace%>",
+  <% end %>
   <% if !@mem_api_namespace %>
     "api_namespace": "midonet-api",
   <% else %>
@@ -15,10 +19,14 @@
     "api_token": <%= @mem_api_token %>,
   <% end %>
   "agent_config_api_namespace": "<%= @mem_agent_config_api_namespace %>",
-  "analytics_ws_api_url": "<%= @mem_analytics_ws_api_url %>",
+  <% if !@mem_analytics_namespace %>
+    "analytics_ws_api_url": "<%= @mem_ws %><%= @analytics_ip %>:8080/analytics",
+  <% else %>
+    "analytics_ws_api_url": "<%= @mem_ws %><%= @analytics_ip %>:8080/<%=@mem_analytics_namespace%>",
+  <% end %>
   "poll_enabled": <%= @mem_poll_enabled %>,
   "login_animation_enabled": <%= @mem_login_animation_enabled %>,
-  "subscriptions_ws_api_url": "<%= @mem_subscriptions_ws_api_url %>",
-  "fabric_ws_api_url": "<%= @mem_fabric_ws_api_url %>"
+  "subscriptions_ws_api_url": "<%= @mem_ws %><%= @cluster_ip %>:8007/subscription",
+  "fabric_ws_api_url": "<%= @mem_ws %><%= @cluster_ip %>:8009/fabric"
 }
 

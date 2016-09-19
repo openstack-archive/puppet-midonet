@@ -46,6 +46,9 @@ class midonet::cluster::run (
   $jmxscraper_target_udp_endpoint  = undef,
   $flow_tracing_service_ws_port    = undef,
   $agent_flow_history_udp_endpoint = undef,
+  $calliope_service_ws_port        = undef,
+  $insights_ssl                    = undef,
+  $analytics_ip                    = undef,
 ) {
 
   file { '/tmp/mn-cluster_config.sh':

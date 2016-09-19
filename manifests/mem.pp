@@ -112,7 +112,7 @@ class midonet::mem(
   $mem_api_token                  = $::midonet::params::mem_api_token,
   $mem_api_host                   = "http://${cluster_ip}:8181",
   $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
-  $mem_analytics_ws_api_url       = "wss://${cluster_ip}:8080/${mem_analytics_namespace}",
+  $mem_analytics_ws_api_url       = "ws://${analytics_ip}:8080/${mem_analytics_namespace}",
   $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}:8007/subscription",
   $mem_fabric_ws_api_url          = "wss://${cluster_ip}:8009/fabric",
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
@@ -125,7 +125,10 @@ class midonet::mem(
   $is_ssl                         = false,
   $ssl_cert                       = '',
   $ssl_key                        = '',
+  $insights_ssl                   = undef,
 ) inherits midonet::params {
+
+  $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
 
   include midonet::repository
 
@@ -175,24 +178,10 @@ class midonet::mem(
       mem_analytics_namespace => $mem_analytics_namespace,
       mem_proxy_preserve_host => $mem_proxy_preserve_host,
       mem_apache_port         => $mem_apache_port,
+      mem_ws                  => $mem_ws,
       is_ssl                  => $is_ssl,
       ssl_cert                => $ssl_cert,
       ssl_key                 => $ssl_key,
-    }
-  }
-  else {
-    class {'midonet::mem::vhost':
-      cluster_ip              => $cluster_ip,
-      analytics_ip            => $analytics_ip,
-      is_insights             => $is_insights,
-      mem_apache_servername   => $mem_apache_servername,
-      mem_apache_docroot      => $mem_apache_docroot,
-      mem_api_namespace       => $mem_api_namespace,
-      mem_trace_namespace     => $mem_trace_namespace,
-      mem_analytics_namespace => $mem_analytics_namespace,
-      mem_proxy_preserve_host => $mem_proxy_preserve_host,
-      mem_apache_port         => $mem_apache_port,
-      is_ssl                  => $is_ssl,
     }
   }
 }
