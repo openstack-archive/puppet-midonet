@@ -101,6 +101,8 @@ class midonet::cluster (
   $heap_newsize            = undef,
   $is_mem                  = undef,
   $is_insights             = undef,
+  $insights_ssl            = undef,
+  $analytics_ip            = undef,
 ) {
 
     class { 'midonet::cluster::install':
@@ -128,8 +130,9 @@ class midonet::cluster (
       keystone_tenant_name    => $keystone_tenant_name,
       keystone_protocol       => $keystone_protocol,
       is_insights             => $is_insights,
+      insights_ssl            => $insights_ssl,
+      analytics_ip            => $analytics_ip,
       require                 => Class['midonet::cluster::install']
     }
     contain 'midonet::cluster::install'
-
 }

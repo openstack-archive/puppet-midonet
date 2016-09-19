@@ -52,6 +52,7 @@ class midonet::mem::vhost (
   $mem_analytics_namespace  = $::midonet::params::mem_analytics_namespace,
   $mem_proxy_preserve_host  = $::midonet::params::mem_proxy_preserve_host,
   $mem_apache_port          = $::midonet::params::mem_apache_port,
+  $mem_ws                   = undef,
   $is_ssl                   = undef,
   $ssl_cert                 = undef,
   $ssl_key                  = undef,
@@ -76,15 +77,15 @@ class midonet::mem::vhost (
     $proxy_pass = [
       {
         'path' => "/${mem_api_namespace}",
-        'url'  => "http://${cluster_ip}:8181/midonet-api",
+        'url'  => "http://${cluster_ip}:8181/${mem_api_namespace}",
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "wss://${cluster_ip}:8460/trace",
+        'url'  => "wss://${cluster_ip}:8460/${mem_trace_namespace}",
       },
       {
         'path' => "/${mem_analytics_namespace}",
-        'url'  => "wss://${analytics_ip}:8080/analytics",
+        'url'  => "${mem_ws}${analytics_ip}:8080/${mem_analytics_namespace}",
       },
     ]
   }
@@ -93,11 +94,11 @@ class midonet::mem::vhost (
     $proxy_pass = [
       {
         'path' => "/${mem_api_namespace}",
-        'url'  => "http://${cluster_ip}:8181/midonet-api",
+        'url'  => "http://${cluster_ip}:8181/${mem_api_namespace}",
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "wss://${cluster_ip}:8460/trace",
+        'url'  => "wss://${cluster_ip}:8460/${mem_trace_namespace}",
       },
     ]
   }

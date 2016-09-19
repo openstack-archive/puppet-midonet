@@ -1,48 +1,22 @@
-{
-    "clio.enabled": true,
-    "clio.service.udp_port": <% if !@clio_service_udp_port %>5001<% else %><%= @clio_service_udp_port %><% end %>,
-    "clio.service.encoding": "binary",
-    "clio.target.udp_endpoint": "<%= @ipaddress %>:<% if !@clio_target_udp_port %>5000<% else %><%= @clio_target_udp_port %><% end %>",
-
-    "clio.data.fields": [
-        "cookie",
-        "devices",
-        "host_uuid",
-        "in_port",
-        "in_tenant",
-        "out_ports",
-        "out_tenant",
-        "match_eth_src",
-        "match_eth_dst",
-        "match_ethertype",
-        "match_network_dst",
-        "match_network_src",
-        "match_network_proto",
-        "match_src_port",
-        "match_dst_port",
-        "action_drop",
-        "action_arp_sip",
-        "action_arp_tip",
-        "action_arp_op",
-        "rules",
-        "sim_result",
-        "final_eth_src",
-        "final_eth_dst",
-        "final_net_src",
-        "final_net_dst",
-        "final_transport_src",
-        "final_transport_dst",
-        "timestamp",
-        "type"
-    ],
-    "jmxscraper.target.udp_endpoint": "<%= @ipaddress %>:<% if !@jmxscraper_target_udp_endpoint %>5000<% else %><%= @jmxscraper_target_udp_endpoint %><% end %>",
-    "mem_cluster.flow_tracing.enabled": true,
-    "mem_cluster.flow_tracing.service.ws_port": <% if !@flow_tracing_service_ws_port %>8460<% else %><%= @flow_tracing_service_ws_port %><% end %>,
-    "mem_cluster.flow_tracing.auth.ssl.enabled": true,
-    "agent.flow_history": {
-        "enabled": true,
-        "encoding": "binary",
-        "udp_endpoint": "<%= @ipaddress %>: <% if !@agent_flow_history_udp_endpoint %>5001<% else %><%= @agent_flow_history_udp_endpoint %><% end %>"
-    }
-}
-
+clio.enabled : true
+clio.service.udp_port : <% if !@clio_service_udp_port %>5001<% else %><%= @clio_service_udp_port %><% end %>,
+clio.service.encoding : "binary"
+clio.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@clio_target_udp_port %>5000<% else %><%= @clio_target_udp_port %><% end %>",
+clio.data.fields : [ "cookie", "devices", "host_uuid", "in_port", "in_tenant", "out_ports", "out_tenant", "match_eth_src", "match_eth_dst", "match_ethertype", "match_network_dst", "match_network_src", "match_network_proto", "match_src_port", "match_dst_port", "action_drop", "action_arp_sip", "action_arp_tip", "action_arp_op", "rules", "sim_result", "final_eth_src", "final_eth_dst", "final_net_src", "final_net_dst", "final_transport_src", "final_transport_dst", "timestamp", "type" ]
+calliope.enabled : true
+calliope.service.ws_port : <% if !@calliope_service_ws_port %>8080<% else %><%= @calliope_service_ws_port %><% end %>
+calliope.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+jmxscraper.enabled : true
+jmxscraper.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@jmxscraper_target_udp_endpoint %>5000<% else %><%= @jmxscraper_target_udp_endpoint %><% end %>"
+mem_cluster.flow_tracing.enabled : true
+mem_cluster.flow_tracing.service.ws_port : <% if !@flow_tracing_service_ws_port %>8460<% else %><%= @flow_tracing_service_ws_port %><% end %>
+mem_cluster.flow_tracing.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+mem_cluster.subscription.service.port : <% if !@cluster_subscription_service_port %>8007<% else %><%= @cluster_subscription_service_port %><% end %>
+mem_cluster.subscription.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+mem_cluster.fabric.enabled : true
+mem_cluster.fabric.api.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+mem_cluster.fabric.api.port : <% if !@cluster_fabric_api_port %>8009<% else %><%= @cluster_fabric_api_port %><% end %>
+mem_cluster.fabric.mfc.port : <% if !@cluster_fabric_mfc_port %>8005<% else %><%= @cluster_fabric_mfc_port %><% end %>
+agent.flow_history.enabled : true
+agent.flow_history.encoding : "binary"
+agent.flow_history.udp_endpoint : "<%= @analytics_ip %>:<% if !@agent_flow_history_udp_endpoint %>5001<% else %><%= @agent_flow_history_udp_endpoint %><% end %>"
