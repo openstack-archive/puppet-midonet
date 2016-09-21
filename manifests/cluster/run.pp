@@ -91,4 +91,11 @@ class midonet::cluster::run (
     name   => $service_name,
     enable => $service_enable,
   }
+
+  file { '/etc/midonet/subscriptions':
+    ensure  => directory,
+    source  => 'puppet:///modules/midonet/subscriptions',
+    require => Service['midonet-cluster'],
+    recurse => true,
+  }
 }
