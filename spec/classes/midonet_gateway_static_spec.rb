@@ -23,6 +23,8 @@ describe 'midonet::gateway::static' do
       }
     end
     it { is_expected.to contain_file('fake_uplink_script').with_ensure('present') }
-    it { is_expected.to contain_exec('/bin/bash -x /tmp/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out') }
+    it { is_expected.to contain_exec('run gateway static creation script').with(
+        'command' => '/bin/bash -x /tmp/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out'
+      ) }
   end
 end
