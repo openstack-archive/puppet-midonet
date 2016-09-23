@@ -93,7 +93,7 @@ class midonet::gateway::static (
   $uplink_script           = 'create_fake_uplink_l2.sh',
   $ensure_scripts          = 'present',
   $hostname                = $::hostname,
-  $masquerade              = true
+  $masquerade              = 'on'
 ) {
 
   # Place script and helper files before executing it
