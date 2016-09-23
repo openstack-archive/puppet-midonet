@@ -92,6 +92,8 @@ class midonet::gateway::static (
   $scripts_dir             = '/tmp',
   $uplink_script           = 'create_fake_uplink_l2.sh',
   $ensure_scripts          = 'present',
+  $hostname                = $::hostname,
+  $masquerade              = true
 ) {
 
   # Place script and helper files before executing it
@@ -102,11 +104,11 @@ class midonet::gateway::static (
   }
 
   # Finally, execute the script
-  exec { "/bin/bash -x ${scripts_dir}/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out":
+  exec { 'run gateway static creation script':
+    command => "/bin/bash -x ${scripts_dir}/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out",
     returns => ['0', '7'],
     require => [
       File['fake_uplink_script'],
-      Package['python-midonetclient'],
     ]
   }
 }
