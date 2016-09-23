@@ -43,7 +43,7 @@ if [ -z "$(ip l | /bin/grep -e uplinkbridge)" ]; then
   brctl addbr uplinkbridge
 fi
 
-if [ -z "$(brctl show | /bin/grep uplinkbridge | head -n1)" ]; then
+if [ -z "$(brctl show | /bin/grep uplinkbridge | head -n1 | grep veth0)" ]; then
   brctl addif uplinkbridge veth0
   echo "ZzZ..."
   sleep 3
