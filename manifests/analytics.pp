@@ -52,6 +52,7 @@ class midonet::analytics (
   $manage_repo        = false,
   $mem_username       = undef,
   $mem_password       = undef,
+  $heap_size_gb       = '4'
 ) {
 
 
@@ -99,7 +100,7 @@ class midonet::analytics (
     if $::osfamily == 'Debian' {
       file_line { 'Set LS_HEAP_SIZE':
         path    => '/etc/default/logstash',
-        line    => 'LS_HEAP_SIZE="4g"',
+        line    => "LS_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^LS_HEAP_SIZE.*$',
         require => Package['logstash'],
         notify  => Service['logstash'],
@@ -107,7 +108,7 @@ class midonet::analytics (
 
       file_line { 'Set ES_HEAP_SIZE':
         path    => '/etc/default/elasticsearch',
-        line    => 'ES_HEAP_SIZE="4g"',
+        line    => "ES_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^ES_HEAP_SIZE.*$',
         require => Package['elasticsearch'],
         notify  => Service['elasticsearch-instance-es-01'],
@@ -116,7 +117,7 @@ class midonet::analytics (
     if $::osfamily == 'RedHat' {
       file_line { 'Set LS_HEAP_SIZE':
         path    => '/etc/sysconfig/logstash',
-        line    => 'LS_HEAP_SIZE="4g"',
+        line    => "LS_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^LS_HEAP_SIZE.*$',
         require => Package['logstash'],
         notify  => Service['logstash'],
@@ -124,7 +125,7 @@ class midonet::analytics (
 
       file_line { 'Set ES_HEAP_SIZE':
         path    => '/etc/sysconfig/elasticsearch',
-        line    => 'ES_HEAP_SIZE="4g"',
+        line    => "ES_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^ES_HEAP_SIZE.*$',
         require => Package['elasticsearch'],
         notify  => Service['elasticsearch-instance-es-01'],
