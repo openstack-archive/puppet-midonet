@@ -40,6 +40,7 @@ class midonet::cluster::run (
   $cluster_port                    = '8181',
   $max_heap_size                   = '1024M',
   $heap_newsize                    = '512M',
+  $package_ensure                  = 'present',
   $is_insights                     = false,
   $clio_service_udp_port           = undef,
   $clio_target_udp_port            = undef,
@@ -51,54 +52,56 @@ class midonet::cluster::run (
   $analytics_ip                    = undef,
 ) {
 
-  file { '/tmp/mn-cluster_config.sh':
-    ensure  => present,
-    content => template('midonet/cluster/mn-cluster_config.sh.erb'),
-  } ->
-
-  exec { '/bin/bash /tmp/mn-cluster_config.sh': }
-
-  file { 'cluster_config':
-    ensure  => present,
-    path    => $cluster_config_path,
-    content => template('midonet/cluster/midonet.conf.erb'),
-    require => Package['midonet-cluster'],
-    notify  => Service['midonet-cluster'],
-    before  => File['/tmp/mn-cluster_config.sh'],
-  }
-
-  file { 'cluster_jvm_config':
-    ensure  => present,
-    path    => $cluster_jvm_config_path,
-    content => template('midonet/cluster/midonet-cluster-env.sh.erb'),
-    require => Package['midonet-cluster'],
-    notify  => Service['midonet-cluster'],
-  }
-
-  if $is_insights {
-    file { 'analytics_settings':
+  if $package_ensure != 'absent' {
+    file { '/tmp/mn-cluster_config.sh':
       ensure  => present,
-      path    => '/tmp/analytics_settings.conf',
-      content => template('midonet/analytics/analytics_settings.erb'),
+      content => template('midonet/cluster/mn-cluster_config.sh.erb'),
     } ->
-    file { 'analytics_settings_script':
+
+    exec { '/bin/bash /tmp/mn-cluster_config.sh': }
+
+    file { 'cluster_config':
       ensure  => present,
-      path    => '/tmp/analytics_settings.sh',
-      content => template('midonet/analytics/analytics_settings.sh.erb'),
-    } ->
-    exec { '/bin/bash /tmp/analytics_settings.sh': }
+      path    => $cluster_config_path,
+      content => template('midonet/cluster/midonet.conf.erb'),
+      require => Package['midonet-cluster'],
+      notify  => Service['midonet-cluster'],
+      before  => File['/tmp/mn-cluster_config.sh'],
+    }
+
+    file { 'cluster_jvm_config':
+      ensure  => present,
+      path    => $cluster_jvm_config_path,
+      content => template('midonet/cluster/midonet-cluster-env.sh.erb'),
+      require => Package['midonet-cluster'],
+      notify  => Service['midonet-cluster'],
+    }
+
+    if $is_insights {
+      file { 'analytics_settings':
+        ensure  => present,
+        path    => '/tmp/analytics_settings.conf',
+        content => template('midonet/analytics/analytics_settings.erb'),
+      } ->
+      file { 'analytics_settings_script':
+        ensure  => present,
+        path    => '/tmp/analytics_settings.sh',
+        content => template('midonet/analytics/analytics_settings.sh.erb'),
+      } ->
+      exec { '/bin/bash /tmp/analytics_settings.sh': }
+    }
+
+    file { '/etc/midonet/subscriptions':
+      ensure  => directory,
+      source  => 'puppet:///modules/midonet/subscriptions',
+      require => Service['midonet-cluster'],
+      recurse => true,
+    }
   }
 
   service { 'midonet-cluster':
     ensure => $service_ensure,
     name   => $service_name,
     enable => $service_enable,
-  }
-
-  file { '/etc/midonet/subscriptions':
-    ensure  => directory,
-    source  => 'puppet:///modules/midonet/subscriptions',
-    require => Service['midonet-cluster'],
-    recurse => true,
   }
 }

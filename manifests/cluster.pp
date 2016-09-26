@@ -134,6 +134,7 @@ class midonet::cluster (
       is_insights             => $is_insights,
       insights_ssl            => $insights_ssl,
       analytics_ip            => $analytics_ip,
+      package_ensure          => $package_ensure,
       require                 => Class['midonet::cluster::install']
     }
     contain 'midonet::cluster::install'
