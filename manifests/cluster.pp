@@ -89,6 +89,7 @@ class midonet::cluster (
   $keystone_protocol       = undef,
   $keystone_tenant_name    = undef,
   $package_name            = undef,
+  $package_ensure          = undef,
   $service_name            = undef,
   $service_ensure          = undef,
   $service_enable          = undef,
@@ -106,8 +107,9 @@ class midonet::cluster (
 ) {
 
     class { 'midonet::cluster::install':
-      package_name => $package_name,
-      is_mem       => $is_mem
+      package_ensure => $package_ensure,
+      package_name   => $package_name,
+      is_mem         => $is_mem
     }
     contain 'midonet::cluster::install'
 

@@ -23,18 +23,19 @@
 # limitations under the License.
 #
 class midonet::cluster::install (
+  $package_ensure    = 'present',
   $package_name      = 'midonet-cluster',
   $is_mem            = false
 ) {
 
   package { 'midonet-cluster':
-    ensure => present,
+    ensure => $package_ensure,
     name   => $package_name,
   }
 
   if $is_mem {
     package { 'midonet-cluster-mem':
-      ensure  => present,
+      ensure  => $package_ensure,
       require => Class['midonet::repository']}
   }
   else  {
