@@ -75,7 +75,7 @@ fi
 ROUTER_ID=$(midonet-cli -A -e router list | grep ${EDGE_ROUTER} | awk '{ print $2 }')
 PORT_ID=$(midonet-cli -A -e router ${ROUTER_ID} port list | grep ${VETH1_IP} | cut -f 2 -d " ")
 
-if [ -z "$(midonet-cli -A -e router ${ROUTER_ID} route list | grep "src 0.0.0.0/0 dst 0.0.0.0/0 port ${PORT_ID}")"]; then
+if [ -z "$(midonet-cli -A -e router ${ROUTER_ID} route list | grep "src 0.0.0.0/0 dst 0.0.0.0/0 port ${PORT_ID}")" ]; then
   midonet-cli -e router ${ROUTER_ID} add route src 0.0.0.0/0 dst 0.0.0.0/0 \
       type normal port router ${ROUTER_ID} port ${PORT_ID} gw ${VETH0_IP}
   echo "Successfully added default route on edge router"
@@ -85,7 +85,7 @@ fi
     #port ${PORT_ID} interface veth1
 
 # Add masquerading to enable NATing
-if [ "${MASQUERADE_ON} = 'on' " ]; then
+if [ "${MASQUERADE_ON} = 'on' " ] && [ -z "$(iptables -v -n -L -t nat | grep "MASQUERADE" | grep "${FIP}" | grep "${NIC}")" ]; then
   iptables -t nat -I POSTROUTING -o ${NIC} -s ${FIP} -j MASQUERADE
   iptables -I FORWARD -s ${FIP} -j ACCEPT
   echo "Succesfully enabled masquerading"
