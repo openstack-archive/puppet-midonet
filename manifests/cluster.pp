@@ -137,5 +137,5 @@ class midonet::cluster (
       package_ensure          => $package_ensure,
       require                 => Class['midonet::cluster::install']
     }
-    contain 'midonet::cluster::install'
+    contain 'midonet::cluster::run'
 }
