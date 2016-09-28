@@ -22,7 +22,7 @@ end
 
 group :system_tests do
 
-  gem 'beaker'
+  gem 'beaker' , '< 3.0.0'
   if beaker_version = ENV['BEAKER_VERSION']
     ## TODO - Remove hardcoded version as soon as BKR-885 is fixed
     ## https://tickets.puppetlabs.com/browse/BKR-885
