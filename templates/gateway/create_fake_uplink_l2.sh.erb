@@ -23,7 +23,7 @@ EDGE_ROUTER=<%= @edge_router %>
 VETH0_IP=<%= @veth0_ip %>
 VETH1_IP=<%= @veth1_ip %>
 VETH_NETWORK=<%= @veth_network %>
-HOSTNAME=<%= @hostname %>
+HOSTNAME=<%= @myhostname %>
 MASQUERADE_ON=<%= @masquerade %>
 
 HOST_ID=$(midonet-cli -A -e host list | grep ${HOSTNAME} | awk '{ print $2 }')
