@@ -30,7 +30,7 @@ HOST_ID=$(midonet-cli -A -e host list | grep ${HOSTNAME} | awk '{ print $2 }')
 BINDING=$(midonet-cli -A -e host ${HOST_ID} list binding interface veth1)
 
 # Create veth pair
-if [ -z "$(ip l | /bin/grep -e veth0 -e veth)" ]; then
+if [ -z "$(ip l | /bin/grep -e veth0 -e veth1)" ]; then
   ip link add type veth
   echo "Succesfully created veth pair"
 fi
