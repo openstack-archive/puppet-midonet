@@ -171,7 +171,7 @@ include stdlib
     binding_profile => {
       'interface_name' => c7_int_name($port_interface_name)
     },
-    ip_address      => [[$port_fixed_ip]],
+    ip_address      => [[$port_fixed_ip],[]],
   } ->
 
   neutron_router_interface { "${edge_router_name}:null":
