@@ -114,14 +114,14 @@ include stdlib
   if($::osfamily == 'Debian' and $::operatingsystemmajrelease == '16.04')
   {
     package {'biosdevname':
-      ensure => 'latest',
+      ensure => 'present',
       before => Neutron_router[$edge_router_name]
     }
   }
   if($::osfamily == 'RedHat')
   {
     package {'biosdevname':
-      ensure => 'latest',
+      ensure => 'present',
       before => Neutron_router[$edge_router_name]
     }
   }
