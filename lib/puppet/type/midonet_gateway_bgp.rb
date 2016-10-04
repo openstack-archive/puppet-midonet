@@ -19,16 +19,19 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
       bgp_neighbors           => [
         {
           'ip_address' => '200.0.1.1',
-          'remote_asn' => '34512'
+          'remote_asn' => '34512',
+          'remote_net' =>  '200.0.1.0/24'
         },
         {
           'ip_address' => '12.0.140.1',
-          'remote_asn' => '24125'
+          'remote_asn' => '24125',
+          'remote_net' =>  '12.0.140.0/24'
         }
       ],
       midonet_api_url         => 'http://controller:8181',
       username                => 'admin',
       password                => 'admin',
+      tenant_name             => 'admin'
     }
   }
 
@@ -56,6 +59,9 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
 
         [ '192.0.2.128/25', '198.51.100.128/25', '203.0.113.128/25' ]"
     validate do |value|
+      if value.class == String
+        value = [value]
+      end
       unless value.class == Array && value.length > 0
         raise ArgumentError, "#{value} is not an Array"
       else

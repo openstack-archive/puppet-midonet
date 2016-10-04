@@ -45,8 +45,15 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
       k = [ bgp_advertised_network["subnetAddress"], bgp_advertised_network["subnetLength"] ].join("/")
       j << k
     end
-    tbd_bgp_networks = j - resource[:bgp_advertised_networks]
-    tba_bgp_networks = resource[:bgp_advertised_networks] - j
+
+    if resource[:bgp_advertised_networks].class == String
+      bgp_advertised_networks_resource = [resource[:bgp_advertised_networks]]
+    else
+      bgp_advertised_networks_resource = resource[:bgp_advertised_networks]
+    end
+
+    tbd_bgp_networks = j - bgp_advertised_networks_resource
+    tba_bgp_networks = bgp_advertised_networks_resource - j
     tbd_bgp_networks.each do |d|
       bgp_network_id = bgp_advertised_networks.select { |bgp_advertised_network| bgp_advertised_network['subnetAddress'] == d.split("/")[0] && bgp_advertised_network['subnetLength'] == d.split("/")[1] }[0]["id"]
       call_delete_bgp_network(bgp_network_id)
