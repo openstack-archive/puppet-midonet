@@ -29,8 +29,15 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
         "remote_asn" => bgp_neighbor["asNumber"] }
       m << n
     end
-    tbd_peers = m - resource[:bgp_neighbors]
-    tba_peers = resource[:bgp_neighbors] - m
+
+    if resource[:bgp_neighbors].class == Hash
+      bgp_advertised_networks_resource = [resource[:bgp_neighbors]]
+    else
+      bgp_advertised_networks_resource = resource[:bgp_neighbors]
+    end
+
+    tbd_peers = m - bgp_advertised_networks_resource
+    tba_peers = bgp_advertised_networks_resource - m
 
     tba_peers.each { |a| call_add_bgp_peer(provider_router_id, a['ip_address'], a['remote_asn']) }
     tbd_peers.each do |d|

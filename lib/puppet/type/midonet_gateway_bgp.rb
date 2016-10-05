@@ -95,6 +95,9 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
     ]
     "
     validate do |value|
+      if value.class == Hash
+        value = [value]
+      end
       unless value.class == Array && value.length > 0
         raise ArgumentError, "'%s' is not an array" % value
       else
