@@ -110,8 +110,6 @@ class midonet::agent (
   $mem_password       = undef
 ) {
 
-  include midonet::repository
-
   class { 'midonet::agent::install':
     package_name   => $package_name,
     package_ensure => $package_ensure,

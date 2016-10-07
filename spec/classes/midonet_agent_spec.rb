@@ -17,7 +17,6 @@ describe 'midonet::agent' do
         :shared_secret      => 'SHARED_SECRET',
       }
     end
-    it { is_expected.to contain_class('midonet::repository') }
     it { is_expected.to contain_class('midonet::agent::install') }
     it { is_expected.to contain_class('midonet::agent::run') }
   end
