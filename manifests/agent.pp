@@ -114,7 +114,6 @@ class midonet::agent (
     package_name   => $package_name,
     package_ensure => $package_ensure,
     manage_java    => $manage_java,
-    require        => Class['midonet::repository'],
   }
   contain 'midonet::agent::install'
 
