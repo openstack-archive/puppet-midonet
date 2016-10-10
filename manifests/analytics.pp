@@ -83,11 +83,12 @@ class midonet::analytics (
             mem_version       => undef,
             mem_username      => $mem_username,
             mem_password      => $mem_password,
+            before            => Class['midonet::analytics::services',
+            'midonet::analytics::quickstart']
           }
         }
       }
       class { 'midonet::analytics::services':
-        require => Class['midonet::repository'],
       } ->
       class { 'midonet::analytics::quickstart':
         zookeeper_hosts   => $zookeeper_hosts,

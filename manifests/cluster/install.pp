@@ -36,7 +36,6 @@ class midonet::cluster::install (
   if $is_mem {
     package { 'midonet-cluster-mem':
       ensure  => $package_ensure,
-      require => Class['midonet::repository']}
   }
   else  {
     notice('Skipping installation of midonet-cluster-mem')
