@@ -71,9 +71,8 @@ class midonet::agent::install (
   case $::osfamily {
     'Debian': {
       package { 'midolman':
-        ensure  => $package_ensure,
-        name    => $package_name,
-        require => Exec['apt_update'],
+        ensure => $package_ensure,
+        name   => $package_name,
       }
     }
     'RedHat': {
