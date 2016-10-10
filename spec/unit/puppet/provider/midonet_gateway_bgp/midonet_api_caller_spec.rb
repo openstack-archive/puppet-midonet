@@ -61,7 +61,9 @@ describe Puppet::Type.type(:midonet_gateway_bgp).provider(:midonet_api_caller) d
     let(:bgp_networks) {
       [
         {
-          "id" => "4a5e4356-3417-4c60-9cf8-7516abcd1234",
+          "id"            => "4a5e4356-3417-4c60-9cf8-7516abcd1234",
+          "subnetAddress" => "10.0.0.0",
+          "subnetLength"  => "24"
         }
       ]
     }
@@ -84,7 +86,7 @@ describe Puppet::Type.type(:midonet_gateway_bgp).provider(:midonet_api_caller) d
       allow(provider).to receive(:call_advertise_bgp_network)
       allow(provider).to receive(:call_get_bgp_peers).and_return(bgp_peers)
       allow(provider).to receive(:call_delete_bgp_peer)
-      allow(provider).to receive(:call_get_bgp_networks).and_return(bgp_networks.map { |e| e['id'] })
+      allow(provider).to receive(:call_get_bgp_networks).and_return(bgp_networks)
       allow(provider).to receive(:call_delete_bgp_network)
       allow(provider).to receive(:call_get_bgp_routes).and_return(bgp_routes)
     end
@@ -92,8 +94,8 @@ describe Puppet::Type.type(:midonet_gateway_bgp).provider(:midonet_api_caller) d
     it 'follows happy path (BGP)' do
       expect(provider).to receive(:call_get_provider_router)
       expect(provider).to receive(:call_assign_asn)
-      expect(provider).to receive(:call_add_bgp_peer).with(routers[0]['id'], '200.100.98.7', '45237')
-      expect(provider).to receive(:call_add_bgp_peer).with(routers[0]['id'], '182.24.63.2', '45235')
+      expect(provider).to receive(:call_add_bgp_peer).with(routers[0]['id'], '200.100.98.7', 45237)
+      expect(provider).to receive(:call_add_bgp_peer).with(routers[0]['id'], '182.24.63.2', 45235)
       expect(provider).to receive(:call_advertise_bgp_network).with(routers[0]['id'], '200.100.0.0/24')
       expect(provider).to receive(:call_advertise_bgp_network).with(routers[0]['id'], '200.0.20.0/24')
       expect(provider).to receive(:call_get_bgp_peers).with(routers[0]['id'])
