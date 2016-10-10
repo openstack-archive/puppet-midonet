@@ -25,13 +25,15 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
 
     define_connection(resource[:midonet_api_url])
 
+    entered_neighbors_parsed = bgp_advertised_networks_resource.collect { |x| {'ip_address' => x['ip_address'], 'remote_asn' => x['remote_asn']} }
+
     # Get the edge router uuid
     provider_router = call_get_provider_router()[0]
     provider_router_id = provider_router['id']
 
     # Assign local ASN to the provider router
     asn = provider_router['asNumber']
-    call_assign_asn(provider_router, resource[:bgp_local_as_number]) unless asn == resource[:bgp_local_as_number]
+    call_assign_asn(provider_router, resource[:bgp_local_as_number]) unless asn.to_i == resource[:bgp_local_as_number].to_i
 
     # Sync BGP peers
     bgp_neighbors = call_get_bgp_peers(provider_router_id)
@@ -41,8 +43,8 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
         "remote_asn" => bgp_neighbor["asNumber"] }
       m << n
     end
-    tbd_peers = m - bgp_neighbors_resource
-    tba_peers = bgp_neighbors_resource - m
+    tbd_peers = m - entered_neighbors_parsed
+    tba_peers = entered_neighbors_parsed - m
 
     tba_peers.each { |a| call_add_bgp_peer(provider_router_id, a['ip_address'], a['remote_asn']) }
     tbd_peers.each do |d|
@@ -133,13 +135,15 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
 
     define_connection(resource[:midonet_api_url])
 
+    entered_neighbors_parsed = bgp_advertised_networks_resource.collect { |x| {'ip_address' => x['ip_address'], 'remote_asn' => x['remote_asn']} }
+
     # Get the edge router uuid
     provider_router = call_get_provider_router()[0]
     provider_router_id = provider_router['id']
     result_array = Array.new
 
     # Check if local ASN is the same
-    result_array.push(provider_router["asNumber"] == resource[:bgp_local_as_number])
+    result_array.push(provider_router["asNumber"].to_i == resource[:bgp_local_as_number].to_i)
     # Check if BGP neighbors are the same
     bgp_neighbors = call_get_bgp_peers(provider_router_id)
     m = Array.new
@@ -148,7 +152,7 @@ Puppet::Type.type(:midonet_gateway_bgp).provide(:midonet_api_caller) do
         "remote_asn" => bgp_neighbor["asNumber"] }
       m << n
     end
-    result_array.push(m == bgp_neighbors_resource)
+    result_array.push(m == entered_neighbors_parsed)
     # Check if advertised networks are the same
     bgp_advertised_networks = call_get_bgp_networks(provider_router_id)
     j = Array.new
