@@ -73,7 +73,6 @@ class midonet::agent::install (
       package { 'midolman':
         ensure  => $package_ensure,
         name    => $package_name,
-        require => Exec['apt_update'],
       }
     }
     'RedHat': {
