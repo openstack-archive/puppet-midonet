@@ -45,6 +45,7 @@ class midonet::mem::vhost (
   $analytics_ip             = $::ipaddress,
   $cluster_ip               = $::ipaddress,
   $is_insights              = false,
+  $insights_ssl             = false,
   $mem_apache_servername    = $::midonet::params::mem_apache_servername,
   $mem_apache_docroot       = $::midonet::params::mem_apache_docroot,
   $mem_api_namespace        = $::midonet::params::mem_api_namespace,
@@ -56,6 +57,7 @@ class midonet::mem::vhost (
   $is_ssl                   = undef,
   $ssl_cert                 = undef,
   $ssl_key                  = undef,
+  $priority                 = undef
 ) inherits midonet::params {
 
   $aliases = [
@@ -71,7 +73,7 @@ class midonet::mem::vhost (
     'append Access-Control-Allow-Headers X-Auth-Token',
   ]
 
-
+  $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
   if $is_insights {
 
     $proxy_pass = [
@@ -81,7 +83,7 @@ class midonet::mem::vhost (
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "wss://${cluster_ip}:8460/${mem_trace_namespace}",
+        'url'  => "${$mem_ws}://${cluster_ip}:8460/${mem_trace_namespace}",
       },
       {
         'path' => "/${mem_analytics_namespace}",
@@ -98,7 +100,7 @@ class midonet::mem::vhost (
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "wss://${cluster_ip}:8460/${mem_trace_namespace}",
+        'url'  => "${mem_ws}://${cluster_ip}:8460/${mem_trace_namespace}",
       },
     ]
   }
@@ -129,6 +131,7 @@ class midonet::mem::vhost (
       ssl_proxy_check_peer_cn     => off,
       ssl_proxy_check_peer_name   => off,
       ssl_proxy_check_peer_expire => off,
+      priority                    => $priority,
       require                     => [Package[$midonet::params::mem_package],Class['::apache::mod::ssl']],
     }
   }
@@ -140,6 +143,7 @@ class midonet::mem::vhost (
       proxy_pass          => $proxy_pass,
       headers             => $headers,
       aliases             => $aliases,
+      priority            => $priority,
       require             => Package[$midonet::params::mem_package],
     }
   }
