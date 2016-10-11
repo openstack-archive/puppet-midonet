@@ -130,8 +130,6 @@ class midonet::mem(
 
   $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
 
-  include midonet::repository
-
   validate_string($mem_package)
   validate_string($mem_install_path)
 
