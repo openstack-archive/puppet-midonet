@@ -46,6 +46,7 @@ class midonet::mem::vhost (
   $cluster_ip               = $::ipaddress,
   $is_insights              = false,
   $insights_ssl             = false,
+  $manage_apache_mods       = true,
   $mem_apache_servername    = $::midonet::params::mem_apache_servername,
   $mem_apache_docroot       = $::midonet::params::mem_apache_docroot,
   $mem_api_namespace        = $::midonet::params::mem_api_namespace,
@@ -109,13 +110,16 @@ class midonet::mem::vhost (
   validate_array($proxy_pass)
   validate_string($mem_apache_docroot)
 
+  if ($manage_apache_mods) {
+
   include ::apache
   include ::apache::mod::headers
   include ::apache::mod::proxy
   include ::apache::mod::proxy_http
+  include ::apache::mod::ssl
+}
 
   if $is_ssl {
-    include ::apache::mod::ssl
     apache::vhost { 'midonet-mem':
       servername                  => $mem_apache_servername,
       docroot                     => $mem_apache_docroot,
