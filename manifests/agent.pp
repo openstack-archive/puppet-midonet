@@ -142,12 +142,12 @@ class midonet::agent (
           mem_version       => undef,
           mem_username      => $mem_username,
           mem_password      => $mem_password,
+          before            => Class['midonet::repository']
         }
         contain 'midonet::repository'
       }
     }
     class { 'midonet::agent::scrapper':
-      require   => Class['midonet::repository'],
     }
     contain 'midonet::agent::scrapper'
   }
