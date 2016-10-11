@@ -73,7 +73,7 @@ class midonet::mem::vhost (
     'append Access-Control-Allow-Headers X-Auth-Token',
   ]
 
-  $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
+  $mem_ws_proto = $insights_ssl? {true => 'wss://' , default => 'ws://'}
   if $is_insights {
 
     $proxy_pass = [
@@ -83,11 +83,11 @@ class midonet::mem::vhost (
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "${$mem_ws}://${cluster_ip}:8460/${mem_trace_namespace}",
+        'url'  => "${mem_ws_proto}://${cluster_ip}:8460/${mem_trace_namespace}",
       },
       {
         'path' => "/${mem_analytics_namespace}",
-        'url'  => "${mem_ws}${analytics_ip}:8080/${mem_analytics_namespace}",
+        'url'  => "${mem_ws_proto}${analytics_ip}:8080/${mem_analytics_namespace}",
       },
     ]
   }
@@ -100,7 +100,7 @@ class midonet::mem::vhost (
       },
       {
         'path' => "/${mem_trace_namespace}",
-        'url'  => "${mem_ws}://${cluster_ip}:8460/${mem_trace_namespace}",
+        'url'  => "${mem_ws_proto}://${cluster_ip}:8460/${mem_trace_namespace}",
       },
     ]
   }
