@@ -27,8 +27,6 @@ class midonet::agent::scrapper (
   $package_name      = 'midonet-jmxscraper',
 ) {
 
-  include midonet::repository
-
   if ($::osfamily == 'RedHat') {
     yumrepo { 'vbernat-lldpd':
       baseurl  => 'http://download.opensuse.org/repositories/home:/vbernat/RHEL_7/',
