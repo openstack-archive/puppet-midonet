@@ -87,12 +87,7 @@
 # limitations under the License.
 #
 define midonet::resources::network_creation(
-  $api_endpoint            = 'http://127.0.0.1:8181/midonet-api',
-  $keystone_username       = 'midogod',
-  $keystone_password       = 'testmido',
   $tenant_name             = 'admin',
-  $controller_ip           = '127.0.0.1',
-  $controller_neutron_port = '9696',
   $network_external        = 'ext-net',
   $allocation_pools        = ['start=172.17.0.100,end=172.17.0.200'],
   $gateway_ip              = '172.17.0.1',
@@ -100,7 +95,6 @@ define midonet::resources::network_creation(
   $subnet_name             = 'ext-subnet',
   $edge_router_name        = 'edge-router',
   $edge_network_name       = 'net-edge1-gw1',
-  $edge_subnet_name        = 'subnet-edge1-gw1',
   $edge_cidr               = '172.17.0.0/24',
   $port_name               = 'testport',
   $port_fixed_ip           = '172.17.0.102',
