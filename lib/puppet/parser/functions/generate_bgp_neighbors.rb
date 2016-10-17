@@ -27,7 +27,7 @@ module Puppet::Parser::Functions
     raise ArgumentError, 'All 3 arrays must have the same legth' unless ip_addresses.length == remote_asns.length && ip_addresses.length == remote_nets.length
 
     ip_addresses.length.times do |k|
-      result.push({ 'ip_address': ip_addresses[k], 'remote_asn': remote_asns[k], 'remote_net': remote_nets[k] })
+      result.push({ 'ip_address' => ip_addresses[k], 'remote_asn' => remote_asns[k], 'remote_net' => remote_nets[k] })
     end
 
     return result
