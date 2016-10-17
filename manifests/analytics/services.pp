@@ -11,7 +11,7 @@
 #   Default: midonet-analytics
 #
 # [*midonet-tools*]
-#   For making mn-conf command available in the Analytics Node 
+#   For making mn-conf command available in the Analytics Node
 #   Default: midonet-tools
 #
 # === Authors
@@ -40,7 +40,6 @@ class midonet::analytics::services (
   $tools_package_name          = 'midonet-tools',
 ) {
 
-  include midonet::repository
   include ::midonet_openstack::profile::midojava::midojava
 
   package { $tools_package_name:
