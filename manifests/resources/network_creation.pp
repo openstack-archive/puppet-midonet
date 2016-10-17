@@ -6,17 +6,9 @@
 #
 # [*api_endpoint*]
 #   Midonet API endpoint
-# [*keystone_username*]
-#   Keystone username
-# [*keystone_password*]
-#   KKeystone Password
 # [*tenant_name*]
 #   Tenant Name
-# [*controller_ip*]
-#   Controller node ip
-# [*controller_neutron_port*]
-#   Controller neutron port
-# [*network external*]
+# [*network_external*]
 #   Name of the external network
 # [*allocation_pools*]
 #   Allocation Pools for the external subnets
@@ -87,12 +79,7 @@
 # limitations under the License.
 #
 define midonet::resources::network_creation(
-  $api_endpoint            = 'http://127.0.0.1:8181/midonet-api',
-  $keystone_username       = 'midogod',
-  $keystone_password       = 'testmido',
   $tenant_name             = 'admin',
-  $controller_ip           = '127.0.0.1',
-  $controller_neutron_port = '9696',
   $network_external        = 'ext-net',
   $allocation_pools        = ['start=172.17.0.100,end=172.17.0.200'],
   $gateway_ip              = '172.17.0.1',
