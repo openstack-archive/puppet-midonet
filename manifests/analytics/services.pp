@@ -40,18 +40,14 @@ class midonet::analytics::services (
   $tools_package_name          = 'midonet-tools',
 ) {
 
-  include ::midonet_openstack::profile::midojava::midojava
-
   package { $tools_package_name:
-    ensure  => present,
-    name    => $tools_package_name,
-    require => Class['midonet_openstack::profile::midojava::midojava'],
+    ensure => present,
+    name   => $tools_package_name,
   }
 
   package { $analytics_package_name:
-    ensure  => present,
-    name    => $analytics_package_name,
-    require => Class['midonet_openstack::profile::midojava::midojava'],
+    ensure => present,
+    name   => $analytics_package_name,
   }
 
   service { $analytics_package_name:
