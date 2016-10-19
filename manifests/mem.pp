@@ -105,20 +105,12 @@ class midonet::mem(
   $mem_analytics_namespace        = undef,
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
-  $mem_login_host                 = "http://${cluster_ip}:8181",
-  $mem_trace_api_host             = "http://${cluster_ip}:8181",
-  $mem_traces_ws_url              = "wss://${cluster_ip}:8460/${mem_trace_namespace}",
   $mem_api_version                = $::midonet::params::mem_api_version,
   $mem_api_token                  = $::midonet::params::mem_api_token,
-  $mem_api_host                   = "http://${cluster_ip}:8181",
   $mem_agent_config_api_namespace = $::midonet::params::mem_agent_config_api_namespace,
-  $mem_analytics_ws_api_url       = "ws://${analytics_ip}:8080/${mem_analytics_namespace}",
-  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}:8007/subscription",
-  $mem_fabric_ws_api_url          = "wss://${cluster_ip}:8009/fabric",
   $mem_poll_enabled               = $::midonet::params::mem_poll_enabled,
   $mem_login_animation_enabled    = $::midonet::params::mem_login_animation_enabled,
   $mem_config_file                = $::midonet::params::mem_config_file,
-  $mem_apache_servername          = $cluster_ip,
   $mem_apache_docroot             = undef,
   $mem_apache_port                = undef,
   $mem_proxy_preserve_host        = undef,
@@ -130,21 +122,24 @@ class midonet::mem(
 
   $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
 
+  validate_bool($mem_api_token)
+  validate_bool($mem_poll_enabled)
+  validate_bool($mem_login_animation_enabled)
   validate_string($mem_package)
   validate_string($mem_install_path)
-
-  validate_string($mem_api_host)
-  validate_string($mem_login_host)
-  validate_string($mem_trace_api_host)
-  validate_string($mem_traces_ws_url)
   validate_string($mem_api_namespace)
-  validate_bool($mem_api_token)
   validate_string($mem_api_version)
   validate_string($mem_config_file)
   validate_string($mem_agent_config_api_namespace)
-  validate_string($mem_analytics_ws_api_url)
-  validate_bool($mem_poll_enabled)
-  validate_bool($mem_login_animation_enabled)
+
+  $mem_login_host                 = "http://${cluster_ip}:8181"
+  $mem_trace_api_host             = "http://${cluster_ip}:8181"
+  $mem_traces_ws_url              = "wss://${cluster_ip}:8460/${mem_trace_namespace}"
+  $mem_api_host                   = "http://${cluster_ip}:8181"
+  $mem_analytics_ws_api_url       = "ws://${analytics_ip}:8080/${mem_analytics_namespace}"
+  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}:8007/subscription"
+  $mem_fabric_ws_api_url          = "wss://${cluster_ip}:8009/fabric"
+  $mem_apache_servername          = $cluster_ip
 
 
   package { 'midonet-manager':
