@@ -177,4 +177,14 @@ class midonet::mem(
       ssl_key                 => $ssl_key,
     }
   }
+  else {
+    Apache::Vhost<| access_log_file == 'horizon_access.log' |> {
+      aliases +> [
+        {
+          alias => '/midonet-manager',
+          path  => '/var/www/html/midonet-manager',
+        }
+      ],
+    }
+  }
 }
