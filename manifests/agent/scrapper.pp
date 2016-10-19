@@ -34,9 +34,14 @@ class midonet::agent::scrapper (
       enabled  => 1,
       gpgcheck => 1,
       gpgkey   => 'http://download.opensuse.org/repositories/home:/vbernat/RHEL_7//repodata/repomd.xml.key',
-      before   => Package['midonet-jmxscraper']
+      before   => Package['midonet-jmxscraper','lldpd']
     }
 }
+
+  package { 'lldpd':
+    ensure => present,
+    before => Package['midonet-jmxscraper']
+  }
 
   package { 'midonet-jmxscraper':
     ensure => present,
