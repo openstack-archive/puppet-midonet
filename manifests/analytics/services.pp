@@ -41,13 +41,15 @@ class midonet::analytics::services (
 ) {
 
   package { $tools_package_name:
-    ensure => present,
-    name   => $tools_package_name,
+    ensure  => present,
+    name    => $tools_package_name,
+    timeout => 700
   }
 
   package { $analytics_package_name:
-    ensure => present,
-    name   => $analytics_package_name,
+    ensure  => present,
+    name    => $analytics_package_name,
+    timeout => 700
   }
 
   service { $analytics_package_name:
