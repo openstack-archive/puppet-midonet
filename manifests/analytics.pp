@@ -95,13 +95,14 @@ class midonet::analytics (
           }
         }
       }
-      class { 'midonet::analytics::services':
-        require => [Class['::logstash','::elasticsearch','::curator'],
-        Elasticsearch::Instance['es-01']]
-      } ->
       class { 'midonet::analytics::quickstart':
         zookeeper_hosts   => $zookeeper_hosts,
+      } ->
+      class { 'midonet::analytics::services':
+        require => [Class['::logstash','::elasticsearch','::curator'],
+        Elasticsearch::Instance['es-01'],File['set_config']]
       }
+
     }
     else  {
       notice('Skipping installation of midonet analytics services')
