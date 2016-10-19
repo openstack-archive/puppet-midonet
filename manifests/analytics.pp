@@ -61,16 +61,23 @@ class midonet::analytics (
       java_install => true,
       repo_version => '1.5',
     }
+    contain ::logstash
 
     class { 'elasticsearch':
       manage_repo  => true,
       repo_version => '1.7',
-    } ->
-    elasticsearch::instance { 'es-01': }
+      require      => Class['::logstash']
+    }
+    contain ::elasticsearch
+
+    elasticsearch::instance { 'es-01':
+      require => Class['::logstash','::elasticsearch']
+    }
 
     class { 'curator':
       version => '3.5',
     }
+    contain ::curator
 
     if $is_mem {
       if $manage_repo == true {
@@ -89,6 +96,8 @@ class midonet::analytics (
         }
       }
       class { 'midonet::analytics::services':
+        require => [Class['::logstash','::elasticsearch','::curator'],
+        Elasticsearch::Instance['es-01']]
       } ->
       class { 'midonet::analytics::quickstart':
         zookeeper_hosts   => $zookeeper_hosts,
