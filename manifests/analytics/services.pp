@@ -55,5 +55,6 @@ class midonet::analytics::services (
     name    => $analytics_package_name,
     enable  => true,
     require => Package[$analytics_package_name],
+    notify  => Service['logstash service']
   }
 }
