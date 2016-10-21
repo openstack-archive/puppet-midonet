@@ -99,7 +99,7 @@ class midonet::analytics (
       class { 'midonet::analytics::services':
         require => [Class['::logstash','::elasticsearch','::curator'],
         Elasticsearch::Instance['es-01']]
-      } ->
+      }
       class { 'midonet::analytics::quickstart':
         zookeeper_hosts => $zookeeper_hosts,
         notify          => Service['midonet-analytics']
