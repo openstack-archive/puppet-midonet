@@ -11,5 +11,8 @@ which mn-conf > /dev/null || {
 echo "agent.openstack.metadata.nova_metadata_url : \"http://<%= @controller_host %>:<%= @metadata_port %>\"" | mn-conf set -t default
 echo "agent.openstack.metadata.shared_secret : <%= @shared_secret %>" | mn-conf set -t default
 echo "agent.openstack.metadata.enabled : true" | mn-conf set -t default
+<% if @dhcp_mtu %>
+  echo "agent.midolman.dhcp_mtu : <% @dhcp_mtu %>" | mn-conf set -t default
+<% end %>
 
 exit 0

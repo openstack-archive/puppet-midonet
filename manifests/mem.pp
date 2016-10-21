@@ -118,6 +118,7 @@ class midonet::mem(
   $ssl_cert                       = '',
   $ssl_key                        = '',
   $insights_ssl                   = undef,
+  $proxypassed                    = false
 ) inherits midonet::params {
 
   $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}

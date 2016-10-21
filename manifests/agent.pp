@@ -107,7 +107,8 @@ class midonet::agent (
   $is_mem             = false,
   $manage_repo        = false,
   $mem_username       = undef,
-  $mem_password       = undef
+  $mem_password       = undef,
+  $dhcp_mtu           = undef
 ) {
 
   class { 'midonet::agent::install':
@@ -127,6 +128,7 @@ class midonet::agent (
     metadata_port     => $metadata_port,
     shared_secret     => $shared_secret,
     max_heap_size     => $max_heap_size,
+    dhcp_mtu          => $dhcp_mtu,
     require           => Class['midonet::agent::install'],
   }
   contain 'midonet::agent::run'
