@@ -48,13 +48,19 @@ class midonet::analytics::services (
   package { $analytics_package_name:
     ensure => present,
     name   => $analytics_package_name,
-  }
+  } ->
+
+  file {'/etc/logstash/conf.d/logstash.conf':
+      ensure  => absent,
+      require => Class['::logstash::config'],
+      notify  => Service['logstash']
+    } ->
 
   service { $analytics_package_name:
     ensure  => 'running',
     name    => $analytics_package_name,
     enable  => true,
     require => Package[$analytics_package_name],
-    notify  => Service['logstash service']
+    notify  => Service['logstash']
   }
 }

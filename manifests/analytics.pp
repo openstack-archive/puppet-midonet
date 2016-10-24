@@ -96,19 +96,6 @@ class midonet::analytics (
         }
       }
 
-      service {'logstash service':
-        ensure  => running,
-        name    => 'logstash',
-        require => [Class['::logstash','::elasticsearch','::curator'],
-        Elasticsearch::Instance['es-01'],Package['logstash']]
-      }
-
-      file {'/etc/logstash/conf.d/logstash.conf':
-          ensure  => absent,
-          require => Class['::logstash::config'],
-          notify  => Service['logstash']
-        }
-
       class { 'midonet::analytics::services':
         require => [Class['::logstash','::elasticsearch','::curator'],
         Elasticsearch::Instance['es-01']]
