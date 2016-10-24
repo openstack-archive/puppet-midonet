@@ -50,7 +50,8 @@ class midonet::analytics::services (
     name   => $analytics_package_name,
   } ->
 
-  file {'/etc/logstash/conf.d/logstash.conf':
+  file {'logstash default conf':
+      path   => '/etc/logstash/conf.d/logstash.conf',
       ensure => absent,
     } ->
 
@@ -63,7 +64,7 @@ class midonet::analytics::services (
 
   exec {'service logstash restart':
     path        => ['/usr/bin', '/usr/sbin',],
-    subscribe   => File['/etc/logstash/conf.d/logstash.conf'],
+    subscribe   => File['logstash default conf'],
     refreshonly => true
   }
 }
