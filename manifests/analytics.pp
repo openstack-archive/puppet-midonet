@@ -52,7 +52,8 @@ class midonet::analytics (
   $manage_repo        = false,
   $mem_username       = undef,
   $mem_password       = undef,
-  $heap_size_gb       = '4'
+  $heap_size_gb       = '4',
+  $allinone           = false,
 ) {
 
 
@@ -100,10 +101,15 @@ class midonet::analytics (
         require => [Class['::logstash','::elasticsearch','::curator'],
         Elasticsearch::Instance['es-01']]
       }
-      class { 'midonet::analytics::quickstart':
-        zookeeper_hosts => $zookeeper_hosts,
-        notify          => Service['midonet-analytics']
+
+      unless $allinone {
+        class { 'midonet::analytics::quickstart':
+          zookeeper_hosts => $zookeeper_hosts,
+          notify          => Service['midonet-analytics']
+        }
       }
+
+
 
     }
     else  {
