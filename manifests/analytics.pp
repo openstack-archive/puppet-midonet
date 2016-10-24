@@ -54,6 +54,7 @@ class midonet::analytics (
   $mem_password       = undef,
   $heap_size_gb       = '4',
   $allinone           = false,
+  $curator_version    = '3.5',
 ) {
 
 
@@ -76,7 +77,7 @@ class midonet::analytics (
     }
 
     class { 'curator':
-      version => '3.5',
+      version => $curator_version,
     }
     contain ::curator
 
