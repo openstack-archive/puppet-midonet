@@ -51,9 +51,8 @@ class midonet::analytics::services (
   } ->
 
   file {'/etc/logstash/conf.d/logstash.conf':
-      ensure  => absent,
-      require => Class['::logstash::config'],
-      notify  => Service['logstash']
+      ensure => absent,
+      notify => Service['logstash']
     } ->
 
   service { $analytics_package_name:
