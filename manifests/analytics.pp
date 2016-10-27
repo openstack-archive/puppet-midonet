@@ -48,7 +48,7 @@
 
 class midonet::analytics (
   $zookeeper_hosts,
-  $is_mem             = false,
+  $is_mem             = true,
   $manage_repo        = false,
   $mem_username       = undef,
   $mem_password       = undef,
