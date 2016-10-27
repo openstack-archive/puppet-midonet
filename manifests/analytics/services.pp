@@ -57,7 +57,7 @@ class midonet::analytics::services (
   }
 
   unless $calliope_port == '8080' {
-    exec { "echo calliope.service.ws_port : ${calliope_port} | mn-conf set":
+    exec { "echo calliope.service.ws_port : ${calliope_port} | mn-conf set -t default":
       path   => ['/usr/bin', '/bin'],
       before => Service[$analytics_package_name],
     }
