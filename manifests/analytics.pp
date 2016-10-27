@@ -55,6 +55,7 @@ class midonet::analytics (
   $heap_size_gb       = '4',
   $allinone           = false,
   $curator_version    = '3.5',
+  $calliope_port      = undef,
 ) {
 
 
@@ -99,7 +100,8 @@ class midonet::analytics (
       }
 
       class { 'midonet::analytics::services':
-        require => [Class['::logstash','::elasticsearch','::curator'],
+        calliope_port => $calliope_port,
+        require       => [Class['::logstash','::elasticsearch','::curator'],
         Elasticsearch::Instance['es-01']]
       }
 

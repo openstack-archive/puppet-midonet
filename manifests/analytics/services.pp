@@ -38,6 +38,7 @@
 class midonet::analytics::services (
   $analytics_package_name      = 'midonet-analytics',
   $tools_package_name          = 'midonet-tools',
+  $calliope_port               = '8080',
 ) {
 
   package { $tools_package_name:
@@ -51,8 +52,16 @@ class midonet::analytics::services (
   } ->
 
   exec {'service logstash restart':
-    path        => ['/usr/bin', '/usr/sbin',],
-  } ->
+    path   => ['/usr/bin', '/usr/sbin',],
+    before => Service[$analytics_package_name],
+  }
+
+  unless $calliope_port == '8080' {
+    exec { "echo calliope.service.ws_port : ${calliope_port} | mn-conf set":
+      path   => ['/usr/bin', '/bin'],
+      before => Service[$analytics_package_name],
+    }
+  }
 
   service { $analytics_package_name:
     ensure  => 'running',
