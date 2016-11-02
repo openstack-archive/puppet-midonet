@@ -1,31 +1,15 @@
 {
-  "api_host": "http://<%= @cluster_ip %><% if !@proxypassed %>:8181<% end %>",
-  "login_host": "http://<%= @cluster_ip %><% if !@proxypassed %>:8181<% end %>",
-  "trace_api_host": "http://<%= @cluster_ip %><% if !@proxypassed %>:8181<% end %>",
-  <% if !@mem_trace_namespace %>
-    "traces_ws_url": "<%= @mem_ws %><%= @cluster_ip %><% if !@proxypassed %>:8460<% end %>/trace",
-  <% else %>
-    "traces_ws_url": "<%= @mem_ws %><%= @cluster_ip %><% if !@proxypassed %>:8460<% end %>/<%=@mem_trace_namespace%>",
-  <% end %>
-  <% if !@mem_api_namespace %>
-    "api_namespace": "midonet-api",
-  <% else %>
-    "api_namespace": "<%= @mem_api_namespace %>",
-  <% end %>
+  "api_host": "<%= @mem_api_host %>,
+  "login_host": "<%= @mem_login_host %>",
+  "trace_api_host": "<%= @mem_trace_api_host %>",
+  "traces_ws_url": "<%= @mem_traces_ws_url %>",
+  "api_namespace": "<%= @mem_api_namespace %>",
   "api_version": "<%= @mem_api_version %>",
-  <% if !@mem_api_token %>
-    "api_token": false,
-  <% else %>
-    "api_token": <%= @mem_api_token %>,
-  <% end %>
+  "api_token": <%= @mem_api_token %>,
   "agent_config_api_namespace": "<%= @mem_agent_config_api_namespace %>",
-  <% if !@mem_analytics_namespace %>
-    "analytics_ws_api_url": "<%= @mem_ws %><%= @analytics_ip %><% if !@proxypassed %>:8080<% end %>/analytics",
-  <% else %>
-    "analytics_ws_api_url": "<%= @mem_ws %><%= @analytics_ip %><% if !@proxypassed %>:8080<% end %>/<%=@mem_analytics_namespace%>",
-  <% end %>
+  "analytics_ws_api_url": "<%= @mem_analytics_ws_api_url %>",
   "poll_enabled": <%= @mem_poll_enabled %>,
   "login_animation_enabled": <%= @mem_login_animation_enabled %>,
-  "subscriptions_ws_api_url": "<%= @mem_ws %><%= @cluster_ip %><% if !@proxypassed %>:8007<% end %>/subscription",
-  "fabric_ws_api_url": "<%= @mem_ws %><%= @cluster_ip %><% if !@proxypassed %>:8009<% end %>/fabric"
+  "subscriptions_ws_api_url": "<%= @mem_subscriptions_ws_api_url %>",
+  "fabric_ws_api_url": "<%= @mem_fabric_ws_api_url %>"
 }

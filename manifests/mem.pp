@@ -100,9 +100,9 @@ class midonet::mem(
   $analytics_ip                   = $::ipaddress,
   $cluster_ip                     = $::ipaddress,
   $is_insights                    = false,
-  $mem_api_namespace              = undef,
-  $mem_trace_namespace            = undef,
-  $mem_analytics_namespace        = undef,
+  $mem_api_namespace              = 'midonet-api',
+  $mem_trace_namespace            = 'trace',
+  $mem_analytics_namespace        = 'analytics',
   $mem_package                    = $::midonet::params::mem_package,
   $mem_install_path               = $::midonet::params::mem_install_path,
   $mem_api_version                = $::midonet::params::mem_api_version,
@@ -118,12 +118,11 @@ class midonet::mem(
   $ssl_cert                       = '',
   $ssl_key                        = '',
   $insights_ssl                   = undef,
-  $proxypassed                    = false,
-  $mem_api_port                   = '8181',
-  $mem_trace_port                 = '8460',
-  $mem_analytics_port             = '8080',
-  $mem_subscription_port          = '8007',
-  $mem_fabric_port                = '8009',
+  $mem_api_port                   = ':8181',
+  $mem_trace_port                 = ':8460',
+  $mem_analytics_port             = ':8080',
+  $mem_subscription_port          = ':8007',
+  $mem_fabric_port                = ':8009',
 
 ) inherits midonet::params {
 
@@ -139,13 +138,13 @@ class midonet::mem(
   validate_string($mem_config_file)
   validate_string($mem_agent_config_api_namespace)
 
-  $mem_login_host                 = "http://${cluster_ip}:${mem_api_port}"
-  $mem_trace_api_host             = "http://${cluster_ip}:${mem_api_port}"
-  $mem_traces_ws_url              = "wss://${cluster_ip}:${mem_trace_port}/${mem_trace_namespace}"
-  $mem_api_host                   = "http://${cluster_ip}:${mem_api_port}"
-  $mem_analytics_ws_api_url       = "ws://${analytics_ip}:${mem_analytics_port}/${mem_analytics_namespace}"
-  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}:${mem_subscription_port}/subscription"
-  $mem_fabric_ws_api_url          = "wss://${cluster_ip}:${mem_fabric_port}/fabric"
+  $mem_login_host                 = "http://${cluster_ip}${mem_api_port}"
+  $mem_trace_api_host             = "http://${cluster_ip}${mem_api_port}"
+  $mem_traces_ws_url              = "wss://${cluster_ip}${mem_trace_port}/${mem_trace_namespace}"
+  $mem_api_host                   = "http://${cluster_ip}${mem_api_port}"
+  $mem_analytics_ws_api_url       = "ws://${analytics_ip}${mem_analytics_port}/${mem_analytics_namespace}"
+  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}${mem_subscription_port}/subscription"
+  $mem_fabric_ws_api_url          = "wss://${cluster_ip}${mem_fabric_port}/fabric"
   $mem_apache_servername          = $cluster_ip
 
 
