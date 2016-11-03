@@ -40,7 +40,7 @@
 #     Default: '3.5'
 #
 # [*calliope_port*]
-#  If you want to run calliope on a custom port, specify it 
+#  If you want to run calliope on a custom port, specify it
 #     Default: false
 #
 # Please note that Keystone port is not mandatory and defaulted to 35537.
@@ -49,16 +49,15 @@
 #
 # The easiest way to run the class is:
 #
-#     class {'::midonet::agent':
-#     zookeeper_hosts =>  [{'ip'   => 'host1',
+#   class {'midonet::analytics':
+#      zookeeper_hosts =>  [{'ip'   => 'host1',
 #                         'port' => '2183'},
 #                         {'ip'   => 'host2'}],
-#      shared_secret   => 's3cr3t',
-#      controller_host => $::ipaddress
-#     }
+#      is_mem          => true,
+#      manage_repo     => false,
+#      heap_size_gb    => '3',
+#   }
 #
-# This call assumes that there is no mem being used, and the controller host is same
-# that where midolman is being installed
 #
 # === Authors
 #

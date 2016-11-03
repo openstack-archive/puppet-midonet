@@ -5,13 +5,18 @@
 # === Parameters
 #
 # [*api_endpoint*]
-#   Url to bind to. Normally the CLI is in the same machine..
+#   Url to make the API calls to, usually it is the controller
 # [*username*]
 #   Keystone username
 # [*password*]
 #   KKeystone Password
 # [*tenant_name*]
 #   Tenant Name
+# [*package_ensure*]
+#   Type of ensure, 'present' or 'absent' ..
+# [*manage_epel*]
+#   Install epel repo?
+#     Default: true
 #
 # === Examples
 #
