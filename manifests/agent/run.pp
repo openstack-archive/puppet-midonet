@@ -1,19 +1,57 @@
 # == Class: midonet::agent::run
 # Check out the midonet::agent class for a full understanding of
 # how to use the agent resource
+# DO NOT USE THIS CLASS ON ITS OWN, use ::midonet::agent !
 #
 # === Parameters
 #
 #
-# [*service_name*]
-#   Name of the MN agent service. Default: midolman
-#
-# [*agent_config_path*]
-#   Full path to the MN agent config. Default: /etc/midolman/midolman.conf
-#
 # [*zookeeper_hosts*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
-#     Default: [ { 'ip' => '127.0.0.1', 'port' => '2181' } ]
+#
+# [*controller_host*]
+#   IP of the controller host (or HAProxy ip serving them).
+#     Default: undef
+#
+# [*metadata_port*]
+#  Port where the metadata service will run
+#     Default: undef
+#
+# [*shared_secret*]
+#  Metadata shared secret
+#     Default: undef
+#
+# [*package_name*]
+#  Name of the midonet agent (midolman) package.
+#     Default: undef
+#
+# [*service_name*]
+#  Name of the midolman service
+#     Default: undef
+#
+# [*service_ensure*]
+#  Whether to ensure the service is running, stopped, etc.
+#     Default: undef
+#
+# [*service_enable*]
+#  Should the service not be enabled by default? Specify it there
+#     Default: undef
+#
+# [*agent_config_path*]
+#  Override the configuration files path
+#     Default: undef
+#
+# [*jvm_config_path*]
+#  Override the jvm config files path
+#     Default: undef
+#
+# [*max_heap_size*]
+#  Specify the heap size of the JavaVM in Gb. Ex: '3'
+#     Default: undef
+#
+# [*dhcp_mtu*]
+#  Specify a mtu for packets here.
+#     Default: undef
 #
 # === Authors
 #
