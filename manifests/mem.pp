@@ -13,79 +13,111 @@
 # [is_insights]
 # Whether using insights or not
 #
+# [mem_api_namespace]
+# Namespace for the midonet api URI
+#   Default: 'midonet-api'
+#
+# [mem_trace_namespace]
+# Namespace for the midonet traces URI
+#   Default: 'trace'
+#
+# [mem_analytics_namespace]
+# Namespace for the midonet analytics URI
+#   Default: 'analytics'
+#
 # [mem_package]
 # Name of the MEM package
 #
 # [mem_install_path]
 # Installation path of MEM package
 #
-# [api_host]
-#   Configures the MidoNet REST API's host:port combination. This can be either
-#   the API host's host name and Tomcat port, or if proxied, e.g via Apache,
-#   the corresponding proxy host name and port.
-#   e.g. "api_host": "http://host:port"
 #
-# [api_version]
+# [mem_api_version]
 #   The default value for the api_version is set to latest version. In case you
 #   are using and older MidoNet REST API, change the version accordingly.
-#   Note: The MidoNet Manager supports the following API versions: 1.8 and 1.9
-#   e.g. "api_version": "1.9"
+#   Note: The MidoNet Manager supports the following API versions: 5.0 , 5.2
+#   e.g. "api_version": "5.2"
 #
-# [api_token]
+# [mem_api_token]
 #   If desired, auto-login can be enabled by setting the value of api_token to
 #   your Keystone token.
-#   e.g. "api_token": keystone_token
+#   e.g. "mem_api_token": keystone_token
 #
-# [api_namespace]
-#   The default value for the api_namespace is set to midonet-api which usually
+# [mem_agent_config_api_namespace]
+#   The default value for the api_namespace is set to conf which usually
 #   does not have to be changed.
-#   Default value: "api_namespace": "midonet-api"
+#   Default value: "mem_agent_config_api_namespace": "conf"
 #
-# [login_host]
-#   Configures the authentication host's host:port combination. Usually your
-#   authentication server, e.g. Keystone, is accessible from the same address as
-#   the MidoNet REST API, so the host:port combination should be the same as for
-#   the API host ("api_host"). Should the authentication server be located on a
-#   different host then the MidoNet REST API, change this parameter accordingly.
-#   e.g "login_host": "http://host:port"
 #
-# [trace_api_host]
-#   Configures the trace requests management API host:port combination. It is
-#   usually the same as the "api_host" but could be setup to run on a different
-#   server. This can be either the API host's host name and Tomcat port, or if
-#   proxied, e.g via Apache, the corresponding proxy host name and port.
-#   e.g. "trace_api_host": "http://host:port"
-#
-# [traces_ws_url]
-#   Configures the websocket endpoint host:port combination. This endpoint is
-#   used by the Flow Tracing feature in Midonet Manager.
-#   e.g. "trace_ws_url": "ws://host:port"
-#
-# [agent_config_api_host]
-#   Configures the Agent Configuration API host:port combination. The Host is
-#   usually the same as the Midonet REST API and the default port is 8459.
-#   e.g. "agent_config_api_host": "http://host:port"
-#
-# [agent_config_api_namespace]
-#   The default value for the 'agent_config_api_namespace' is set to 'conf'
-#   which usually does not have to be changed.
-#   Default value: "api_namespace": "conf"
-#
-# [poll_enabled]
+# [mem_poll_enabled]
 #   The Auto Polling will seamlessly refresh Midonet Manager data periodically.
 #   It is enabled by default and can be disabled in Midonet Manager's Settings
 #   section directly through the UI. This will only disable it for the duration
 #   of the current session. It can also be disabled permanently by changing the
 #   'poll_enabled' parameter to 'false'
 #
-# [mem_api_namespace]
-#   The path where you are serving the api. Default "midonet-api"
+# [mem_login_animation_enabled]
+#   Whether the login page background animation should be enabled or not
+#   Default: true
 #
-# [mem_trace_namespace]
-#   The path where you are serving the analytics service. Default "trace"
+# [mem_config_file]
+# File for the MEM manager frontend configuration
+#   Default: "${mem_install_path}/config/client.js"
 #
-# [mem_analytics_namespace]
-#   The path where you are serving the analytics service. Default "analytics"
+# [mem_apache_docroot]
+#   Document root for mem vhost
+#   Default: undef
+#
+# [mem_apache_port]
+#   The port where apache for mem will run
+#   Default: undef
+#
+# [mem_proxy_preserve_host]
+#   Should configure proxy preserve host on apache?
+#
+# [is_ssl]
+#   Does MEM use SSL?
+#   Default: undef
+#
+# [ssl_cert]
+#   SSL certificate path
+#   Default: undef
+#
+# [ssl_key]
+#   SSL key path
+#   Default: undef
+#
+# [insights_ssl]
+#   Is MEM Insights using SSL?
+#   Default: undef
+#
+# [mem_api_port]
+#   The port where the midonet api is listening
+#   Default: '8181'
+#
+# [mem_trace_port]
+#   The port where the midonet traces is listening
+#   Default: '8460'
+#
+# [mem_analytics_port]
+#   The port where the midonet analytics is listening
+#   Default: '8000'
+#
+# [mem_api_port]
+#   The port where the midonet subscription service is listening
+#   Default: '8007'
+#
+# [mem_fabric_port]
+#   The port where the midonet fabric service is listening
+#   Default: '8009'
+# == Examples
+#
+# The minimum parameters required are
+#
+#    class {'midonet::mem':
+#      cluster_ip            => '127.0.0.1',
+#      analytics_ip          => '127.0.0.1',
+#    }
 #
 # === Authors
 #
