@@ -1,37 +1,48 @@
-# MidoNet
+# midonet
 
 #### Table of Contents
 
-1. [Overview](#overview)
-2. [Module Description](#module-description)
-3. [Setup](#setup)
-    * [What MidoNet affects](#what-midonet-affects)
-    * [Beginning with MidoNet](#beginning-with-midonet)
-4. [Usage](#usage)
-5. [Reference](#reference)
-    * [Classes](#classes)
-    * [Types](#types)
-6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
+1. [Overview - What is the midonet module?](#overview)
+2. [Module Description - What does the module do?](#module-description)
+3. [Setup - The basics of getting started with midonet](#setup)
+4. [Implementation - An under-the-hood peek at what the module is doing](#usage)
+5. [Limitations - OS compatibility, etc.](#limitations)
+6. [Development - Guide for contributing to the module](#development)
+6. [Contributors - Those with commits](#contributors)
 
 ## Overview
 
-Puppet module for install MidoNet components.
+This Puppet module is maintained by [Midokura](http://www.midokura.com)
+and is used to flexibly configure and manage all MidoNet components.
+
+To understand all MidoNet components and how they relate to each other,
+check out the [MidoNet Reference Architecture]
+(http://docs.midonet.org/docs/latest/reference-architecture/content/index.html).
 
 ## Module Description
 
-MidoNet is an Apache licensed production grade network virtualization software
-for Infrastructure-as-a-Service (IaaS) clouds. This module provides the puppet
-manifests to install all the components to deploy easily MidoNet in a
-production environment.
+The keystone module is a thorough attempt to make Puppet capable of managing
+the entirety of MidoNet. This includes manifests to provision both open source
+and enterprise components:
 
-To know all the components and how they relate each other, check out [midonet
-reference architecture
-docs](http://docs.midonet.org/docs/latest/reference-architecture/content/index.html)
+* MidoNet Cluster (formerly known as the MidoNet API)
+* MidoNet CLI
+* MidoNet Agent (also known as Midolman)
+* MEM
+* MEM Insights
+
+Uplink configuration for gateway nodes is also set up through the use of this
+module. Currently both static and BGP uplinks are supported.
+
+This module is tested in combination with other modules needed to build and
+leverage a MidoNet installation.
 
 ## Setup
 
+**What the neutron module affects:**
 
+* [MidoNet](https://www.midonet.org/), an alternative plugin for Neutron,
+  the networking service for OpenStack.
 
 ### Beginning with MidoNet
 
