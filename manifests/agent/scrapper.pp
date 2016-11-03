@@ -1,11 +1,15 @@
 # == Class: midonet::agent::scrapper
 # Check out the midonet::agent class for a full understanding of
 # how to use the midonet::agent resource
-#
 # === Authors
 #
 # Midonet (http://midonet.org)
 #
+# === Parameters
+#
+# [*package_name*]
+#   Name of the JMXscraper package.
+#     Default: 'midonet-jmxscraper'
 # === Copyright
 #
 # Copyright (c) 2016 Midokura SARL, All Rights Reserved.
