@@ -14,7 +14,7 @@
 #
 # - midonet::repository
 # - midonet::midonet_agent
-# - midonet::midonet_api
+# - midonet::midonet_cluster
 # - midonet::midonet_cli
 # - midonet::neutron_plugin
 #
@@ -41,6 +41,7 @@
 class midonet {
 
     include ::midonet::params
+    include ::midonet::repository
 
 
     # Add midonet-cluster
