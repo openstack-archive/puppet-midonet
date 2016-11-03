@@ -4,33 +4,33 @@
 #
 # === Parameters
 #
-# [*midonet_repo*]
-#   Midonet Repository URL location. Please note the version
-#   of midonet use to be part of that URL.
-#   Ex: 'http://repo.midonet.org/midonet/v2014.11'
-# [*midonet_openstack_repo*]
-#   Midonet Repository URL for the Midonet Neutron Plugin. The version use to
-#   be part of the URL. The package avaiable in this repo (the midonet plugin)
-#   is released along each OpenStack release (Icehouse, Juno, Kilo...) , not
-#   the Midonet OSS release. This is why Midonet maintains different repos.
-#   Ex: 'http://repo.midonet.org/openstack'.
-# [*midonet_thirdparty_repo*]
-#   Third party software pinned for Midonet stability URL.
-#   Ex: 'http://repo.midonet.org/misc'.
-# [*midonet_release*]
-#   Stage of the package. It can be 'stable', 'testing' or 'unstable'.
-#   Stable by default.
-# [*midoney_key_url*]
-#   Midonet Key URL path.
-# [*midonet_key*]
-#   Midonet GPG key for validate packages. Only override it if you use a
-#   different fork of Midonet.
-# [*manage_distro_repo*}
-#   Choose whether or not to manage the distros' OpenStack repositories (e.g. RDO).
-#   Defaults to true
-# [*manage_epel_repo*]
-#   Choose whether or not to manage EPEL under CentOS.
-#   Defaults to true
+# [*is_mem*]
+#  Whether using MEM (true) or OSS Midonet (false)
+#    Default: false
+#
+# [*midonet_version*]
+# Midonet version to deploy.
+#     Default: '5.2'
+#
+# [*midonet_stage*]
+# Midonet stage to deploy 'unstable' , 'stable' ...
+#     Default: 'stable'
+#
+# [*openstack_release*]
+# Openstack release
+#     Default: 'mitaka'
+#
+# [*mem_version*]
+# Midonet MEM version to deploy.
+#     Default: '5.2'
+#
+# [*mem_username*]
+# MEM repository username
+#     Default: undef
+#
+# [*mem_password*]
+# MEM repository password
+#     Default: undef
 # === Examples
 #
 # The easiest way to run the class is:
@@ -45,28 +45,20 @@
 # declaration:
 #
 #     class { 'midonet::repository':
-#         midonet_repo            => 'http://repo.midonet.org/midonet/v2014.11',
-#         midonet_openstack_repo  => 'http://repo.midonet.org/openstack',
-#         midonet_thirdparty_repo => 'http://repo.midonet.org/misc',
-#         midonet_key             => '50F18FCF',
-#         midonet_stage           => 'stable',
-#         midonet_key_url         => 'http://repo.midonet.org/packages.midokura.key',
-#         manage_distro_repo      => true,
-#         manage_epel_repo        => true,
-#         openstack_release       => 'juno'
+#          midonet_version         => '5.2',
+#          mem_version             => '5.2',
+#          openstack_release       => 'mitaka'
+#          mem_username            => 'username',
+#          mem_password            => 'passw0rd'
 #     }
 #
 # or use a YAML file using the same attributes, accessible from Hiera:
 #
-#     midonet::repository::midonet_repo: 'http://repo.midonet.org/midonet/v2014.11'
-#     midonet::repository::midonet_openstack_repo: 'http://repo.midonet.org/openstack'
-#     midonet::repository::midonet_thirdparty_repo: 'http://repo.midonet.org/misc'
-#     midonet::repository::midonet_key: '50F18FCF'
-#     midonet::repository::midonet_stage: 'stable'
-#     midonet::repository::midonet_key_url: 'http://repo.midonet.org/packages.midokura.key'
-#     midonet::repository::midonet_distro_repo: true
-#     midonet::repository::midonet_epel_repo: true
-#     midonet::repository::openstack_release: 'juno'
+#     midonet::repository::midonet_version: '5.2'
+#     midonet::repository::mem_version: '5.2'
+#     midonet::repository::openstack_release: 'mitaka'
+#     midonet::repository::mem_username: 'username'
+#     midonet::repository::mem_password: 'passw0rd'
 #
 #
 # === Authors
