@@ -12,8 +12,8 @@
 # [*zookeeper_hosts*]
 #   List of IPs and ports of hosts where Zookeeper is installed
 #
-# [*cassandra_servers*]
-#   List of IPs and ports of where cassandra is installed
+# [*config_path*]
+#  Path for the analytics configuration file
 #
 # === Authors
 #
