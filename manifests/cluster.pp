@@ -4,42 +4,71 @@
 #
 # === Parameters
 #
-# [*package_name*]
-#   List of hash [{ip, port}] Zookeeper instances that run in cluster.
-# [*service_name*]
-#   Whether to authenticate the cluster request through a Keystone service. Default:
-#   false.
-# [*service_ensure*]
-#   Whether to enable the vtep service endpoint. Default: false
-# [*service_enable*]
-#   The name of the tomcat package to install. The module already inserts a
-#   value depending on the distribution used. Don't override it unless you know
-#   what you are doing.
-# [*cluster_config_path*]
-#   Let choose the address to bind instead of all of them
-# [*cluster_host*]
-#   Keystone port
-# [*cluster_port*]
-#   Keystone port
 # [*zookeeper_hosts*]
-#   Exposed IP address. By default, it exposes the first internet address that
-#   founds in the host.
+#   List of hash [{ip, port}] Zookeeper instances that run in cluster.
 # [*cassandra_servers*]
-#   TCP listening port. By default, 8080
+#   List of IP's / IP:PORT where cassandra servers are running
 # [*cassandra_rep_factor*]
-#   Keystone service endpoint IP. Not used if keystone_auth is false.
+#   Cassandra replication factor
 # [*keystone_admin_token*]
-#   Keystone service endpoint port. Not used if keystone_auth is false.
+#   Keystone admin token
 # [*keystone_host*]
-#   Keystone host
+#   Host where keystone is running
+# [*keystone_protocol*]
+#   Protocol ( http / https ) to make the keystone requests
+#     Default: undef
+# [*keystone_tenant_name*]
+#   Name of the keystone tenant
+#     Default: undef
+# [*package_name*]
+#   Name of the midonet cluster package
+#     Default: undef
+# [*package_ensure*]
+#   Ensure 'present', 'absent' ...
+#     Default: undef
+# [*service_name*]
+#   Name of the midonet cluster service
+#     Default: undef
+# [*service_ensure*]
+#   Ensure 'running' , 'stopped' ... status of service
+#     Default: undef
+# [*service_enable*]
+#  Should enable service on startup?
+#     Default: undef
+# [*cluster_config_path*]
+#   Path to store the midonet cluster configuration files
+#     Default: undef
+# [*cluster_jvm_config_path*]
+#   Path to store the midonet cluster JVM configuration files
+#     Default: undef
+# [*cluster_host*]
+#   IP to bind to the midonet cluster service
+#     Default: undef
+# [*cluster_port*]
+#   Port to bind the midonet cluster service
+#     Default: undef
 # [*keystone_port*]
-#   Keystone port
+#   Port where the keystone service is running
+#     Default: undef
 # [*max_heap_size*]
-#   Java Max Heap Size
+#   Heap size of midonet cluster JVM , in gb . Ex: '4'
+#     Default: undef
 # [*heap_newsize*]
-#   Java heap size default Size
+#   Xmx heap size value in gb . Ex '4'
+#     Default: undef
 # [*is_mem*]
-#   Using MEM installation?
+#   Whether to install cluster mem packages or not
+#     Default: undef
+# [*is_insights*]
+#  Whether using MEM Insights or not
+#     Default: undef
+# [*insights_ssl*]
+#   Is MEM insights using SSL?
+#     Default: undef
+# [*analytics_ip*]
+#   Heap size of midonet cluster JVM , in gb . Ex: '4'
+#     Default: undef
+
 #
 # === Examples
 #
