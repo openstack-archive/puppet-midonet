@@ -4,7 +4,7 @@
 #
 # Configures analytics box for NSDB node access
 #
-# Parameters
+# === Parameters
 # [*config_path*]
 # Path for storing the zookeeper configuration file.
 # Default: /etc/midonet/midonet.conf

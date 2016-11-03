@@ -18,6 +18,17 @@
 #
 # Midonet (http://midonet.org)
 #
+# === Parameters
+# [*analytics_package_name*]
+# Package name for analytics
+# Default: 'midonet-analytics'
+#
+# [*tools_package_name*]
+#   Midonet Tools package name
+#
+# [*calliope_port*]
+#  Port where calliope listens to
+#
 # === Copyright
 #
 # Copyright (c) 2016 Midokura SARL, All Rights Reserved.
