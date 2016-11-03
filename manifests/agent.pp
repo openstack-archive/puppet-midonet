@@ -6,51 +6,67 @@
 #
 # [*zookeeper_hosts*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
+#
 # [*controller_host*]
 #   IP of the controller host (or HAProxy ip serving them).
 #     Default: undef
+#
 # [*metadata_port*]
 #  Port where the metadata service will run
 #     Default: undef
+#
 # [*shared_secret*]
 #  Metadata shared secret
 #     Default: undef
+#
 # [*package_name*]
 #  Name of the midonet agent (midolman) package.
 #     Default: undef
+#
 # [*service_name*]
 #  Name of the midolman service
 #     Default: undef
+#
 # [*service_ensure*]
 #  Whether to ensure the service is running, stopped, etc.
 #     Default: undef
+#
 # [*service_enable*]
 #  Should the service not be enabled by default? Specify it there
 #     Default: undef
+#
 # [*agent_config_path*]
 #  Override the configuration files path
 #     Default: undef
+#
 # [*package_ensure*]
 #  If you want to specify a version for the midolman package, use this parameters
 #     Default: undef
+#
 # [*manage_java*]
 #  If the host doesn't have a Java installation, setting this to true will install Java8
 #     Default: undef
+#
 # [*max_heap_size*]
 #  Specify the heap size of the JavaVM in Gb. Ex: '3'
 #     Default: undef
+#
 # [*is_mem*]
 #  If using MEM Enterprise , set to true
 #     Default: undef
+#
 # [*manage_repo*]
 #  Should manage midonet repositories?
 #     Default: undef
+#
 # [*mem_username*]
 #  If manage_repo is true and is_mem then specify the username to access the packages
 #     Default: undef
+#
 # [*mem_password*]
 #  If manage_repo is true and is_mem then specify the password to access the packages
 #     Default: undef
+#
 # [*dhcp_mtu*]
 #  Specify a mtu for packets here.
 #     Default: undef

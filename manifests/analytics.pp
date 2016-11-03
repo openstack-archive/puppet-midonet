@@ -4,26 +4,61 @@
 #
 # === Parameters
 #
-# [*is_mem*]
-#   Boolean variable - If true puppet will install MEM specific services
-#     Default: false
+# [*zookeeper_hosts*]
+#   List of hash [{ip, port}] Zookeeper instances that run in cluster.
 #
 # [*manage_repo*]
 #   Boolean variable - If true puppet will install repositories on given node
 #     Default: false
 #
+# [*is_mem*]
+#  If using MEM Enterprise , set to true
+#     Default: undef
+#
+# [*manage_repo*]
+#  Should manage midonet repositories?
+#     Default: undef
+#
 # [*mem_username*]
-#   Username which will have access to Midokura repositories
+#  If manage_repo is true and is_mem then specify the username to access the packages
 #     Default: undef
 #
 # [*mem_password*]
-#   Password for User which will be used to access the Midokura repositories
+#  If manage_repo is true and is_mem then specify the password to access the packages
 #     Default: undef
 #
-# [*zookeeper_hosts*]
-#   List of IPs and ports of hosts where Zookeeper is installed
+# [*heap_size_gb*]
+#  Specify the heap size of the JavaVM in Gb. Ex: '3'
+#     Default: '4'
+#
+# [*allinone*]
+#  If doing an allinone deployment, set to true
+#     Default: false
+#
+# [*curator_version*]
+#  Version of elastic curator
+#     Default: '3.5'
+#
+# [*calliope_port*]
+#  If you want to run calliope on a custom port, specify it 
+#     Default: false
 #
 # Please note that Keystone port is not mandatory and defaulted to 35537.
+#
+# === Examples
+#
+# The easiest way to run the class is:
+#
+#     class {'::midonet::agent':
+#     zookeeper_hosts =>  [{'ip'   => 'host1',
+#                         'port' => '2183'},
+#                         {'ip'   => 'host2'}],
+#      shared_secret   => 's3cr3t',
+#      controller_host => $::ipaddress
+#     }
+#
+# This call assumes that there is no mem being used, and the controller host is same
+# that where midolman is being installed
 #
 # === Authors
 #
