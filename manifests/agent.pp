@@ -4,62 +4,71 @@
 #
 # === Parameters
 #
-# [*package_name*]
-#   Name of the package in the repository. Default: undef
-#
-# [*service_name*]
-#   Name of the MN agent service. Default: undef
-#
-# [*service_ensure*]
-#   Whether the service should be running or not. Default: undef
-#
-# [*agent_config_path*]
-#   Full path to the MN agent config. Default: undef
-#
-# [*package_ensure*]
-#   Whether the package should be installed or not. Default: undef
-#
-# [*manage_java*]
-#   Set to true to install java. Defaults: undef
-#
 # [*zookeeper_hosts*]
 #   List of hash [{ip, port}] Zookeeper instances that run in cluster.
+# [*controller_host*]
+#   IP of the controller host (or HAProxy ip serving them).
 #     Default: undef
-#
+# [*metadata_port*]
+#  Port where the metadata service will run
+#     Default: undef
+# [*shared_secret*]
+#  Metadata shared secret
+#     Default: undef
+# [*package_name*]
+#  Name of the midonet agent (midolman) package.
+#     Default: undef
+# [*service_name*]
+#  Name of the midolman service
+#     Default: undef
+# [*service_ensure*]
+#  Whether to ensure the service is running, stopped, etc.
+#     Default: undef
+# [*service_enable*]
+#  Should the service not be enabled by default? Specify it there
+#     Default: undef
+# [*agent_config_path*]
+#  Override the configuration files path
+#     Default: undef
+# [*package_ensure*]
+#  If you want to specify a version for the midolman package, use this parameters
+#     Default: undef
+# [*manage_java*]
+#  If the host doesn't have a Java installation, setting this to true will install Java8
+#     Default: undef
+# [*max_heap_size*]
+#  Specify the heap size of the JavaVM in Gb. Ex: '3'
+#     Default: undef
 # [*is_mem*]
-#   Boolean variable - If true puppet will install MEM specific services
-#     Default: false
-#
-# [*manage_repo*]
-#   Boolean variable - If true puppet will install repositories on given node
-#     Default: false
-#
-# [*mem_username*]
-#   Username which will have access to Midokura repositories
+#  If using MEM Enterprise , set to true
 #     Default: undef
-#
+# [*manage_repo*]
+#  Should manage midonet repositories?
+#     Default: undef
+# [*mem_username*]
+#  If manage_repo is true and is_mem then specify the username to access the packages
+#     Default: undef
 # [*mem_password*]
-#   Password for User which will be used to access the Midokura repositories
+#  If manage_repo is true and is_mem then specify the password to access the packages
+#     Default: undef
+# [*dhcp_mtu*]
+#  Specify a mtu for packets here.
 #     Default: undef
 #
 # === Examples
 #
 # The easiest way to run the class is:
 #
-#     include midonet::agent
+#     class {'::midonet::agent':
+#     zookeeper_hosts =>  [{'ip'   => 'host1',
+#                         'port' => '2183'},
+#                         {'ip'   => 'host2'}],
+#      shared_secret   => 's3cr3t',
+#      controller_host => $::ipaddress
+#     }
 #
-# This call assumes that there is a zookeeper instance and a cassandra instance
-# running in the target machine, and will configure the midonet-agent to
-# connect to them.
-#
-# This is a quite naive deployment, just for demo purposes. A more realistic one
-# would be:
-#
-#    class {'midonet::agent':
-#            zookeeper_hosts =>  [{'ip'   => 'host1',
-#                                  'port' => '2183'},
-#                                 {'ip'   => 'host2'}],
-#          }
+# This call assumes that there is no mem being used, and the controller host is same
+# that where midolman is being installed
 #
 # Please note that Zookeeper port is not mandatory and defaulted to 2181
 #
