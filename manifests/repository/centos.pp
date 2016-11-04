@@ -1,6 +1,36 @@
 # == Class: midonet::repository::centos
 # NOTE: don't use this class, use midonet::repository(::init) instead
 #
+# === Parameters
+#
+# [*is_mem*]
+#  Whether using MEM (true) or OSS Midonet (false)
+#    Default: false
+#
+# [*midonet_version*]
+# Midonet version to deploy.
+#     Default: '5.2'
+#
+# [*midonet_stage*]
+# Midonet stage to deploy 'unstable' , 'stable' ...
+#     Default: 'stable'
+#
+# [*openstack_release*]
+# Openstack release
+#     Default: 'mitaka'
+#
+# [*mem_version*]
+# Midonet MEM version to deploy.
+#     Default: '5.2'
+#
+# [*mem_username*]
+# MEM repository username
+#     Default: undef
+#
+# [*mem_password*]
+# MEM repository password
+#     Default: undef
+#
 # === Authors
 #
 # Midonet (http://midonet.org)
