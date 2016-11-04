@@ -1,6 +1,19 @@
 # == Class: midonet::midonet_api::install
 # Check out the midonet::midonet_api class for a full understanding of
 # how to use the midonet_api resource
+# === Parameters
+#
+# [*package_ensure*]
+#   Status to ensure for the midonet cluster package
+#   Default: 'present'
+#
+# [*package_name*]
+#   Name of the midonet cluster package
+#   Default: 'midonet-cluster'
+#
+# [*is_mem*]
+#   Whether or not install the MEM related packages
+#   Default: false
 #
 # === Authors
 #

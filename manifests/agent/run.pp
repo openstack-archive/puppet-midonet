@@ -21,33 +21,29 @@
 #  Metadata shared secret
 #     Default: undef
 #
-# [*package_name*]
-#  Name of the midonet agent (midolman) package.
-#     Default: undef
-#
 # [*service_name*]
 #  Name of the midolman service
-#     Default: undef
+#     Default: midolman
 #
 # [*service_ensure*]
 #  Whether to ensure the service is running, stopped, etc.
-#     Default: undef
+#     Default: running
 #
 # [*service_enable*]
 #  Should the service not be enabled by default? Specify it there
-#     Default: undef
+#     Default: true
 #
 # [*agent_config_path*]
 #  Override the configuration files path
-#     Default: undef
+#     Default: /etc/midolman/midolman.conf
 #
 # [*jvm_config_path*]
 #  Override the jvm config files path
-#     Default: undef
+#     Default: /etc/midolman/midolman-env.sh
 #
 # [*max_heap_size*]
-#  Specify the heap size of the JavaVM in Gb. Ex: '3'
-#     Default: undef
+#  Specify the heap size of the JavaVM in Gb. Ex: '1024M'
+#     Default: '1024M'
 #
 # [*dhcp_mtu*]
 #  Specify a mtu for packets here.

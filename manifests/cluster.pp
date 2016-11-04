@@ -51,10 +51,10 @@
 #   Port where the keystone service is running
 #     Default: undef
 # [*max_heap_size*]
-#   Heap size of midonet cluster JVM , in gb . Ex: '4'
+#   Heap size of midonet cluster JVM. Ex '1024M'
 #     Default: undef
 # [*heap_newsize*]
-#   Xmx heap size value in gb . Ex '4'
+#   Xmx heap size value in gb . Ex '512M'
 #     Default: undef
 # [*is_mem*]
 #   Whether to install cluster mem packages or not
@@ -66,7 +66,7 @@
 #   Is MEM insights using SSL?
 #     Default: undef
 # [*analytics_ip*]
-#   Heap size of midonet cluster JVM , in gb . Ex: '4'
+#   IP of the Analytics node
 #     Default: undef
 
 #

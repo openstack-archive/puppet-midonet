@@ -48,7 +48,7 @@
 #     Default: undef
 #
 # [*max_heap_size*]
-#  Specify the heap size of the JavaVM in Gb. Ex: '3'
+#  Specify the heap size of the JavaVM. Ex: '512M'
 #     Default: undef
 #
 # [*is_mem*]
