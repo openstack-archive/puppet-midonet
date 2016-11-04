@@ -7,21 +7,29 @@
 #
 # [*analytics_ip*]
 #  The public IP of where the analytics service is listening.
+#     Default : $::ipaddress
 #
 # [*cluster_ip*]
 #  The public IP of where
+#     Default: $::ipaddress
 #
 # [*is_insights*]
 #   Boolean defining if insights is being used or not
+#     Default: false
 #
-# [*mem_apache_port*]
-#   Port where apache will listen for midonet-manager. Default is '80'
+# [*insights_ssl*]
+#   Is mem insights using ssl?
+#     Default: false
 #
-# [*mem_apache_docroot*]
-#   Document root for mem vhost. Default '/var/www/html'
+# [*manage_apache_mods*]
+#   Install apache mods?
+#     Default: true
 #
 # [*mem_apache_servername*]
 #   Servername for the mem vhost
+#
+# [*mem_apache_docroot*]
+#   Document root for mem vhost. Default '/var/www/html'
 #
 # [*mem_api_namespace*]
 #   Path where the api endpoint is. Default 'midonet-api'
@@ -32,6 +40,43 @@
 # [*mem_analytics_namespace*]
 #   Path where the analyics endpoint is. Default 'analytics'
 #
+# [*mem_proxy_preserve_host*]
+#   Use proxypreservehost directive
+#     Default: true
+#
+# [*mem_apache_port*]
+#   Port where apache will listen for midonet-manager. Default is '80'
+#
+# [*mem_ws*]
+#   Whether to use ws or wss ?
+#
+# [*is_ssl*]
+#   Whether use ssl or not
+#     Default: undef
+#
+# [*ssl_cert*]
+#   Ssl certificate
+#     Default: undef
+#
+# [*ssl_key*]
+#   Ssl key
+#     Default: undef
+#
+# [*priority*]
+#   priority of the mem vhost
+#     Default: undef
+#
+# [*mem_api_port*]
+#   Port where midonet api is listening to
+#     Default: '8181'
+#
+# [*mem_apache_port*]
+#   Port where traces endpoint is listening
+#     Default: '8460'
+#
+# [*mem_analytics_port*]
+#   Port where analytics service is listening to.
+#     Default: '8080'
 #
 # === Authors
 #

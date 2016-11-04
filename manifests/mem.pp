@@ -48,6 +48,14 @@
 #   does not have to be changed.
 #   Default value: "mem_agent_config_api_namespace": "conf"
 #
+# [*mem_api_namespace*]
+#   Path where the api endpoint is. Default 'midonet-api'
+#
+# [*mem_trace_namespace*]
+#   Path where the analytics traces endpoint is. Default 'traces'
+#
+# [*mem_analytics_namespace*]
+#   Path where the analyics endpoint is. Default 'analytics'
 #
 # [mem_poll_enabled]
 #   The Auto Polling will seamlessly refresh Midonet Manager data periodically.
