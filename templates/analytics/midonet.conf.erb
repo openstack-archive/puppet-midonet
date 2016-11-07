@@ -14,7 +14,13 @@
                                                                                                          │
 [zookeeper]
 <%- zkarr = Array.new -%>
-<%- @zookeeper_hosts.each do |s| -%>
+<%- zk_hosts = Array.new -%>
+<%- if @zookeeeper_hosts.class == String -%>
+  <%- zk_hosts.push(@zookeeper_hosts) -%>
+<%- else -%>
+  <%- zk_hosts = @zookeeper_hosts -%>
+<%- end -%>
+<%- zk_hosts.each do |s| -%>
   <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
 <%- end -%>
 zookeeper_hosts = <%= zkarr.join(",") %>
