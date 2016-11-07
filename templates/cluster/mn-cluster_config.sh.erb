@@ -11,14 +11,26 @@ which mn-conf > /dev/null || {
 cat << EOF | mn-conf set -t default
 zookeeper {
   <%- zkarr = Array.new -%>
-  <%- @zookeeper_hosts.each do |s| -%>
-  <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
+  <%- zk_hosts = Array.new -%>
+  <%- if @zookeeeper_hosts.class == Hash -%>
+    <%- zk_hosts.push(@zookeeper_hosts) -%>
+  <%- else -%>
+    <%- zk_hosts = @zookeeper_hosts -%>
+  <%- end -%>
+  <%- zk_hosts.each do |s| -%>
+    <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
   <%- end -%>
   zookeeper_hosts = "<%= zkarr.join(",") %>"
 }
 
 cassandra {
-  servers = "<%= @cassandra_servers.join(",") %>"
+  <%- cass_hosts = Array.new -%>
+  <%- if @cassandra_servers.class == String -%>
+    <%- cass_hosts.push(@cassandra_servers) -%>
+  <%- else -%>
+    <%- cass_hosts = @cassandra_servers -%>
+  <%- end -%>
+  servers = "<%= cass_hosts.join(",") %>"
 }
 EOF
 echo "cassandra.replication_factor : <%= @cassandra_rep_factor %>" | mn-conf set -t default
