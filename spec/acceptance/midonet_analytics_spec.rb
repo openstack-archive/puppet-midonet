@@ -6,6 +6,10 @@ describe 'midonet::analytics class' do
     it 'should install the midonet analytics without any errors' do
       pp = <<-EOS
       include ::midonet::repository
+      class { 'midonet_openstack::role::nsdb':
+        client_ip => '127.0.0.1',
+        id        => 1
+      }
       class { 'midonet::analytics':
         is_mem            => false,
         manage_repo       => false,
