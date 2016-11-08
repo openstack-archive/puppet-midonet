@@ -35,7 +35,13 @@ USE_SCREEN="True"
 
 # ZK Hosts (comma delimited)
 <%- zkarr = Array.new -%>
-<%- @zookeeper_hosts.each do |s| -%>
+<%- zk_hosts = Array.new -%>
+<%- if @zookeeeper_hosts.class == Hash -%>
+  <%- zk_hosts.push(@zookeeper_hosts) -%>
+<%- else -%>
+  <%- zk_hosts = @zookeeper_hosts -%>
+<%- end -%>
+<%- zk_hosts.each do |s| -%>
   <%- zkarr.push("#{s['ip']}:#{s['port'] ||= 2181 }") -%>
 <%- end -%>
 ZOOKEEPER_HOSTS=<%= zkarr.join(",") %>

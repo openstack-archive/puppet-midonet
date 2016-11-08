@@ -7,7 +7,8 @@ describe 'midonet::cluster class' do
       pp = <<-EOS
       include ::midonet::repository
       class { 'midonet_openstack::role::nsdb':
-        client_ip => '127.0.0.1'
+        client_ip => '127.0.0.1',
+        id        => 1
       }
       class { 'midonet::cluster':
         zookeeper_hosts       => [{ 'ip' => '127.0.0.1', 'port' => '2181' }],
