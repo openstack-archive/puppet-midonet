@@ -43,7 +43,7 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
       number, use any of the RFC 1930's reserved AS number.  It should be an
       integer.  Only applicable when uplink_type=='bgp'."
     validate do |value|
-      unless value =~ /^\d+$/
+      unless value =~ /^\d+(\.\d+)?$/
         raise ArgumentError, "'%s' is not a valid AS number" % value
       end
     end
@@ -108,7 +108,7 @@ Puppet::Type.newtype(:midonet_gateway_bgp) do
             unless e["ip_address"] =~ /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
               raise ArgumentError, "#{e['ip_address']} is not a valid IP address"
             end
-            unless e["remote_asn"] =~ /^\d+$/
+            unless e["remote_asn"] =~ /^\d+(\.\d+)?$/
               raise ArgumentError, "#{e['remote_asn']} is not a valid AS number"
             end
             unless e["remote_net"] =~ /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/\d+$/
