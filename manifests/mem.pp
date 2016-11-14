@@ -157,7 +157,7 @@ class midonet::mem(
   $is_ssl                         = false,
   $ssl_cert                       = '',
   $ssl_key                        = '',
-  $insights_ssl                   = undef,
+  $insights_ssl                   = false,
   $mem_api_port                   = ':8181',
   $mem_trace_port                 = ':8460',
   $mem_analytics_port             = ':8080',
@@ -180,11 +180,11 @@ class midonet::mem(
 
   $mem_login_host                 = "http://${cluster_ip}${mem_api_port}"
   $mem_trace_api_host             = "http://${cluster_ip}${mem_api_port}"
-  $mem_traces_ws_url              = "wss://${cluster_ip}${mem_trace_port}/${mem_trace_namespace}"
+  $mem_traces_ws_url              = "${$mem_ws}://${cluster_ip}${mem_trace_port}/${mem_trace_namespace}"
   $mem_api_host                   = "http://${cluster_ip}${mem_api_port}"
-  $mem_analytics_ws_api_url       = "ws://${analytics_ip}${mem_analytics_port}/${mem_analytics_namespace}"
-  $mem_subscriptions_ws_api_url   = "wss://${cluster_ip}${mem_subscription_port}/subscription"
-  $mem_fabric_ws_api_url          = "wss://${cluster_ip}${mem_fabric_port}/fabric"
+  $mem_analytics_ws_api_url       = "${$mem_ws}://${analytics_ip}${mem_analytics_port}/${mem_analytics_namespace}"
+  $mem_subscriptions_ws_api_url   = "${$mem_ws}://${cluster_ip}${mem_subscription_port}/subscription"
+  $mem_fabric_ws_api_url          = "${$mem_ws}://${cluster_ip}${mem_fabric_port}/fabric"
   $mem_apache_servername          = $cluster_ip
 
 
