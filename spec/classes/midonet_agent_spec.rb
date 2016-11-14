@@ -5,8 +5,9 @@ describe 'midonet::agent' do
     let :facts do
       {
         :osfamily           => 'Debian',
-        :lsbdistid          => 'Ubuntu',
+        :lsbdistid          => 'ubuntu',
         :lsbdistrelease     => '16.04',
+        :lsbdistcodename    => 'xenial',
       }
     end
     let :params do

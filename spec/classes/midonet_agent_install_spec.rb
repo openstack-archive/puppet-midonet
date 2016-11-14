@@ -5,8 +5,9 @@ describe 'midonet::agent::install' do
     let :facts do
       {
         :osfamily       => 'Debian',
-        :lsbdistid      => 'Ubuntu',
+        :lsbdistid      => 'ubuntu',
         :lsbdistrelease => '16.04',
+        :lsbdistcodename => 'xenial',
       }
     end
     it { is_expected.to contain_package('midolman').with(

@@ -4,9 +4,10 @@ describe 'midonet::agent::run' do
   context 'with default parameters' do
     let :facts do
       {
-        :osfamily       => 'Debian',
-        :lsbdistid      => 'Ubuntu',
-        :lsbdistrelease => '16.04',
+        :osfamily        => 'Debian',
+        :lsbdistid       => 'ubuntu',
+        :lsbdistrelease  => '16.04',
+        :lsbdistcodename => 'xenial',
       }
     end
     let :params do
