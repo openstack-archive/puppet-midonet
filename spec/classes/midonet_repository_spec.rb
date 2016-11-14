@@ -7,6 +7,7 @@ describe 'midonet::repository' do
         :osfamily           => 'Debian',
         :lsbdistid          => 'Ubuntu',
         :lsbdistrelease     => '16.04',
+        :puppetversion      => Puppet.version
       }
     end
     it { is_expected.to contain_class('midonet::repository::ubuntu').with(
@@ -44,6 +45,7 @@ describe 'midonet::repository' do
         :osfamily           => 'Debian',
         :lsbdistid          => 'Ubuntu',
         :lsbdistrelease     => '16.04',
+        :puppetversion      => Puppet.version
       }
     end
     let :params do
@@ -69,7 +71,9 @@ describe 'midonet::repository' do
     let :facts do
       {
         :osfamily                     => 'RedHat',
-        :operatingsystemmajrelease    => '7'
+        :operatingsystemmajrelease    => '7',
+        :puppetversion                => Puppet.version
+
       }
     end
     let :params do
