@@ -5,7 +5,7 @@
 #
 
 define midonet::resources::interface_up(
-  String $mac_address
+  $mac_address
 ) {
 
   exec { 'bring_interface_up':
