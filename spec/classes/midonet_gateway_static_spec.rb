@@ -7,6 +7,7 @@ describe 'midonet::gateway::static' do
         :osfamily       => 'Debian',
         :lsbdistid      => 'Ubuntu',
         :lsbdistrelease => '16.04',
+        :puppetversion  => Puppet.version        
       }
     end
     let :params do

@@ -5,7 +5,8 @@ describe 'midonet::repository::centos' do
     let :facts do
       {
         :osfamily                     => 'RedHat',
-        :operatingsystemmajrelease    => '7'
+        :operatingsystemmajrelease    => '7',
+        :puppetversion                => Puppet.version
       }
     end
     let :params do
@@ -55,7 +56,8 @@ describe 'midonet::repository::centos' do
     let :facts do
       {
         :osfamily                     => 'RedHat',
-        :operatingsystemmajrelease    => '7'
+        :operatingsystemmajrelease    => '7',
+        :puppetversion                => Puppet.version        
       }
     end
     let :params do

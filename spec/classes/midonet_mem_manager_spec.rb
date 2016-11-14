@@ -13,7 +13,8 @@ describe 'midonet::mem' do
         :fqdn                   => 'gateway',
         :memorysize             => '2048',
         :lsbdistid              => 'trusty',
-        :lsbdistrelease         => '14.04'
+        :lsbdistrelease         => '14.04',
+        :puppetversion          => Puppet.version        
       }
     end
     it { is_expected.to contain_package('midonet-manager').with(
