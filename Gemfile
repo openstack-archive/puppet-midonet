@@ -11,6 +11,7 @@ def location_for(place, fake_version = nil)
 end
 
 group :development, :unit_tests do
+  gem 'public_suffix' , '2.0.3',            :require => false
   gem 'rspec-puppet', '~> 2.4',             :require => false
   gem 'fast_gettext', '1.1.0',              :require => false
   gem 'rspec-core', '3.5',                  :require => false
@@ -22,6 +23,7 @@ end
 
 group :system_tests do
 
+  gem 'public_suffix' , '2.0.3'
   gem 'beaker' , '< 3.0.0'
   if beaker_version = ENV['BEAKER_VERSION']
     ## TODO - Remove hardcoded version as soon as BKR-885 is fixed
