@@ -5,7 +5,7 @@ describe 'midonet::cluster::install' do
     let :facts do
       {
         :osfamily       => 'Debian',
-        :lsbdistid      => 'Ubuntu',
+        :lsbdistid      => 'ubuntu',
         :lsbdistrelease => '16.04',
       }
     end
