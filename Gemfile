@@ -18,6 +18,10 @@ group :development, :unit_tests do
   gem 'puppet-lint', '>= 0.3.2',            :require => false
   gem 'metadata-json-lint',                 :require => false
   gem 'faraday',                            :require => false
+  # addressable 2.5.0 pulls in public_suffix >= 2.0 requires ruby >= 2.0
+  gem 'addressable', ['< 2.5.0']
+    # json_pure 2.0.2 requires ruby >= 2.0 and we don't have it on Ubuntu Trusty
+  gem 'json_pure', ['2.0.1']
 end
 
 group :system_tests do
