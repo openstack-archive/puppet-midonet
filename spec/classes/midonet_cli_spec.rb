@@ -54,7 +54,8 @@ describe 'midonet::cli' do
         :operatingsystemmajrelease => '14',
         :puppetversion             => '3.8.7',
         :lsbdistid                 => 'Ubuntu',
-        :lsbdistcodename           => 'Trusty'
+        :lsbdistcodename           => 'Trusty',
+        :puppetversion             => Puppet.version
       })
     end
 
@@ -82,7 +83,8 @@ describe 'midonet::cli' do
         :operatingsystemmajrelease => '16',
         :puppetversion             => '3.8.7',
         :lsbdistid                 => 'Ubuntu',
-        :lsbdistcodename           => 'Xenial'
+        :lsbdistcodename           => 'Xenial',
+        :puppetversion             => Puppet.version
       })
     end
 
@@ -108,6 +110,7 @@ describe 'midonet::cli' do
         :ipaddress_eth0            => '172.17.0.3',
         :operatingsystemmajrelease => '7',
         :puppetversion             => '3.8.7',
+        :puppetversion             => Puppet.version
       })
     end
 
