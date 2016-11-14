@@ -7,6 +7,7 @@ describe 'midonet::cluster::install' do
         :osfamily       => 'Debian',
         :lsbdistid      => 'Ubuntu',
         :lsbdistrelease => '16.04',
+        :puppetversion  => Puppet.version
       }
     end
     it { is_expected.to contain_package('midonet-cluster').with(
