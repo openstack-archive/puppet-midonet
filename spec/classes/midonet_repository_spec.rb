@@ -5,7 +5,7 @@ describe 'midonet::repository' do
     let :facts do
       {
         :osfamily           => 'Debian',
-        :lsbdistid          => 'Ubuntu',
+        :lsbdistid          => 'ubuntu',
         :lsbdistrelease     => '16.04',
       }
     end
@@ -42,7 +42,7 @@ describe 'midonet::repository' do
     let :facts do
       {
         :osfamily           => 'Debian',
-        :lsbdistid          => 'Ubuntu',
+        :lsbdistid          => 'ubuntu',
         :lsbdistrelease     => '16.04',
       }
     end
