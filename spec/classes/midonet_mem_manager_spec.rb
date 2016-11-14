@@ -12,7 +12,7 @@ describe 'midonet::mem' do
         :concat_basedir         => '/var/packages',
         :fqdn                   => 'gateway',
         :memorysize             => '2048',
-        :lsbdistid              => 'trusty',
+        :lsbdistid              => 'ubuntu',
         :lsbdistrelease         => '14.04'
       }
     end
