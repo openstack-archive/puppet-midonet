@@ -166,7 +166,7 @@ class midonet::mem(
 
 ) inherits midonet::params {
 
-  $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
+  $mem_ws = $insights_ssl? {true => 'wss' , default => 'ws'}
 
   validate_bool($mem_api_token)
   validate_bool($mem_poll_enabled)
