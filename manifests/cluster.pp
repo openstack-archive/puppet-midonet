@@ -140,7 +140,7 @@ class midonet::cluster (
       package_name   => $package_name,
       is_mem         => $is_mem
     }
-    contain 'midonet::cluster::install'
+    contain midonet::cluster::install
 
     class { 'midonet::cluster::run':
       service_name            => $service_name,
@@ -166,5 +166,5 @@ class midonet::cluster (
       package_ensure          => $package_ensure,
       require                 => Class['midonet::cluster::install']
     }
-    contain 'midonet::cluster::run'
+    contain midonet::cluster::run
 }
