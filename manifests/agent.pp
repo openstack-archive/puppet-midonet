@@ -141,7 +141,7 @@ class midonet::agent (
     package_ensure => $package_ensure,
     manage_java    => $manage_java,
   }
-  contain 'midonet::agent::install'
+  contain midonet::agent::install
 
   class { 'midonet::agent::run':
     service_name      => $service_name,
@@ -156,7 +156,7 @@ class midonet::agent (
     dhcp_mtu          => $dhcp_mtu,
     require           => Class['midonet::agent::install'],
   }
-  contain 'midonet::agent::run'
+  contain midonet::agent::run
 
   if $is_mem {
     if $manage_repo == true {
@@ -171,12 +171,12 @@ class midonet::agent (
           mem_password      => $mem_password,
           before            => Class['midonet::agent::scrapper']
         }
-        contain 'midonet::repository'
+        contain midonet::repository
       }
     }
     class { 'midonet::agent::scrapper':
     }
-    contain 'midonet::agent::scrapper'
+    contain midonet::agent::scrapper
   }
   else  {
     notice('Skipping installation of jmx-scrapper')
