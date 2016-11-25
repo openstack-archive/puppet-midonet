@@ -9,8 +9,9 @@ define midonet::resources::interface_up(
 ) {
 
   exec { 'bring_interface_up':
-    command => "/usr/sbin/ip link set dev $(ip -o link | grep ${mac_address} | awk '{print \$2}' | tr -d ':') up",
-    onlyif  => "/usr/sbin/ip -o link | grep ${mac_address} | grep 'state DOWN'"
+    path    => '/usr/bin:/usr/sbin:/sbin',
+    command => "ip link set dev $(ip -o link | grep ${mac_address} | awk '{print \$2}' | tr -d ':') up",
+    onlyif  => "ip -o link | grep ${mac_address} | grep 'state DOWN'"
   }
 
 }
