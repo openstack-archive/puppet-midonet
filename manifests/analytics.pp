@@ -98,14 +98,14 @@ class midonet::analytics (
       java_install => true,
       repo_version => '1.5',
     }
-    contain ::logstash
+    contain logstash
 
     class { 'elasticsearch':
       manage_repo  => true,
       repo_version => '1.7',
       require      => Class['::logstash']
     }
-    contain ::elasticsearch
+    contain elasticsearch
 
     elasticsearch::instance { 'es-01':
       require => Class['::logstash','::elasticsearch']
@@ -114,7 +114,7 @@ class midonet::analytics (
     class { 'curator':
       version => $curator_version,
     }
-    contain ::curator
+    contain curator
 
     if $is_mem {
       if $manage_repo == true {
