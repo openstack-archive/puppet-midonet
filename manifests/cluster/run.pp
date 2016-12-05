@@ -143,6 +143,9 @@ class midonet::cluster::run (
       notify  => Service['midonet-cluster'],
     }
 
+    package { 'python-neutron-lbaas': ensure => installed }
+    package { 'python-neutron-fwaas': ensure => installed }
+
     if $is_insights {
       file { 'analytics_settings':
         ensure  => present,
