@@ -47,11 +47,14 @@ class midonet::analytics::quickstart (
     path   => '/etc/midonet',
     owner  => 'root',
     mode   => '0755',
-  } ->
+  }
 
-  file { 'set_config':
-    ensure  => present,
-    path    => $config_path,
-    content => template('midonet/analytics/midonet.conf.erb'),
+    if !defined(File['set_config']) {
+    file { 'set_config':
+      ensure  => present,
+      path    => $config_path,
+      content => template('midonet/analytics/midonet.conf.erb'),
+      require => File['midonet folder']
+    }
   }
 }
