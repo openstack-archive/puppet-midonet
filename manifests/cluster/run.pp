@@ -126,7 +126,7 @@ class midonet::cluster::run (
 
     exec { '/bin/bash /tmp/mn-cluster_config.sh': }
 
-    file { 'cluster_config':
+    file { 'set_config':
       ensure  => present,
       path    => $cluster_config_path,
       content => template('midonet/cluster/midonet.conf.erb'),

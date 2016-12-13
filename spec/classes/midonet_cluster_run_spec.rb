@@ -21,7 +21,7 @@ describe 'midonet::cluster::run' do
     end
     it { is_expected.to contain_exec('/bin/bash /tmp/mn-cluster_config.sh') }
     it { is_expected.to contain_file('/tmp/mn-cluster_config.sh').with_ensure('present') }
-    it { is_expected.to contain_file('cluster_config').with(
+    it { is_expected.to contain_file('set_config').with(
         'ensure'  => 'present',
         'path'    => '/etc/midonet/midonet.conf',
       ) }
