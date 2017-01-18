@@ -63,6 +63,55 @@
 # [*analytics_ip*]
 #   IP of the Analytics node
 #     Default: undef
+# [*midonet_version*]
+#   Version of Midonet
+#     Default: '5.2'
+# [*elk_seeds*]
+#   List of elk seeds , in the form "ip1,ip2,ip3"
+#     Default: '$::ipaddress'
+# [*cluster_api_address*]
+#   IP Address that is publicly exposed for the REST Api . Usually this will be the same as
+#   the cluster_host but you might want to configure it in some cases, such as using an haproxy
+#   on the front
+#     Default: '$::ipaddress'
+# [*cluster_api_port*]
+#   Port Address that is publicly exposed for the REST Api . Usually this will be the same as
+#   the cluster_host but you might want to configure it in some cases, such as using an haproxy
+#   on the front. Usually you don't want to modify this
+#     Default: '8181'
+# [*elk_cluster_name*]
+#   Elasticsearch cluster name. Not needed if running in single-elk-node mode
+#     Default: 'undef'
+# [*elk_target_endpoint*]
+#   Configures the elk target endpoint
+#     Default: 'undef'
+# [*endpoint_host*]
+#   Where the unified endpoint will bind to
+#     Default: '$::ipaddress'
+# [*endpoint_port*]
+#   Where the unified endpoint will bind to ( port )
+#     Default: '8888'
+# [*ssl_source_type*]
+#   SSL Source type. 'autosigned' , 'keystore' , 'certificate'
+#     Default: 'undef'
+# [*ssl_cert_path*]
+#   SSL certificate path
+#     Default: 'undef'
+# [*ssl_privkey_path*]
+#   SSL private key path
+#     Default: 'undef'
+# [*ssl_privkey_pwd*]
+#   SSL private key password
+#     Default: 'undef'
+# [*flow_history_port*]
+#   Port for flow history endpoint
+#     Default: '5001'
+# [*jarvis_enabled*]
+#   Should enable jarvis?
+#     Default: 'undef'
+# [*midonet_version*]
+#   Midoent Version
+#     Default: '5.2'
 # === Authors
 #
 # Midonet (http://midonet.org)
@@ -116,7 +165,29 @@ class midonet::cluster::run (
   $calliope_service_ws_port        = undef,
   $insights_ssl                    = undef,
   $analytics_ip                    = undef,
+  $elk_seeds                       = "$::ipaddress",
+  $cluster_api_address             = $::ipaddress,
+  $cluster_api_port                = '8181',
+  $elk_cluster_name                = '',
+  $elk_target_endpoint             = $::ipaddress,
+  $endpoint_host                   = $::ipaddress,
+  $endpoint_port                   = '8888',
+  $ssl_source_type                 = undef,
+  $ssl_cert_path                   = undef,
+  $ssl_privkey_path                = undef,
+  $ssl_privkey_pwd                 = undef,
+  $ssl_keystore_path               = undef,
+  $ssl_keystore_pwd                = undef,
+  $flow_history_port               = '5001',
+  $jarvis_enabled                  = true,
+  $midonet_version                 = '5.2'
 ) {
+
+  include ::stdlib
+
+  $api_proto      = $insights_ssl? {true => 'https://' , default => 'http://'}
+  $mem_login_host = "${api_proto}${cluster_api_address}:${cluster_api_port}/midonet-api"
+  $new_api        = versioncmp($midonet_version,'5.2') ? {'1' => true, default => false}
 
   if $package_ensure != 'absent' {
     file { '/tmp/mn-cluster_config.sh':
@@ -158,6 +229,21 @@ class midonet::cluster::run (
         content => template('midonet/analytics/analytics_settings.sh.erb'),
       } ->
       exec { '/bin/bash /tmp/analytics_settings.sh': }
+      if versioncmp($midonet_version,'5.2') > 0
+      {
+        file { 'analytics_settings_local':
+          ensure  => present,
+          path    => '/tmp/analytics_settings_local.conf',
+          content => template('midonet/analytics/analytics_settings_local.erb'),
+        } ->
+        file { 'analytics_settings_script local':
+          ensure  => present,
+          path    => '/tmp/analytics_settings_local.sh',
+          content => template('midonet/analytics/analytics_settings.sh.erb'),
+          require => Exec['/bin/bash /tmp/analytics_settings.sh']
+        } ->
+        exec { '/bin/bash /tmp/analytics_settings_local.sh': }
+      }
     }
 
     file { '/etc/midonet/subscriptions':

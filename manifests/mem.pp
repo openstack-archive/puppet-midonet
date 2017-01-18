@@ -118,6 +118,10 @@
 # [mem_fabric_port]
 #   The port where the midonet fabric service is listening
 #   Default: '8009'
+#
+# [api_ssl]
+#   Is midonet api using SSL?
+#   Default: false
 # == Examples
 #
 # The minimum parameters required are
@@ -163,10 +167,13 @@ class midonet::mem(
   $mem_analytics_port             = ':8080',
   $mem_subscription_port          = ':8007',
   $mem_fabric_port                = ':8009',
+  $api_ssl                        = false,
 
 ) inherits midonet::params {
 
-  $mem_ws = $insights_ssl? {true => 'wss://' , default => 'ws://'}
+  $mem_ws    = $insights_ssl? {true => 'wss://' , default => 'ws://'}
+  $api_proto = $api_ssl? {true => 'https://' , default => 'http://'}
+
 
   validate_bool($mem_api_token)
   validate_bool($mem_poll_enabled)
@@ -178,10 +185,10 @@ class midonet::mem(
   validate_string($mem_config_file)
   validate_string($mem_agent_config_api_namespace)
 
-  $mem_login_host                 = "http://${cluster_ip}${mem_api_port}"
-  $mem_trace_api_host             = "http://${cluster_ip}${mem_api_port}"
+  $mem_login_host                 = "${api_proto}${cluster_ip}${mem_api_port}"
+  $mem_trace_api_host             = "${api_proto}${cluster_ip}${mem_api_port}"
   $mem_traces_ws_url              = "${$mem_ws}${cluster_ip}${mem_trace_port}/${mem_trace_namespace}"
-  $mem_api_host                   = "http://${cluster_ip}${mem_api_port}"
+  $mem_api_host                   = "${api_proto}${cluster_ip}${mem_api_port}"
   $mem_analytics_ws_api_url       = "${$mem_ws}${analytics_ip}${mem_analytics_port}/${mem_analytics_namespace}"
   $mem_subscriptions_ws_api_url   = "${$mem_ws}${cluster_ip}${mem_subscription_port}/subscription"
   $mem_fabric_ws_api_url          = "${$mem_ws}${cluster_ip}${mem_fabric_port}/fabric"
