@@ -68,7 +68,52 @@
 # [*analytics_ip*]
 #   IP of the Analytics node
 #     Default: undef
-
+# [*midonet_version*]
+#   Version of Midonet
+#     Default: '5.2'
+# [*elk_seeds*]
+#   List of elk seeds , in the form "ip1,ip2,ip3"
+#     Default: '5.2'
+# [*cluster_api_address*]
+#   IP Address that is publicly exposed for the REST Api . Usually this will be the same as
+#   the cluster_host but you might want to configure it in some cases, such as using an haproxy
+#   on the front
+#     Default: '$::ipaddress'
+# [*cluster_api_port*]
+#   Port Address that is publicly exposed for the REST Api . Usually this will be the same as
+#   the cluster_host but you might want to configure it in some cases, such as using an haproxy
+#   on the front. Usually you don't want to modify this
+#     Default: '8181'
+# [*elk_cluster_name*]
+#   Elasticsearch cluster name. Not needed if running in single-elk-node mode
+#     Default: 'undef'
+# [*elk_target_endpoint*]
+#   Configures the elk target endpoint
+#     Default: 'undef'
+# [*endpoint_host*]
+#   Where the unified endpoint will bind to
+#     Default: 'undef'
+# [*endpoint_port*]
+#   Where the unified endpoint will bind to ( port )
+#     Default: 'undef'
+# [*ssl_source_type*]
+#   SSL Source type. 'autosigned' , 'keystore' , 'certificate'
+#     Default: 'undef'
+# [*ssl_cert_path*]
+#   SSL certificate path
+#     Default: 'undef'
+# [*ssl_privkey_path*]
+#   SSL private key path
+#     Default: 'undef'
+# [*ssl_privkey_pwd*]
+#   SSL private key password
+#     Default: 'undef'
+# [*flow_history_port*]
+#   Port for flow history endpoint
+#     Default: 'undef'
+# [*jarvis_enabled*]
+#   Should enable jarvis?
+#     Default: 'undef'
 #
 # === Examples
 #
@@ -138,6 +183,22 @@ class midonet::cluster (
   $is_insights               = undef,
   $insights_ssl              = undef,
   $analytics_ip              = undef,
+  $midonet_version           = '5.2',
+  $elk_seeds                 = undef,
+  $cluster_api_address       = $::ipaddress,
+  $cluster_api_port          = '8181',
+  $elk_cluster_name          = undef,
+  $elk_target_endpoint       = undef,
+  $endpoint_host             = undef,
+  $endpoint_port             = undef,
+  $ssl_source_type           = undef,
+  $ssl_cert_path             = undef,
+  $ssl_privkey_path          = undef,
+  $ssl_privkey_pwd           = undef,
+  $ssl_keystore_path         = undef,
+  $ssl_keystore_pwd          = undef,
+  $flow_history_port         = undef,
+  $jarvis_enabled            = undef,
 ) {
 
     class { 'midonet::cluster::install':
@@ -165,15 +226,31 @@ class midonet::cluster (
       keystone_port             => $keystone_port,
       keystone_tenant_name      => $keystone_tenant_name,
       keystone_protocol         => $keystone_protocol,
-      keystone_user_name        => undef,
-      keystone_user_password    => undef,
-      keystone_domain_name      => 'Default',
-      keystone_domain_id        => 'default',
-      keystone_keystone_version => '3',
+      keystone_user_name        => $keystone_user_name,
+      keystone_user_password    => $keystone_user_password,
+      keystone_domain_name      => $keystone_domain_name,
+      keystone_domain_id        => $keystone_domain_id,
+      keystone_keystone_version => $keystone_keystone_version,
       is_insights               => $is_insights,
       insights_ssl              => $insights_ssl,
       analytics_ip              => $analytics_ip,
       package_ensure            => $package_ensure,
+      midonet_version           => $midonet_version,
+      elk_seeds                 => $elk_seeds,
+      cluster_api_address       => $cluster_api_address,
+      cluster_api_port          => $cluster_api_port,
+      elk_cluster_name          => $elk_cluster_name,
+      elk_target_endpoint       => $elk_target_endpoint,
+      endpoint_host             => $endpoint_host,
+      endpoint_port             => $endpoint_port,
+      ssl_source_type           => $ssl_source_type,
+      ssl_cert_path             => $ssl_cert_path,
+      ssl_privkey_path          => $ssl_privkey_path,
+      ssl_privkey_pwd           => $ssl_privkey_pwd,
+      ssl_keystore_path         => $ssl_keystore_path,
+      ssl_keystore_pwd          => $ssl_keystore_pwd,
+      flow_history_port         => $flow_history_port,
+      jarvis_enabled            => $jarvis_enabled,
       require                   => Class['midonet::cluster::install']
     }
     contain midonet::cluster::run
