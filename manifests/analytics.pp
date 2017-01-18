@@ -43,6 +43,22 @@
 #  If you want to run calliope on a custom port, specify it
 #     Default: false
 #
+# [*midonet_version*]
+#  Version of midonet
+#     Default: '5.2'
+#
+# [*elk_bind_ip*]
+#  Where to bind elk instance
+#     Default: 'undef' , will bind to $::ipaddress
+#
+# [*elk_cluster_name*]
+#  Name of elk cluster
+#     Default: 'elasticsearch'
+#
+# [*elk_hosts*]
+#  List of elk seeds
+#     Default: ['$::ipaddress']
+#
 # Please note that Keystone port is not mandatory and defaulted to 35537.
 #
 # === Examples
@@ -90,22 +106,45 @@ class midonet::analytics (
   $allinone           = false,
   $curator_version    = '3.5',
   $calliope_port      = undef,
+  $midonet_version    = undef,
+  $elk_bind_ip        = undef,
+  $elk_cluster_name   = 'elasticsearch',
+  $elk_hosts          = ["$::ipaddress"]
 ) {
+  include ::stdlib
+  $logstash_version            = versioncmp($midonet_version,'5.2') ? {'1' => '5.x', default => '1.5'}
+  $elastic_version             = versioncmp($midonet_version,'5.2') ? {'1' => '5.x', default => '1.7'}
+  $real_analytics_package_name = versioncmp($midonet_version,'5.2') ? {'1' => 'midonet-elk', default => 'midonet-analytics'}
 
+  if versioncmp($midonet_version,'5.2') > 0
+  {
+    $ins_service_name = 'elasticsearch-es-01'
+    $config = { 'network.host' => ['_local_',"${elk_bind_ip}"],
+                'cluster.name' => $elk_cluster_name,
+                'discovery.zen.ping.unicast.hosts' => $elk_hosts,
+                'discovery.zen.minimum_master_nodes' => (size($elk_hosts)/2)+1}
 
-    class { 'logstash':
-      manage_repo  => true,
-      java_install => true,
-      repo_version => '1.5',
-    }
-    contain logstash
+  }
+  else {
+    $config = undef
+    $ins_service_name = 'elasticsearch-instance-es-01'
+  }
 
     class { 'elasticsearch':
       manage_repo  => true,
-      repo_version => '1.7',
+      repo_version => $elastic_version,
+      config       => $config,
       require      => Class['::logstash']
     }
     contain elasticsearch
+
+    class { 'logstash':
+      manage_repo  => true,
+      repo_version => $logstash_version,
+    }
+    contain logstash
+
+
 
     elasticsearch::instance { 'es-01':
       require => Class['::logstash','::elasticsearch']
@@ -151,7 +190,8 @@ class midonet::analytics (
       }
 
       class { 'midonet::analytics::services':
-        calliope_port => $calliope_port,
+        calliope_port   => $calliope_port,
+        midonet_version => $midonet_version,
         require       => [
           Class['::logstash','::elasticsearch'],
           Elasticsearch::Instance['es-01'],
@@ -160,9 +200,17 @@ class midonet::analytics (
       }
 
       unless $allinone {
-        class { 'midonet::analytics::quickstart':
-          zookeeper_hosts => $zookeeper_hosts,
-          notify          => Service['midonet-analytics']
+        if versioncmp($midonet_version,'5.2') > 0
+        {
+          class { 'midonet::analytics::quickstart':
+            zookeeper_hosts => $zookeeper_hosts,
+          }
+        }
+        else {
+          class { 'midonet::analytics::quickstart':
+            zookeeper_hosts => $zookeeper_hosts,
+            notify          => Service[$real_analytics_package_name]
+          }
         }
       }
 
@@ -187,7 +235,7 @@ class midonet::analytics (
         line    => "ES_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^ES_HEAP_SIZE.*$',
         require => Package['elasticsearch'],
-        notify  => Service['elasticsearch-instance-es-01'],
+        notify  => Service[$ins_service_name],
       }
     }
     if $::osfamily == 'RedHat' {
@@ -204,7 +252,7 @@ class midonet::analytics (
         line    => "ES_HEAP_SIZE='${heap_size_gb}g'",
         match   => '^ES_HEAP_SIZE.*$',
         require => Package['elasticsearch'],
-        notify  => Service['elasticsearch-instance-es-01'],
+        notify  => Service[$ins_service_name],
       }
     }
-}
+  }
