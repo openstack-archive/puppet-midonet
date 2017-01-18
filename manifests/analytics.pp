@@ -111,10 +111,27 @@ class midonet::analytics (
       require => Class['::logstash','::elasticsearch']
     }
 
-    class { 'curator':
-      version => $curator_version,
+    if $::osfamily == 'Debian' {
+      anchor { 'curator-begin': } ->
+      class { 'curator':
+        version => $curator_version,
+      } ->
+      anchor { 'curator-end': }
+    } elsif $::osfamily == 'RedHat' {
+      anchor { 'curator-begin': } ->
+      exec { 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch':
+        path => '/usr/bin'
+      } ->
+      yumrepo { 'curator-3':
+        descr    => 'CentOS/RHEL repository for Elasticsearch Curator 3 packages',
+        baseurl  => 'http://packages.elastic.co/curator/3/centos/$releasever',
+        gpgcheck => true,
+        gpgkey   => 'http://packages.elastic.co/GPG-KEY-elasticsearch',
+        enabled  => true,
+      } ->
+      package { 'python-elasticsearch-curator': ensure => installed } ->
+      anchor { 'curator-end': }
     }
-    contain curator
 
     if $is_mem {
       if $manage_repo == true {
@@ -135,8 +152,11 @@ class midonet::analytics (
 
       class { 'midonet::analytics::services':
         calliope_port => $calliope_port,
-        require       => [Class['::logstash','::elasticsearch','::curator'],
-        Elasticsearch::Instance['es-01']]
+        require       => [
+          Class['::logstash','::elasticsearch'],
+          Elasticsearch::Instance['es-01'],
+          Anchor['curator-end']
+        ]
       }
 
       unless $allinone {

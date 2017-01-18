@@ -18,6 +18,7 @@ RSpec.configure do |c|
 
       # install git
       install_package host, 'git'
+      install_package host, 'ruby'
 
       zuul_ref = ENV['ZUUL_REF']
       zuul_branch = ENV['ZUUL_BRANCH']
