@@ -1,22 +1,46 @@
-clio.enabled : true
-clio.service.udp_port : <% if !@clio_service_udp_port %>5001<% else %><%= @clio_service_udp_port %><% end %>,
-clio.service.encoding : "binary"
-clio.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@clio_target_udp_port %>5000<% else %><%= @clio_target_udp_port %><% end %>",
-clio.data.fields : [ "cookie", "devices", "host_uuid", "in_port", "in_tenant", "out_ports", "out_tenant", "match_eth_src", "match_eth_dst", "match_ethertype", "match_network_dst", "match_network_src", "match_network_proto", "match_src_port", "match_dst_port", "action_drop", "action_arp_sip", "action_arp_tip", "action_arp_op", "rules", "sim_result", "final_eth_src", "final_eth_dst", "final_net_src", "final_net_dst", "final_transport_src", "final_transport_dst", "timestamp", "type" ]
-calliope.enabled : true
-calliope.service.ws_port : <% if !@calliope_service_ws_port %>8080<% else %><%= @calliope_service_ws_port %><% end %>
-calliope.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
-jmxscraper.enabled : true
-jmxscraper.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@jmxscraper_target_udp_endpoint %>5000<% else %><%= @jmxscraper_target_udp_endpoint %><% end %>"
-mem_cluster.flow_tracing.enabled : true
-mem_cluster.flow_tracing.service.ws_port : <% if !@flow_tracing_service_ws_port %>8460<% else %><%= @flow_tracing_service_ws_port %><% end %>
-mem_cluster.flow_tracing.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
-mem_cluster.subscription.service.port : <% if !@cluster_subscription_service_port %>8007<% else %><%= @cluster_subscription_service_port %><% end %>
-mem_cluster.subscription.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
-mem_cluster.fabric.enabled : true
-mem_cluster.fabric.api.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
-mem_cluster.fabric.api.port : <% if !@cluster_fabric_api_port %>8009<% else %><%= @cluster_fabric_api_port %><% end %>
-mem_cluster.fabric.mfc.port : <% if !@cluster_fabric_mfc_port %>8005<% else %><%= @cluster_fabric_mfc_port %><% end %>
-agent.flow_history.enabled : true
-agent.flow_history.encoding : "binary"
-agent.flow_history.udp_endpoint : "<%= @analytics_ip %>:<% if !@agent_flow_history_udp_endpoint %>5001<% else %><%= @agent_flow_history_udp_endpoint %><% end %>"
+<% if @new_api %>
+  agent.flow_history.enabled : true
+  agent.flow_history.encoding : "binary"
+  insights.jmxscraper.enabled : true
+  insights.jmxscraper.target.endpoint : "<%= @elk_target_endpoint %>"
+  insights.elasticsearch.seeds : [<%= @elk_seeds %>]
+  <% if @elk_cluster_name %>insights.elasticsearch.cluster_name : "<%= @elk_cluster_name %>"<% end %>
+  insights.endpoint.service.host : "<%= @endpoint_host %>"
+  insights.endpoint.service.port : <%= @endpoint_port %>
+  <% if @elk_target_endpoint %>insights.flow_history.target.endpoint : "<%= @elk_target_endpoint %>"<% end %>
+  insights.flow_history.service.host : "<%= @endpoint_host %>"
+  insights.flow_history.service.port : <%= @flow_history_port %>
+  insights.jarvis.enabled : <%= @jarvis_enabled %>
+  insights.jarvis.rest_api.uri : "<%= @mem_login_host %>"
+  insights.endpoint.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+  <% if @ssl_source_type %>insights.endpoint.auth.ssl.source : <%= @ssl_source_type %><% end %>
+  <% if @ssl_keystore_path %>insights.endpoint.auth.ssl.keystore_path : <%= @ssl_keystore_path %><% end %>
+  <% if @ssl_keystore_pwd %>insights.endpoint.auth.ssl.keystore_password : <%= @ssl_keystore_pwd %><% end %>
+  <% if @ssl_cert_path %>insights.endpoint.ssl.certificate_path : <%= @ssl_cert_path %><% end %>
+  <% if @ssl_privkey_path %>insights.endpoint.ssl.privatekey_path : <%= @ssl_privkey_path %><% end %>
+  <% if @ssl_privkey_pwd %>insights.endpoint.ssl.privatekey_password : <%= @ssl_privkey_pwd %><% end %>
+
+<% else %>
+  clio.enabled : true
+  clio.service.udp_port : <% if !@clio_service_udp_port %>5001<% else %><%= @clio_service_udp_port %><% end %>,
+  clio.service.encoding : "binary"
+  clio.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@clio_target_udp_port %>5000<% else %><%= @clio_target_udp_port %><% end %>",
+  clio.data.fields : [ "cookie", "devices", "host_uuid", "in_port", "in_tenant", "out_ports", "out_tenant", "match_eth_src", "match_eth_dst", "match_ethertype", "match_network_dst", "match_network_src", "match_network_proto", "match_src_port", "match_dst_port", "action_drop", "action_arp_sip", "action_arp_tip", "action_arp_op", "rules", "sim_result", "final_eth_src", "final_eth_dst", "final_net_src", "final_net_dst", "final_transport_src", "final_transport_dst", "timestamp", "type" ]
+  calliope.enabled : true
+  calliope.service.ws_port : <% if !@calliope_service_ws_port %>8080<% else %><%= @calliope_service_ws_port %><% end %>
+  calliope.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+  jmxscraper.enabled : true
+  jmxscraper.target.udp_endpoint : "<%= @analytics_ip %>:<% if !@jmxscraper_target_udp_endpoint %>5000<% else %><%= @jmxscraper_target_udp_endpoint %><% end %>"
+  mem_cluster.flow_tracing.enabled : true
+  mem_cluster.flow_tracing.service.ws_port : <% if !@flow_tracing_service_ws_port %>8460<% else %><%= @flow_tracing_service_ws_port %><% end %>
+  mem_cluster.flow_tracing.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+  mem_cluster.subscription.service.port : <% if !@cluster_subscription_service_port %>8007<% else %><%= @cluster_subscription_service_port %><% end %>
+  mem_cluster.subscription.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+  mem_cluster.fabric.enabled : true
+  mem_cluster.fabric.api.auth.ssl.enabled : <% if !@insights_ssl %>false<% else %><%= @insights_ssl %><% end %>
+  mem_cluster.fabric.api.port : <% if !@cluster_fabric_api_port %>8009<% else %><%= @cluster_fabric_api_port %><% end %>
+  mem_cluster.fabric.mfc.port : <% if !@cluster_fabric_mfc_port %>8005<% else %><%= @cluster_fabric_mfc_port %><% end %>
+  agent.flow_history.enabled : true
+  agent.flow_history.encoding : "binary"
+  agent.flow_history.udp_endpoint : "<%= @analytics_ip %>:<% if !@agent_flow_history_udp_endpoint %>5001<% else %><%= @agent_flow_history_udp_endpoint %><% end %>"
+<% end %>
