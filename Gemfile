@@ -11,11 +11,12 @@ def location_for(place, fake_version = nil)
 end
 
 group :development, :unit_tests do
+  gem 'nokogiri', '1.6.8.1',                 :require => false
   gem 'rspec-puppet', '~> 2.4',             :require => false
   gem 'fast_gettext', '1.1.0',              :require => false
   gem 'rspec-core', '3.5',                  :require => false
   gem 'puppetlabs_spec_helper', '1.1.1',    :require => false
-  gem 'puppet-lint', '>= 0.3.2',            :require => false
+  gem 'puppet-lint', '2.0.2',               :require => false
   gem 'metadata-json-lint',                 :require => false
   gem 'faraday',                            :require => false
   # addressable 2.5.0 pulls in public_suffix >= 2.0 requires ruby >= 2.0
@@ -26,6 +27,7 @@ end
 
 group :system_tests do
 
+  gem 'beaker-hostgenerator', '0.8.1'
   gem 'beaker' , '< 3.0.0'
   if beaker_version = ENV['BEAKER_VERSION']
     ## TODO - Remove hardcoded version as soon as BKR-885 is fixed
@@ -38,8 +40,8 @@ group :system_tests do
     gem 'beaker-rspec',  :require => false
   end
 
-  gem 'serverspec',    :require => false
-  gem 'beaker-puppet_install_helper', :require => false
+  gem 'serverspec', '2.37.2',    :require => false
+  gem 'beaker-puppet_install_helper' ,'0.5.0', :require => false
   gem 'r10k',                               :require => false
 end
 
