@@ -75,13 +75,14 @@ class midonet::agent::run (
   $controller_host,
   $metadata_port,
   $shared_secret,
-  $service_name       = 'midolman',
-  $service_ensure     = 'running',
-  $service_enable     = true,
-  $agent_config_path  = '/etc/midolman/midolman.conf',
-  $jvm_config_path    = '/etc/midolman/midolman-env.sh',
-  $max_heap_size      = '1024M',
-  $dhcp_mtu           = undef
+  $service_name         = 'midolman',
+  $service_ensure       = 'running',
+  $service_enable       = true,
+  $midonet_config_path  = '/etc/midonet/midonet.conf',
+  $agent_config_path    = '/etc/midolman/midolman.conf',
+  $jvm_config_path      = '/etc/midolman/midolman-env.sh',
+  $max_heap_size        = '1024M',
+  $dhcp_mtu             = undef
 ) {
 
   file { '/tmp/mn-agent_config.sh':
@@ -98,6 +99,28 @@ class midonet::agent::run (
     require => Package['midolman'],
     notify  => Service['midolman'],
     before  => File['/tmp/mn-agent_config.sh'],
+  }
+
+  if !defined(File['set_config']) {
+    file { 'set_config':
+      ensure  => present,
+      path    => $midonet_config_path,
+      content => template('midonet/agent/midolman.conf.erb'),
+      require => [
+        Package['midolman'],
+        File['midonet folder']
+      ],
+      notify  => Service['midolman'],
+      before  => File['/tmp/mn-agent_config.sh'],
+    }
+  }
+  if !defined(File['midonet folder']) {
+    file { '/etc/midonet':
+      ensure => 'directory',
+      path   => '/etc/midonet',
+      owner  => 'root',
+      mode   => '0755',
+    }
   }
 
   file { 'jvm_config':
