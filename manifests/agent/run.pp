@@ -75,13 +75,14 @@ class midonet::agent::run (
   $controller_host,
   $metadata_port,
   $shared_secret,
-  $service_name       = 'midolman',
-  $service_ensure     = 'running',
-  $service_enable     = true,
-  $agent_config_path  = '/etc/midolman/midolman.conf',
-  $jvm_config_path    = '/etc/midolman/midolman-env.sh',
-  $max_heap_size      = '1024M',
-  $dhcp_mtu           = undef
+  $service_name         = 'midolman',
+  $service_ensure       = 'running',
+  $service_enable       = true,
+  $midonet_config_path  = '/etc/midonet/midonet.conf',
+  $agent_config_path    = '/etc/midolman/midolman.conf',
+  $jvm_config_path      = '/etc/midolman/midolman-env.sh',
+  $max_heap_size        = '1024M',
+  $dhcp_mtu             = undef
 ) {
 
   file { '/tmp/mn-agent_config.sh':
@@ -94,6 +95,14 @@ class midonet::agent::run (
   file { 'agent_config':
     ensure  => present,
     path    => $agent_config_path,
+    content => template('midonet/agent/midolman.conf.erb'),
+    require => Package['midolman'],
+    notify  => Service['midolman'],
+    before  => File['/tmp/mn-agent_config.sh'],
+  }
+  file { 'midonet_config':
+    ensure  => present,
+    path    => $midonet_config_path,
     content => template('midonet/agent/midolman.conf.erb'),
     require => Package['midolman'],
     notify  => Service['midolman'],
