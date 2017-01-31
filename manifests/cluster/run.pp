@@ -112,6 +112,12 @@
 # [*midonet_version*]
 #   Midoent Version
 #     Default: '5.2'
+# [*state_proxy_address*]
+#   Address to bind to the state proxy service
+#     Default: undef
+# [*state_proxy_port*]
+#   Address to bind to the state proxy service
+#     Default: undef
 # === Authors
 #
 # Midonet (http://midonet.org)
@@ -180,7 +186,9 @@ class midonet::cluster::run (
   $ssl_keystore_pwd                = undef,
   $flow_history_port               = '5001',
   $jarvis_enabled                  = true,
-  $midonet_version                 = '5.2'
+  $midonet_version                 = '5.2',
+  $state_proxy_address             = '0.0.0.0',
+  $state_proxy_port                = '2346'
 ) {
 
   include ::stdlib
