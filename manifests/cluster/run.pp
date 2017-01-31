@@ -197,13 +197,15 @@ class midonet::cluster::run (
 
     exec { '/bin/bash /tmp/mn-cluster_config.sh': }
 
-    file { 'set_config':
-      ensure  => present,
-      path    => $cluster_config_path,
-      content => template('midonet/cluster/midonet.conf.erb'),
-      require => Package['midonet-cluster'],
-      notify  => Service['midonet-cluster'],
-      before  => File['/tmp/mn-cluster_config.sh'],
+    if !defined(File['set_config']) {
+      file { 'set_config':
+        ensure  => present,
+        path    => $cluster_config_path,
+        content => template('midonet/cluster/midonet.conf.erb'),
+        require => Package['midonet-cluster'],
+        notify  => Service['midonet-cluster'],
+        before  => File['/tmp/mn-cluster_config.sh'],
+      }
     }
 
     file { 'cluster_jvm_config':

@@ -42,14 +42,16 @@ class midonet::analytics::quickstart (
   $config_path      = '/etc/midonet/midonet.conf',
 ) {
 
-  file { 'midonet folder':
-    ensure => 'directory',
-    path   => '/etc/midonet',
-    owner  => 'root',
-    mode   => '0755',
+  if !defined(File['midonet folder']) {
+    file { 'midonet folder':
+      ensure => 'directory',
+      path   => '/etc/midonet',
+      owner  => 'root',
+      mode   => '0755',
+    }
   }
 
-    if !defined(File['set_config']) {
+  if !defined(File['set_config']) {
     file { 'set_config':
       ensure  => present,
       path    => $config_path,
