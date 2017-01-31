@@ -114,6 +114,12 @@
 # [*jarvis_enabled*]
 #   Should enable jarvis?
 #     Default: 'undef'
+# [*state_proxy_address*]
+#   Address to bind to the state proxy service
+#     Default: undef
+# [*state_proxy_port*]
+#   Address to bind to the state proxy service
+#     Default: undef
 #
 # === Examples
 #
@@ -199,6 +205,8 @@ class midonet::cluster (
   $ssl_keystore_pwd          = undef,
   $flow_history_port         = undef,
   $jarvis_enabled            = undef,
+  $state_proxy_address       = undef,
+  $state_proxy_port          = undef
 ) {
 
     class { 'midonet::cluster::install':
@@ -251,6 +259,8 @@ class midonet::cluster (
       ssl_keystore_pwd          => $ssl_keystore_pwd,
       flow_history_port         => $flow_history_port,
       jarvis_enabled            => $jarvis_enabled,
+      state_proxy_address       => $state_proxy_address,
+      state_proxy_port          => $state_proxy_port
       require                   => Class['midonet::cluster::install']
     }
     contain midonet::cluster::run
