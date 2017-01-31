@@ -56,6 +56,10 @@ cluster.rest_api {
   http_host = <%= @cluster_host %>
   http_port = <%= @cluster_port %>
 }
+cluster.state_proxy.server {
+  address = <%= @state_proxy_address %>
+  port = <%= @state_proxy_port %>
+}
 EOF
 
 exit 0
