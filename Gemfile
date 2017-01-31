@@ -34,11 +34,7 @@ group :system_tests do
     ## https://tickets.puppetlabs.com/browse/BKR-885
     # gem 'beaker', *location_for(beaker_version)
   end
-  if beaker_rspec_version = ENV['BEAKER_RSPEC_VERSION']
-    gem 'beaker-rspec', *location_for(beaker_rspec_version)
-  else
-    gem 'beaker-rspec',  :require => false
-  end
+    gem 'beaker-rspec', '5.6.0'  :require => false
 
   gem 'serverspec', '2.37.2',    :require => false
   gem 'beaker-puppet_install_helper' ,'0.5.0', :require => false
