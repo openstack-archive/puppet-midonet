@@ -1,0 +1,9 @@
+Code-Review+2: Alejandro Andreu <alejandroandreu@openmailbox.org>
+Code-Review+2: Alex Ruiz Estradera <ahharu@ahharu.com>
+Workflow+1: Alex Ruiz Estradera <ahharu@ahharu.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 01 Feb 2017 16:05:24 +0000
+Reviewed-on: https://review.openstack.org/427745
+Project: openstack/puppet-midonet
+Branch: refs/heads/stable/mitaka
