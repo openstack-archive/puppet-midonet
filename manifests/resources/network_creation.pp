@@ -154,7 +154,7 @@ include stdlib
 
     ensure          => present,
     network_name    => $edge_network_name,
-    binding_host_id => pick($binding_host_id,$::hostname),
+    binding_host_id => pick($binding_host_id,$::fqdn),
     binding_profile => {
       'interface_name' => c7_int_name($port_interface_name)
     },
