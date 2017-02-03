@@ -16,8 +16,8 @@ require 'netaddr'
 require 'socket'
 
 module Puppet::Parser::Functions
-  newfunction(:cidr2iface, :type => :rvalue, :doc => <<-EOS
-    This function returns an interface name or will raise an error if no iface
+  newfunction(:cidr2ip, :type => :rvalue, :doc => <<-EOS
+    This function returns an ip address or will raise an error if no iface
     is configured with an IP address inside the specified CIDR.
 
     If multiples interfaces match, the first one is returned.
@@ -28,7 +28,7 @@ module Puppet::Parser::Functions
     end
     ifaces = Socket.getifaddrs.map { |i| {ip: i.addr.ip_address,name: i.name,cidr: NetAddr::CIDR::create("#{i.addr.ip_address} #{i.netmask.ip_address}").to_s } if i.addr.ipv4? }.compact
     matching_iface = ifaces.select{ |i| i[:cidr] == argv[0]}.first
-    return matching_iface[:name] unless matching_iface.nil?
+    return matching_iface[:ip] unless matching_iface.nil?
     raise ("No Matching iface found")
   end
 end
