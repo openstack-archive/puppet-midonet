@@ -1,0 +1,8 @@
+Code-Review+2: Alex Ruiz Estradera <ahharu@ahharu.com>
+Workflow+1: Alex Ruiz Estradera <ahharu@ahharu.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 17 Feb 2017 11:39:52 +0000
+Reviewed-on: https://review.openstack.org/435384
+Project: openstack/puppet-midonet
+Branch: refs/heads/stable/ocata
