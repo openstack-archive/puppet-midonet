@@ -221,7 +221,7 @@ class midonet::cluster (
       service_ensure            => $service_ensure,
       service_enable            => $service_enable,
       cluster_config_path       => $cluster_config_path,
-      cluster_jvm_config_path   => $cluster_config_path,
+      cluster_jvm_config_path   => $cluster_jvm_config_path,
       cluster_host              => $cluster_host,
       cluster_port              => $cluster_port,
       max_heap_size             => $max_heap_size,
