@@ -51,7 +51,9 @@ class midonet::analytics::services (
   $tools_package_name          = 'midonet-tools',
   $elk_package_name            = 'midonet-elk',
   $calliope_port               = '8080',
-  $midonet_version             = '5.2'
+  $midonet_version             = '5.2',
+  $logstash_service            = 'logstash',
+  $elasticsearch_service       = 'elasticsearch',
 ) {
   include ::stdlib
   $real_analytics_package_name = versioncmp($midonet_version,'5.2') ? {'1' => $elk_package_name, default => $analytics_package_name}
@@ -60,65 +62,65 @@ class midonet::analytics::services (
 
   if versioncmp($midonet_version,'5.2') > 0 {
 
-    if $::osfamily == 'Debian' {
-      exec {'update-ca-certificates -f':
-        path   => ['/usr/bin', '/usr/sbin','/bin'],
-        before => Package[$tools_package_name],
-      }
-    }
-    package { $tools_package_name:
-      ensure => present,
-      name   => $tools_package_name,
-    }
-
+    package { $tools_package_name: ensure => present, }
     package { $real_analytics_package_name:
       ensure => present,
-      name   => $real_analytics_package_name,
-    } ->
-
-    exec { $logstash_command:
-      path    => ['/usr/bin', '/usr/sbin','/sbin'],
-      require => Package[$real_analytics_package_name],
+      notify => $analytics_notifications,
     }
 
-    exec {'service elasticsearch-es-01 restart':
-      path    => ['/usr/bin', '/usr/sbin',],
-      require => Package[$real_analytics_package_name],
-    }
+    if $::osfamily == 'RedHat' {
+      $analytics_notifications = Service['logstash', 'elasticsearch']
+      }
+      elsif $::osfamily == 'Debian' {
+        $analytics_notifications = undef
+        exec {'update-ca-certificates -f':
+          path   => ['/usr/bin', '/usr/sbin','/bin'],
+          before => Package['midonet_tools'],
+        }
+        exec { $logstash_command:
+          path    => ['/usr/bin', '/usr/sbin','/sbin'],
+          require => Package['analytics'],
+        }
+        exec { 'service elasticsearch-es-01 restart':
+          path    => ['/usr/bin', '/usr/sbin',],
+          require => Package['analytics'],
+        }
+      }
 
   }
 
   else {
-    package { $tools_package_name:
+    package { 'midonet_tools':
       ensure => present,
       name   => $tools_package_name,
     }
 
-    package { $real_analytics_package_name:
+    package { 'analytics':
       ensure => present,
       name   => $real_analytics_package_name,
     } ->
 
     exec { $logstash_command:
       path   => ['/usr/bin', '/usr/sbin','/sbin'],
-      before => Service[$real_analytics_package_name],
+      before => Service['analytics_service'],
     }
 
     unless $calliope_port == '8080' {
       exec { "echo calliope.service.ws_port : ${calliope_port} | mn-conf set -t default":
         path   => ['/usr/bin', '/bin'],
-        before => Service[$real_analytics_package_name],
+        before => Service['analytics_service'],
       }
     }
 
-    service { $real_analytics_package_name:
+    service { 'analytics_service':
       ensure  => 'running',
       name    => $real_analytics_package_name,
       enable  => true,
-      require => Package[$real_analytics_package_name],
+      require => Package['analytics'],
     }
 
   }
 
 
 }
+
