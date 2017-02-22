@@ -242,7 +242,7 @@ class midonet::mem(
         }
       ],
       proxy_pass +> [
-        { 'path' => '/midonet-api', 'url' => 'http://localhost:8181' },
+        { 'path' => '/midonet-api', 'url' => 'http://localhost:8181/midonet-api' },
       ],
       proxy_preserve_host =>  true
     }
