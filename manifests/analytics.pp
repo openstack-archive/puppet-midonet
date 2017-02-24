@@ -229,8 +229,8 @@ class midonet::analytics (
     $elasticsearch_service = 'elasticsearch'
   }
   if $::osfamily == 'RedHat' {
-    $logstash_config_file = '/etc/sysconfig/logstash'
-    $elasticsearch_config_file = '/etc/sysconfig/elasticsearch'
+    $logstash_config_file = '/etc/logstash/jvm.options'
+    $elasticsearch_config_file = '/etc/elasticsearch/jvm.options'
     $logstash_service = 'logstash'
     $elasticsearch_service = 'elasticsearch'
   }
