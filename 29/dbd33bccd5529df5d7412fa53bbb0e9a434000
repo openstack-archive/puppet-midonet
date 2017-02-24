@@ -1,0 +1,8 @@
+Code-Review+2: Alejandro Andreu <alejandroandreu@openmailbox.org>
+Workflow+1: Alejandro Andreu <alejandroandreu@openmailbox.org>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 24 Feb 2017 16:23:55 +0000
+Reviewed-on: https://review.openstack.org/437869
+Project: openstack/puppet-midonet
+Branch: refs/heads/stable/newton
