@@ -172,7 +172,7 @@ class midonet::mem(
 ) inherits midonet::params {
 
   $mem_ws    = $insights_ssl? {true => 'wss://' , default => 'ws://'}
-  $api_proto = $api_ssl? {true => 'https://' , default => 'http://'}
+  $api_proto = $api_ssl? {true => 'https://' , default    => 'http://'}
 
 
   validate_bool($mem_api_token)
@@ -241,6 +241,10 @@ class midonet::mem(
           path  => '/var/www/html/midonet-manager',
         }
       ],
+      proxy_pass +> [
+        { 'path' => '/midonet-api', 'url' => 'http://localhost:8181/midonet-api' },
+      ],
+      proxy_preserve_host =>  true
     }
   }
 }
