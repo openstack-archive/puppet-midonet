@@ -58,13 +58,7 @@ class midonet::analytics::services (
   include ::stdlib
   $real_analytics_package_name = versioncmp($midonet_version,'5.2') ? {'1' => $elk_package_name, default => $analytics_package_name}
 
-  if $::osfamily == 'Debian' and $::lsbdistrelease == '14.04'
-  {
-    $logstash_command = 'initctl restart logstash'
-  }
-  else {
-    $logstash_command = 'service logstash restart'
-  }
+  $logstash_command = 'service restart logstash'
 
   if versioncmp($midonet_version,'5.2') > 0 {
 
