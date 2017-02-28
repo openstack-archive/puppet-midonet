@@ -58,7 +58,7 @@ class midonet::analytics::services (
   include ::stdlib
   $real_analytics_package_name = versioncmp($midonet_version,'5.2') ? {'1' => $elk_package_name, default => $analytics_package_name}
 
-  $logstash_command = 'service restart logstash'
+  $logstash_command = 'service logstash restart'
 
   if versioncmp($midonet_version,'5.2') > 0 {
 
