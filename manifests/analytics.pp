@@ -118,7 +118,7 @@ class midonet::analytics (
 
   if versioncmp($midonet_version,'5.2') > 0
   {
-    $ins_service_name = 'elasticsearch-instance-es-01'
+    $ins_service_name = 'elasticsearch-es-01'
     $config = {
       'network.host' => ['_local_',$elk_bind_ip],
       'cluster.name' => $elk_cluster_name,
