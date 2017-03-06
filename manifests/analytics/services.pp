@@ -75,15 +75,15 @@ class midonet::analytics::services (
         $analytics_notifications = undef
         exec {'update-ca-certificates -f':
           path   => ['/usr/bin', '/usr/sbin','/sbin','/bin'],
-          before => Package['midonet_tools'],
+          before => Package[$real_analytics_package_name],
         }
         exec { $logstash_command:
           path    => ['/usr/bin', '/usr/sbin','/sbin','/bin'],
-          require => Package['analytics'],
+          require => Package[$real_analytics_package_name],
         }
         exec { 'service elasticsearch-es-01 restart':
           path    => ['/usr/bin', '/usr/sbin','/bin','/sbin'],
-          require => Package['analytics'],
+          require => Package[$real_analytics_package_name],
         }
       }
 
