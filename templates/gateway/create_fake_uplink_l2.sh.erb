@@ -90,3 +90,13 @@ if [ "${MASQUERADE_ON}" == 'on' ] && [ -z "$(iptables -v -n -L -t nat | grep "MA
   iptables -I FORWARD -s ${FIP} -j ACCEPT
   echo "Succesfully enabled masquerading"
 fi
+
+# Ensure there are no malicious iptables rules
+if [ -f /etc/redhat-release ];
+then
+    iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited || true
+    if [[ $(cat /etc/sysconfig/iptables | grep -v -- '-A FORWARD -j REJECT --reject-with icmp-host-prohibited') ]];
+    then
+        cat /etc/sysconfig/iptables | grep -v -- '-A FORWARD -j REJECT --reject-with icmp-host-prohibited' > /etc/sysconfig/iptables
+    fi
+fi
