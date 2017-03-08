@@ -99,16 +99,34 @@ class midonet::gateway::static (
   # Place script and helper files before executing it
   file { 'fake_uplink_script':
     ensure  => $ensure_scripts,
-    path    => "${scripts_dir}/create_fake_uplink_l2.sh",
+    path    => "${scripts_dir}/${uplink_script}",
     content => template('midonet/gateway/create_fake_uplink_l2.sh.erb'),
   }
 
   # Finally, execute the script
   exec { 'run gateway static creation script':
-    command => "/bin/bash -x ${scripts_dir}/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out",
+    command => "/bin/bash -x ${scripts_dir}/${uplink_script} 2>&1 | tee ${scripts_dir}/${uplink_script}.out",
     returns => ['0', '7'],
     require => [
       File['fake_uplink_script'],
     ]
+  }
+
+  # Ensure interfaces are configured and enabled at boot time
+  # (for the time being this is RHEL 7.x only)
+  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7' {
+    file { 'fake_uplink_script-STARTUP':
+      ensure  => $ensure_scripts,
+      mode    => '0775',
+      path    => '/usr/local/sbin/create_fake_uplink_l2.sh',
+      content => template('midonet/gateway/create_fake_uplink_l2.sh.erb'),
+    } ->
+    file { 'fake_uplink_script-SERVICEFILE':
+      ensure => $ensure_scripts,
+      mode   => '0644',
+      path   => '/etc/systemd/system/midonet-static-uplink.service',
+      source => 'puppet:///modules/midonet/gateway/midonet-static-uplink.service',
+    } ->
+    service { 'midonet-static-uplink': enable => true }
   }
 }
