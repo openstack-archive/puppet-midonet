@@ -107,6 +107,7 @@ class midonet::gateway::static (
   exec { 'run gateway static creation script':
     command => "/bin/bash -x ${scripts_dir}/create_fake_uplink_l2.sh 2>&1 | tee /tmp/bash.out",
     returns => ['0', '7'],
+    timeout => 1800,
     require => [
       File['fake_uplink_script'],
     ]
