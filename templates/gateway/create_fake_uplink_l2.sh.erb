@@ -73,6 +73,11 @@ fi
 
 # Create a port on the edge router and bind it to the veth pair
 ROUTER_ID=$(midonet-cli -A -e router list | grep ${EDGE_ROUTER} | awk '{ print $2 }')
+
+while [ -z $(midonet-cli -A -e host ${HOST_ID} binding list | grep veth1 | awk '{ print $6}') ]; do
+  echo "ZzZ..."
+  sleep 5
+done
 PORT_ID=$(midonet-cli -A -e host ${HOST_ID} binding list | grep veth1 | awk '{ print $6}')
 
 if [ -z "$(midonet-cli -A -e router ${ROUTER_ID} route list | grep "src 0.0.0.0/0 dst 0.0.0.0/0 gw ${VETH0_IP} port ${PORT_ID}")" ]; then
