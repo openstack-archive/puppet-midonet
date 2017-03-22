@@ -15,10 +15,6 @@
 #  If using MEM Enterprise , set to true
 #     Default: undef
 #
-# [*manage_repo*]
-#  Should manage midonet repositories?
-#     Default: undef
-#
 # [*mem_username*]
 #  If manage_repo is true and is_mem then specify the username to access the packages
 #     Default: undef
@@ -133,7 +129,7 @@ class midonet::analytics (
   }
 
   class { 'elasticsearch':
-    manage_repo  => true,
+    manage_repo  => $manage_repo,
     repo_version => $elastic_version,
     config       => $config,
     require      => Class['::logstash']
@@ -141,12 +137,10 @@ class midonet::analytics (
   contain elasticsearch
 
   class { 'logstash':
-    manage_repo  => true,
+    manage_repo  => $manage_repo,
     repo_version => $logstash_version,
   }
   contain logstash
-
-
 
   elasticsearch::instance { 'es-01':
     require => Class['::logstash','::elasticsearch']
@@ -160,17 +154,20 @@ class midonet::analytics (
     anchor { 'curator-end': }
   }
   elsif $::osfamily == 'RedHat' {
+    if $manage_repo {
+      exec { 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch':
+        path => '/usr/bin'
+      } ->
+      yumrepo { 'curator-3':
+        descr    => 'CentOS/RHEL repository for Elasticsearch Curator 3 packages',
+        baseurl  => 'http://packages.elastic.co/curator/3/centos/$releasever',
+        gpgcheck => true,
+        gpgkey   => 'http://packages.elastic.co/GPG-KEY-elasticsearch',
+        enabled  => true,
+        before   => Package['python-elasticsearch-curator'],
+      }
+    }
     anchor { 'curator-begin': } ->
-    exec { 'rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch':
-      path => '/usr/bin'
-    } ->
-    yumrepo { 'curator-3':
-      descr    => 'CentOS/RHEL repository for Elasticsearch Curator 3 packages',
-      baseurl  => 'http://packages.elastic.co/curator/3/centos/$releasever',
-      gpgcheck => true,
-      gpgkey   => 'http://packages.elastic.co/GPG-KEY-elasticsearch',
-      enabled  => true,
-    } ->
     package { 'python-elasticsearch-curator': ensure => installed } ->
     anchor { 'curator-end': }
   }
@@ -186,8 +183,10 @@ class midonet::analytics (
           mem_version       => undef,
           mem_username      => $mem_username,
           mem_password      => $mem_password,
-          before            => Class['midonet::analytics::services',
-          'midonet::analytics::quickstart']
+          before            => Class[
+            'midonet::analytics::services',
+            'midonet::analytics::quickstart'
+          ]
         }
       }
     }
