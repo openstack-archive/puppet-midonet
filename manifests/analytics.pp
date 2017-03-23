@@ -143,6 +143,7 @@ class midonet::analytics (
   class { 'logstash':
     manage_repo  => true,
     repo_version => $logstash_version,
+    purge_config => false,
   }
   contain logstash
 
