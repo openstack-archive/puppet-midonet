@@ -203,7 +203,9 @@ class midonet::cluster::run (
       content => template('midonet/cluster/mn-cluster_config.sh.erb'),
     } ->
 
-    exec { '/bin/bash /tmp/mn-cluster_config.sh': }
+    exec { '/bin/bash /tmp/mn-cluster_config.sh':
+      require => File['set_config'],
+    }
 
     file { 'set_config':
       ensure  => present,
@@ -236,7 +238,9 @@ class midonet::cluster::run (
         path    => '/tmp/analytics_settings.sh',
         content => template('midonet/analytics/analytics_settings.sh.erb'),
       } ->
-      exec { '/bin/bash /tmp/analytics_settings.sh': }
+      exec { '/bin/bash /tmp/analytics_settings.sh':
+        require => File['set_config'],
+      }
       if versioncmp($midonet_version,'5.2') > 0
       {
         file { 'analytics_settings_local':
@@ -250,7 +254,9 @@ class midonet::cluster::run (
           content => template('midonet/analytics/analytics_settings.sh.erb'),
           require => Exec['/bin/bash /tmp/analytics_settings.sh']
         } ->
-        exec { '/bin/bash /tmp/analytics_settings_local.sh': }
+        exec { '/bin/bash /tmp/analytics_settings_local.sh':
+          require => File['set_config'],
+        }
       }
     }
 
