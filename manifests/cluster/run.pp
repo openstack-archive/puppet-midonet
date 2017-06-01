@@ -256,8 +256,10 @@ class midonet::cluster::run (
           content => template('midonet/analytics/analytics_settings.sh.erb'),
           require => Exec['/bin/bash /tmp/analytics_settings.sh']
         } ->
+        # As we will only be deploying MidoNet 5.4 we can set a single notify here
         exec { '/bin/bash /tmp/analytics_settings_local.sh':
           require => File['set_config'],
+          notify  => Service['midonet-cluster'],
         }
       }
     }
