@@ -1,7 +1,11 @@
 <% if @new_api %>
   agent.flow_history.enabled : true
-  agent.flow_history.encoding : "binary"
   insights.jmxscraper.enabled : true
+  insights.bigdata.enabled : true
+  insights.flow_tracing.enabled : true
+  insights.analytics_api.enabled : true
+  insights.endpoint.enabled : true
+  agent.flow_history.encoding : "binary"
   insights.jmxscraper.target.endpoint : "<%= @elk_target_endpoint %>"
   insights.elasticsearch.seeds : [<%= @elk_seeds %>]
   <% if @elk_cluster_name %>insights.elasticsearch.cluster_name : "<%= @elk_cluster_name %>"<% end %>

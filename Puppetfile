@@ -13,7 +13,7 @@ mod 'puppet-neutron',
 ## External modules
 
 mod 'puppetlabs/inifile'
-mod 'puppetlabs/apt'
+mod 'puppetlabs/apt', '2.4.0'
 mod 'puppetlabs/java'
 mod 'puppetlabs/stdlib'
 mod 'puppetlabs/apache'
