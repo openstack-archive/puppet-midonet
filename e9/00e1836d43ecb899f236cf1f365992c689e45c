@@ -1,0 +1,9 @@
+Code-Review+2: Alejandro Andreu <alejandroandreu@openmailbox.org>
+Workflow+1: Alejandro Andreu <alejandroandreu@openmailbox.org>
+Code-Review+1: Antonio Ojea <itsuugo@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 02 Jun 2017 10:49:29 +0000
+Reviewed-on: https://review.openstack.org/469926
+Project: openstack/puppet-midonet
+Branch: refs/heads/master
