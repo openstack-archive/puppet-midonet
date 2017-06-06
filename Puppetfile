@@ -12,20 +12,20 @@ mod 'puppet-neutron',
 
 ## External modules
 
-mod 'puppetlabs/inifile'
+mod 'puppetlabs/inifile', '1.6.0'
 mod 'puppetlabs/apt', '2.4.0'
-mod 'puppetlabs/java'
-mod 'puppetlabs/stdlib'
-mod 'puppetlabs/apache'
-mod 'puppetlabs/firewall'
+mod 'puppetlabs/java', '2.0.0'
+mod 'puppetlabs/stdlib', '4.17.0'
+mod 'puppetlabs/apache', '1.11.0'
+mod 'puppetlabs/firewall', '1.9.0'
 mod 'deric/zookeeper' , '0.6.1'
 mod 'locp/cassandra' , '1.25.2'
-mod 'puppetlabs/concat'
-mod 'TubeMogul/curator'
+mod 'puppetlabs/concat', '4.0.0'
+mod 'TubeMogul/curator', '1.0.2'
 mod 'elasticsearch/elasticsearch' , '0.13.2'
-mod 'elasticsearch/logstash'
-mod 'electrical/file_concat'
-mod 'richardc/datacat'
+mod 'elasticsearch/logstash', '0.6.6'
+mod 'electrical/file_concat', '1.0.1'
+mod 'richardc/datacat', '0.6.2'
 
 
 mod 'midonet_openstack',
