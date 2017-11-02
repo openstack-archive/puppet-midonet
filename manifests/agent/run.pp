@@ -92,24 +92,23 @@ class midonet::agent::run (
 
   exec { '/bin/bash /tmp/mn-agent_config.sh': }
 
+  Package['midolman'] ~> File['agent_config']
+
   file { 'agent_config':
     ensure  => present,
     path    => $agent_config_path,
     content => template('midonet/agent/midolman.conf.erb'),
-    require => Package['midolman'],
     notify  => Service['midolman'],
     before  => File['/tmp/mn-agent_config.sh'],
   }
 
   if !defined(File['set_config']) {
+    Package['midolman'] ~> File['set_config']
+    File['midonet folder'] ~> File['set_config']
     file { 'set_config':
       ensure  => present,
       path    => $midonet_config_path,
       content => template('midonet/agent/midolman.conf.erb'),
-      require => [
-        Package['midolman'],
-        File['midonet folder']
-      ],
       notify  => Service['midolman'],
       before  => File['/tmp/mn-agent_config.sh'],
     }
@@ -123,11 +122,12 @@ class midonet::agent::run (
     }
   }
 
+  Package['midolman'] ~> File['jvm_config']
+
   file { 'jvm_config':
     ensure  => present,
     path    => $jvm_config_path,
     content => template('midonet/agent/midolman-env.sh.erb'),
-    require => Package['midolman'],
     notify  => Service['midolman'],
   }
 

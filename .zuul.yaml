@@ -1,0 +1,5 @@
+- project:
+    name: openstack/puppet-midonet
+    templates:
+      - puppet-openstack-check-jobs
+      - puppet-module-unit-jobs
