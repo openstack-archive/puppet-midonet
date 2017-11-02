@@ -20,9 +20,7 @@ RSpec.configure do |c|
       install_package host, 'git'
       install_package host, 'ruby'
 
-      zuul_ref = ENV['ZUUL_REF']
       zuul_branch = ENV['ZUUL_BRANCH']
-      zuul_url = ENV['ZUUL_URL']
 
       repo = 'openstack/puppet-midonet'
 
@@ -33,16 +31,14 @@ RSpec.configure do |c|
       if r.exit_code == 0
         zuul_clone_cmd = '/usr/zuul-env/bin/zuul-cloner '
         zuul_clone_cmd += '--cache-dir /opt/git '
-        zuul_clone_cmd += "--zuul-ref #{zuul_ref} "
         zuul_clone_cmd += "--zuul-branch #{zuul_branch} "
-        zuul_clone_cmd += "--zuul-url #{zuul_url} "
         zuul_clone_cmd += "git://git.openstack.org #{repo}"
         on host, zuul_clone_cmd
       else
         on host, "git clone https://git.openstack.org/#{repo} #{repo}"
       end
 
-      on host, "ZUUL_REF=#{zuul_ref} ZUUL_BRANCH=#{zuul_branch} ZUUL_URL=#{zuul_url} bash #{repo}/spec/files/install_modules.sh"
+      on host, "ZUUL_BRANCH=#{zuul_branch} bash #{repo}/spec/files/install_modules.sh"
 
       # Install the module being tested
       on host, "rm -fr /etc/puppet/modules/#{modname}"
