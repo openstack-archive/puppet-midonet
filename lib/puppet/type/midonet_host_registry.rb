@@ -77,7 +77,7 @@ Puppet::Type.newtype(:midonet_host_registry) do
     desc "IP address that will be used to as the underlay layer to
           create the tunnels. It will take the fact $ipaddress by
           default"
-    defaultto Facter['ipaddress'].value
+    defaultto Facter.value('ipaddress')
     validate do |value|
       unless value =~ /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
         raise ArgumentError, "'%s' is not a valid IPv4 address" % value
