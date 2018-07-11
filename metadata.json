@@ -27,11 +27,11 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ "7.0", "7.1", "7.2" ]
+      "operatingsystemrelease": [ "7.0" ]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": ["14.04","16.04"]
+      "operatingsystemrelease": ["16.04"]
     }
   ]
 }
