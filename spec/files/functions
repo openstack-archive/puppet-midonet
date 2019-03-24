@@ -39,7 +39,7 @@ EOF
     --zuul-ref $ZUUL_REF \
     --zuul-branch $ZUUL_BRANCH \
     --zuul-url $ZUUL_URL \
-    git://git.openstack.org $project_names
+    https://git.openstack.org $project_names
 
 
 }
